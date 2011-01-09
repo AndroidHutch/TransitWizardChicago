@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="hello">Hello World, TransitGenieMain!</string>
+    <string name="app_name">TransitGenie</string>
+    <string name="orig_hello">Use Current Location</string>
+    <string name="dest_hello">Destination</string>
+    <string name="go">Go</string>
+</resources>
