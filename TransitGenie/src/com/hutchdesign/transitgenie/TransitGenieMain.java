@@ -1,5 +1,5 @@
 package com.hutchdesign.transitgenie;
-//edit
+//edit new svn browser
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
