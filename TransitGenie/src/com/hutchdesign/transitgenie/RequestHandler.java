@@ -15,13 +15,13 @@ public class RequestHandler extends DefaultHandler{
         private boolean in_innertag = false;
         private boolean in_mytag = false;
        
-        private RouteData routeData = new RouteData();
+        private RouteData[] routeData = new RouteData[10];
  
         // ===========================================================
         // Getter & Setter
         // ===========================================================
  
-        public RouteData getParsedData() {
+        public RouteData[] getParsedData() {
                 return this.routeData;
         }
  
@@ -30,7 +30,7 @@ public class RequestHandler extends DefaultHandler{
         // ===========================================================
         @Override
         public void startDocument() throws SAXException {
-                this.routeData = new RouteData();
+                //this.routeData = new RouteData();
         }
  
         @Override
@@ -56,7 +56,7 @@ public class RequestHandler extends DefaultHandler{
                         // Extract an Attribute
                         String attrValue = atts.getValue("thenumber");
                         int i = Integer.parseInt(attrValue);
-                        routeData.setExtractedInt(i);
+                        //routeData.setExtractedInt(i);
                 }
         }
        
@@ -81,7 +81,7 @@ public class RequestHandler extends DefaultHandler{
         @Override
     public void characters(char ch[], int start, int length) {
                 if(this.in_mytag){
-                routeData.setExtractedString(new String(ch, start, length));
+                //routeData.setExtractedString(new String(ch, start, length));
         }
     }
 }

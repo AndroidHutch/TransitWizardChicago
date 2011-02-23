@@ -1,9 +1,18 @@
 package com.hutchdesign.transitgenie;
 //edit new svn browser
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
+import java.io.StringReader;
+
+import tbxml.TBXML;
+
+
+import org.xmlpull.v1.XmlPullParser;
+import org.xmlpull.v1.XmlPullParserException;
+import org.xmlpull.v1.XmlPullParserFactory;
 
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
@@ -33,7 +42,7 @@ public class TransitGenieMain extends Activity
 	EditText origin;
 	EditText destination;
 	TextView tv;
-	RouteData routeData;
+	RouteData[] routeData;
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) 
@@ -43,11 +52,11 @@ public class TransitGenieMain extends Activity
         
         Button goButton = (Button)findViewById(R.id.Go);
         
-        goButton.setOnClickListener(mAddListener);
+        goButton.setOnClickListener(goButtonListener);
         
     }
     
-	private OnClickListener mAddListener = new OnClickListener()
+	private OnClickListener goButtonListener = new OnClickListener()
 	{
 		public void onClick(View v)
 		{
