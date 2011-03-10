@@ -1,3 +1,0 @@
-While ( eventType != XmlPullParser.END_DOCUMENT)
-{
-	if eventType ==  
