@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+	<item android:id="@+id/menu_settings"
+	      android:icon="@drawable/ic_menu_settings"
+	      android:title="Settings" />
+	      
+	<item android:id="@+id/menu_time"
+	android:icon="@drawable/ic_menu_time"
+	android:title="Depart Time" />
+	
+	<item android:id="@+id/menu_about"
+	android:icon="@drawable/ic_menu_about"
+	android:title="About" />
+
+</menu>
