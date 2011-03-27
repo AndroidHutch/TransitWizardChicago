@@ -10,7 +10,7 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
-public class places extends Activity {
+public class Places extends Activity {
 	
 	//List of popular places in Chicago.
 	static final String popular[] = {
