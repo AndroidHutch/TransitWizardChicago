@@ -40,7 +40,7 @@ public class TransitGenieMain extends Activity {
 	    	public void onClick(View v){
 	    		
 	    		//Run places activity
-	    		Intent i = new Intent(getApplicationContext(), Places.class);
+	    		Intent i = new Intent(getApplicationContext(), PopularPlaces.class);
 	            startActivity(i);
 	            
 	            //TODO: Grab origin selection from places activity
@@ -59,7 +59,7 @@ public class TransitGenieMain extends Activity {
 	    	public void onClick(View v){
 	    		
 	    		//Run places activity
-	    		Intent i = new Intent(getApplicationContext(), Places.class);
+	    		Intent i = new Intent(getApplicationContext(), PopularPlaces.class);
 	            startActivity(i);
 	            
 	            //TODO: Grab destination selection from places activity
