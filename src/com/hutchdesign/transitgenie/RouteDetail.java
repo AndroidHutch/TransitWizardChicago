@@ -10,7 +10,7 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
-public class detail extends Activity {
+public class RouteDetail extends Activity {
 	
     /** Called when the activity is first created. */
     @Override

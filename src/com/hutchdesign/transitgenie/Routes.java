@@ -10,7 +10,7 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
-public class transit extends Activity {
+public class Routes extends Activity {
 	
     /** Called when the activity is first created. */
     @Override

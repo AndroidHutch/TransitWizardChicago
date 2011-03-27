@@ -10,7 +10,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-//TODO: ! HUTCH ! Create request class w/ variables
 //TODO: Wrap .xml files in in Scroll Views
 
 public class TransitGenieMain extends Activity {
@@ -20,6 +19,9 @@ public class TransitGenieMain extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
         
+        //Set up Request URL
+        
+        Request request = new Request();
         
         //Import Buttons from main.xml
         Button button_go = (Button)findViewById(R.id.button_go);			//"Go" button on main screen (=> User is ready for routes)
@@ -38,7 +40,7 @@ public class TransitGenieMain extends Activity {
 	    	public void onClick(View v){
 	    		
 	    		//Run places activity
-	    		Intent i = new Intent(getApplicationContext(), places.class);
+	    		Intent i = new Intent(getApplicationContext(), Places.class);
 	            startActivity(i);
 	            
 	            //TODO: Grab origin selection from places activity
@@ -57,7 +59,7 @@ public class TransitGenieMain extends Activity {
 	    	public void onClick(View v){
 	    		
 	    		//Run places activity
-	    		Intent i = new Intent(getApplicationContext(), places.class);
+	    		Intent i = new Intent(getApplicationContext(), Places.class);
 	            startActivity(i);
 	            
 	            //TODO: Grab destination selection from places activity
