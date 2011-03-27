@@ -10,6 +10,8 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
+//New lines bc svn is picky
+
 public class Places extends Activity {
 	
 	//List of popular places in Chicago.
