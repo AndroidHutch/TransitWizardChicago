@@ -36,7 +36,7 @@ public class Request {
 	public String server = "www.transitgenie.com:8080";
 	public Double version = 2.3;
 	public double originLongitude = 0.0;
-	public double originLatitude = 0.0;
+	public String originLatitude = "0.0";
 	public double destLongitude = 0.0;
 	public double destLatitude = 0.0;
 	public double queryTime = 1234;

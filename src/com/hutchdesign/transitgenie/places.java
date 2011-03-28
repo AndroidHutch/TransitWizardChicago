@@ -12,7 +12,7 @@ import android.widget.Toast;
 
 //New lines bc svn is picky
 
-public class PopularPlaces extends Activity {
+public class places extends Activity {
 	
 	//List of popular places in Chicago.
 	static final String popular[] = {
@@ -23,6 +23,8 @@ public class PopularPlaces extends Activity {
 		};
 	
 	static String CHOICE = "";
+
+	public static String latitude;
 	
     /** Called when the activity is first created. */
     @Override
