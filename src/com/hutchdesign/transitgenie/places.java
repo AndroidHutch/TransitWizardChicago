@@ -3,6 +3,7 @@ package com.hutchdesign.transitgenie;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -21,6 +22,8 @@ public class places extends Activity {
 		  "Field Museum",
 		  "Willis Tower"
 		};
+
+	protected static final int MAP_LOCATION = 0;
 	
 	static String CHOICE = "";
 
@@ -31,7 +34,7 @@ public class places extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.places);
-        
+        final Context mContext = this;
         //Import buttons from places.xml
         ImageButton select_crnt = (ImageButton)findViewById(R.id.select_crnt);	//Used to select "Current Location"
         ImageButton select_map = (ImageButton)findViewById(R.id.select_map);	//Used to select point on map
@@ -46,7 +49,7 @@ public class places extends Activity {
          */
         select_crnt.setOnClickListener(new View.OnClickListener(){	
 	    	public void onClick(View v){
-	    		
+	    		finish();
 	    		//TODO: Return String "Use Current Location..." (will set to origin button on main screen)
 	    		//Set current coordinates in request class
 	    		
@@ -60,6 +63,12 @@ public class places extends Activity {
 	    	public void onClick(View v){
 	    		
 	    		//TODO: Integrate Google Maps
+	    		//Run places activity
+	    		//CRASHES
+	    		Intent i = new Intent( mContext, Map.class);
+	            startActivity(i);
+	    		//startActivityForResult(i, MAP_LOCATION);
+	    		
 	    		//Return to main: Address String
 	    		//Set coordinates in request class
 	    	}
