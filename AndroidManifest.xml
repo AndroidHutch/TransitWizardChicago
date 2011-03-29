@@ -13,7 +13,7 @@
         <activity android:name=".places"></activity>
         <activity android:name=".transit"></activity>
 		<activity android:name=".detail"></activity>
-		<activity android:name=".map"></activity>
+		<activity android:name=".Map"></activity>
 		<uses-library android:name="com.google.android.maps"></uses-library>
     </application>
 
@@ -22,5 +22,5 @@
 
 <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"></uses-permission>
 <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"></uses-permission>
-<user-permission android:name="android.permission.INTERNET"></user-permission>
+<uses-permission android:name="android.permission.INTERNET"></uses-permission>
 </manifest> 

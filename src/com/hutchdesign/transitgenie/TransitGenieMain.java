@@ -43,7 +43,8 @@ public class TransitGenieMain extends Activity {
 	    		
 	    		//Run places activity
 	    		Intent i = new Intent(getApplicationContext(), places.class);
-	            startActivityForResult(i, ORIGIN_REQUEST);
+	            startActivity(i);
+	    		//startActivityForResult(i, ORIGIN_REQUEST);
 	            
 	            //TODO: Grab origin selection from places activity
 	            //possible reference: http://thedevelopersinfo.wordpress.com/2009/10/15/passing-data-between-activities-in-android/

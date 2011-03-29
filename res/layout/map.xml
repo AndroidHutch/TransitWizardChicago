@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="fill_parent"
+  android:layout_height="fill_parent">
+  
+  <com.google.android.maps.MapView 
+    android:id="@+id/map"
+    android:layout_width="fill_parent" 
+    android:layout_height="fill_parent" 
+    android:enabled="true" 
+    android:clickable="true" 
+    android:apiKey="0rM_sm7RGytbbJrKEggI8NgG9EncQ7612w0_AwA" />
+<!-- Using debug api key, must change to actual key for release
+0rM_sm7RGytYAoEjJrv0XVIfSPM937jJRnV7USA  -->
+     
+    
+</LinearLayout>
