@@ -29,9 +29,9 @@
     
     	<ImageButton
 		android:id="@+id/select_crnt"
-		android:src="@drawable/play"
-		android:layout_width="50px"
-		android:layout_height="50px"
+		android:src="@drawable/ic_button_01"
+		android:layout_width="40px"
+		android:layout_height="40px"
 		android:layout_alignParentRight="true"
 		>
 		</ImageButton>
@@ -55,9 +55,9 @@
 	
 		<ImageButton
 		android:id="@+id/select_map"
-		android:src="@drawable/play"
-		android:layout_width="50px"
-		android:layout_height="50px"
+		android:src="@drawable/ic_button_01"
+		android:layout_width="40px"
+		android:layout_height="40px"
 		android:layout_alignParentRight="true"
 		>
 		</ImageButton>
@@ -79,9 +79,9 @@
 	
 		<ImageButton
 		android:id="@+id/select_pop"
-		android:src="@drawable/expand1"
-		android:layout_width="50px"
-		android:layout_height="50px"
+		android:src="@drawable/ic_button_01"
+		android:layout_width="40px"
+		android:layout_height="40px"
 		android:layout_alignParentRight="true"
 		>
 		</ImageButton>

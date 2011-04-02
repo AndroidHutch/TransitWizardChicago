@@ -9,6 +9,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 //TODO: Wrap .xml files in in Scroll Views
@@ -27,8 +28,8 @@ public class TransitGenieMain extends Activity {
         
         //Import Buttons from main.xml
         Button button_go = (Button)findViewById(R.id.button_go);			//"Go" button on main screen (=> User is ready for routes)
-        Button button_origin = (Button)findViewById(R.id.button_origin);	//User wishes to choose origin.
-        Button button_destn = (Button)findViewById(R.id.button_destn);		//User wishes to choose destination.
+        ImageButton button_origin = (ImageButton)findViewById(R.id.button_origin);	//User wishes to choose origin.
+        ImageButton button_destn = (ImageButton)findViewById(R.id.button_destn);		//User wishes to choose destination.
         
         
         
