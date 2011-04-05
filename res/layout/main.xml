@@ -17,32 +17,32 @@
     android:textSize="16px"
     />
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="horizontal"
-    android:layout_width="wrap_content"
+    android:layout_width="fill_parent"
     android:layout_height="wrap_content"
-    android:background="#b6b6b6"
     >
- 
-	<ImageButton 
+	
+	
+    <ImageButton 
 	android:id="@+id/button_origin" 
-	android:src="@drawable/ic_button_02"
+	android:src="@drawable/ic_button_04"
 	android:layout_width="45px" 
 	android:layout_height="45px"
+	android:layout_alignParentRight="true"
 	>
 	</ImageButton>
 	
-	<TextView  
+	<EditText  
 	android:id="@+id/text_origin2"
     android:layout_width="fill_parent" 
     android:layout_height="wrap_content" 
-    android:text="Use Current Location"
-    android:textColor="#000000"
-    android:textSize="14px"
-    android:layout_gravity="center_vertical"
+    android:text="Use Current Location" 
+    android:layout_toLeftOf="@id/button_origin"
+    android:selectAllOnFocus="true"
     />
 	
-</LinearLayout>
+</RelativeLayout>
 
 
 	<TextView  
@@ -57,35 +57,34 @@
     />
 
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="horizontal"
-    android:layout_width="wrap_content"
+    android:layout_width="fill_parent"
     android:layout_height="wrap_content"
-    android:background="#b6b6b6"
-    >	
-    
-	<ImageButton 
+    >
+	
+	
+    <ImageButton 
 	android:id="@+id/button_destn" 
-	android:src="@drawable/ic_button_02"
+	android:src="@drawable/ic_button_04"
 	android:layout_width="45px" 
 	android:layout_height="45px"
+	android:layout_alignParentRight="true"
 	>
 	</ImageButton>
 	
-	<TextView  
-	android:id="@+id/text_destin2"
+	<EditText  
+	android:id="@+id/text_destn2"
     android:layout_width="fill_parent" 
     android:layout_height="wrap_content" 
-    android:text="Use Current Location"
-    android:textColor="#000000"
-    android:textSize="14px"
-    android:layout_gravity="center_vertical"
+    android:text="Use Current Location" 
+    android:layout_toLeftOf="@id/button_destn"
+    android:selectAllOnFocus="true"    
     />
 	
-</LinearLayout>
+</RelativeLayout>
 	
-		
-	
+
 	<Button 
 	android:id="@+id/button_go" 
 	android:background="@drawable/custom_button"
@@ -105,11 +104,5 @@
     android:gravity="center"
     android:layout_gravity="right"
     />
-	
-	
-	<View android:id="@+id/divider1"
-    android:background="@drawable/gradient"
-    android:layout_width="fill_parent"
-    android:layout_height="1dp" />
 
 </LinearLayout>

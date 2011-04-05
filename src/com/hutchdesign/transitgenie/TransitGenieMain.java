@@ -25,7 +25,8 @@ import android.widget.TextView;
 public class TransitGenieMain extends Activity {
     protected static final int ORIGIN_REQUEST = 0;
 
-  //Set up Request URL 
+    Bundle b;	//Hodls data passed between main activity and places activity
+    //Set up Request URL 
     Request request = new Request();
     Document[] routes;
 	/** Called when the activity is first created. */
@@ -33,6 +34,8 @@ public class TransitGenieMain extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
+        
+        b = new Bundle();
         
         //Import Buttons from main.xml
         Button button_go = (Button)findViewById(R.id.button_go);			//"Go" button on main screen (=> User is ready for routes)
@@ -77,6 +80,10 @@ public class TransitGenieMain extends Activity {
 	    		
 	    		//Run places activity
 	    		Intent i = new Intent(getApplicationContext(), places.class);
+	    		
+	    		b.putInt("origin", 1);	//Pass to Places activity that user is requesting origin.
+	    		i.putExtras(b);
+	    		
 	            startActivity(i);
 	    		//startActivityForResult(i, ORIGIN_REQUEST);
 	            
@@ -97,6 +104,10 @@ public class TransitGenieMain extends Activity {
 	    		
 	    		//Run places activity
 	    		Intent i = new Intent(getApplicationContext(), places.class);
+	    		
+	    		b.putInt("origin", 2);	//Pass to Places activity that user is requesting destination.
+	    		i.putExtras(b);
+	    		
 	            startActivity(i);
 	            
 	            //TODO: Grab destination selection from places activity
