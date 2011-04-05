@@ -1,5 +1,13 @@
 package com.hutchdesign.transitgenie;
 
+import java.io.IOException;
+import java.net.MalformedURLException;
+
+import javax.xml.parsers.ParserConfigurationException;
+
+import org.w3c.dom.Document;
+import org.xml.sax.SAXException;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
@@ -19,7 +27,7 @@ public class TransitGenieMain extends Activity {
 
   //Set up Request URL 
     Request request = new Request();
-    
+    Document[] routes;
 	/** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -31,7 +39,32 @@ public class TransitGenieMain extends Activity {
         ImageButton button_origin = (ImageButton)findViewById(R.id.button_origin);	//User wishes to choose origin.
         ImageButton button_destn = (ImageButton)findViewById(R.id.button_destn);		//User wishes to choose destination.
         
-        
+        button_go.setOnClickListener(new View.OnClickListener(){	
+	    	public void onClick(View v){
+	    		try {
+					request.buildURL();
+				} catch (MalformedURLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+	    		try {
+					routes = request.buildRoutes();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (ParserConfigurationException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (SAXException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+	    		//Run Routes activity
+				//TODO ALLIE: Send routes doc array to Routes.class to display
+	    		Intent i = new Intent(getApplicationContext(), Routes.class);
+	            startActivity(i);
+	    	}
+        });
         
         /*
          * SET ORIGIN
@@ -79,13 +112,13 @@ public class TransitGenieMain extends Activity {
         // If the request went well (OK) and the request was ORIGIN_REQUEST
         if (resultCode == Activity.RESULT_OK && requestCode == ORIGIN_REQUEST) {
             // Perform a query to the contact's content provider for the contact's name
-            Cursor cursor = getContentResolver().query(data.getData(),
-            new String[] {places.latitude}, null, null, null);
-            if (cursor.moveToFirst()) { // True if the cursor is not empty
-                int columnIndex = cursor.getColumnIndex(places.latitude);
-                request.originLatitude = cursor.getString(columnIndex);
-                //request = null;// Do something with the selected contact's name...
-            }
+//            Cursor cursor = getContentResolver().query(data.getData(),
+//            new String[] {places.latitude}, null, null, null);
+//            if (cursor.moveToFirst()) { // True if the cursor is not empty
+//                int columnIndex = cursor.getColumnIndex(places.latitude);
+//                request.originLatitude = cursor.getString(columnIndex);
+//                //request = null;// Do something with the selected contact's name...
+//            }
         }
     }
     //Customize Menu

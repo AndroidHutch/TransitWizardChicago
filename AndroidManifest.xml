@@ -11,8 +11,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".places"></activity>
-        <activity android:name=".transit"></activity>
-		<activity android:name=".detail"></activity>
+        <activity android:name=".Routes"></activity>
+		<activity android:name=".RouteDetail"></activity>
 		<activity android:name=".Map"></activity>
 		<uses-library android:name="com.google.android.maps"></uses-library>
     </application>
