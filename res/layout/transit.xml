@@ -5,6 +5,75 @@
     android:layout_height="fill_parent"
     android:background="#b6b6b6"
     >
+
+	<LinearLayout
+    android:orientation="horizontal"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:background="#000000"
+    >
     
+    	<ImageView 
+		android:id="@+id/transit_swap"
+		android:layout_width="20px" 
+		android:layout_height="26px" 
+		android:src="@drawable/swap" 
+		android:padding="5px"
+		>
+		</ImageView>	
+		
+		<LinearLayout
+	    android:orientation="vertical"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:background="#000000"
+	    android:padding="5px"
+	    >
+	    	<TextView  
+			android:id="@+id/transit_origin1"
+		    android:layout_width="fill_parent" 
+		    android:layout_height="wrap_content" 
+		    android:text="origin"
+		    android:textStyle="bold"
+		    android:textColor="#000000"
+		    android:background="#FFFFFF"
+		    android:textSize="10px"
+		    />
+		    <TextView  
+			android:id="@+id/transit_destn1"
+		    android:layout_width="fill_parent" 
+		    android:layout_height="wrap_content" 
+		    android:text="destination"
+		    android:textStyle="bold"
+		    android:textColor="#000000"
+		    android:background="#FFFFFF"
+		    android:textSize="10px"
+		    />
+		</LinearLayout>
+    	
+    
+    </LinearLayout>
+
+
+	<ListView 
+		android:id="@+id/RouteListView"
+        android:layout_width="fill_parent" android:layout_height="fill_parent"
+        android:layout_weight="1.0"
+        android:textColor="#444444"
+        android:divider="@drawable/divider"
+        android:dividerHeight="1px"
+        android:cacheColorHint="#00000000">
+	</ListView>
+    
+	<TextView  
+	    android:layout_width="fill_parent" 
+	    android:layout_height="wrap_content" 
+	    android:text="Click row for route details.\nControls on top adjust origin/destination\nand arrival/departure time preferences."
+	    android:textStyle="bold"
+	    android:textColor="#000000"
+	    android:textSize="14px"
+	    android:gravity="center"
+	    android:paddingTop="10px"
+	    />
 	
 </LinearLayout>

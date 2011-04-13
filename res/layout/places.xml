@@ -12,9 +12,9 @@
     android:layout_height="wrap_content" 
     android:text="@string/title_places"
     android:textColor="#000000"
-    android:textSize="18px"
+    android:textSize="20px"
     android:textStyle="bold"
-    android:paddingBottom="15px"
+    android:paddingBottom="10px"
     />
     
 

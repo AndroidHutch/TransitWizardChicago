@@ -26,10 +26,11 @@ import android.widget.TextView;
 public class TransitGenieMain extends Activity {
     protected static final int ORIGIN_REQUEST = 0;
 
-    Bundle b;	//Hodls data passed between main activity and places activity
+    Bundle b;	//Holds data passed between main activity and places activity
     //Set up Request URL 
     Request request = new Request();
     Document[] routes;
+    
 	/** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -45,7 +46,9 @@ public class TransitGenieMain extends Activity {
         
         button_go.setOnClickListener(new View.OnClickListener(){	
 	    	public void onClick(View v){
-	    		try {
+	    		
+	    		//TODO: Fix this crashing
+	    		/*try {
 					request.buildURL();
 				} catch (MalformedURLException e1) {
 					// TODO Auto-generated catch block
@@ -62,7 +65,9 @@ public class TransitGenieMain extends Activity {
 				} catch (SAXException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
-				}
+				}*/
+	    		
+	    		
 	    		//Run Routes activity
 				//TODO ALLIE: Send routes doc array to Routes.class to display
 	    		Intent i = new Intent(getApplicationContext(), Routes.class);
@@ -128,7 +133,7 @@ public class TransitGenieMain extends Activity {
     	Bundle bundl = data.getExtras();
     	
         // If the request went well (OK) and the request was ORIGIN_REQUEST
-        if (resultCode == Activity.RESULT_OK && requestCode == ORIGIN_REQUEST) {
+        if(resultCode == Activity.RESULT_OK && requestCode == ORIGIN_REQUEST) {
         	
         	EditText origin = (EditText) findViewById(R.id.text_origin2);
         	origin.setText(bundl.getString("origin_string"));
@@ -142,12 +147,18 @@ public class TransitGenieMain extends Activity {
 								//  request = null;// Do something with the selected contact's name...
 								//  }
         }
-     // If the request went well (OK) and the request was for destination
-        else if (resultCode == Activity.RESULT_OK)
+        
+        //If the request went well (OK) and the request was for destination
+        else if(resultCode == Activity.RESULT_OK)
         {
         	EditText destn = (EditText) findViewById(R.id.text_destn2);
         	destn.setText(bundl.getString("destin_string"));
         }
+        
+        else if(resultCode == Activity.RESULT_CANCELED)
+        {
+        }
+        
     }
     
     //Customize Menu

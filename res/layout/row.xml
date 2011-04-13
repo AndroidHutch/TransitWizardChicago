@@ -1,0 +1,242 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="fill_parent"
+	android:layout_height="fill_parent"
+	android:orientation="vertical"
+	android:padding="2px"
+	android:background="#999999">
+	
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+android:layout_width="fill_parent"
+android:layout_height="wrap_content"
+android:orientation="horizontal"
+android:background="#FFFFFF">
+	
+	<LinearLayout 
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:orientation="vertical"
+		android:paddingLeft="2px"
+		>
+		
+			<TextView  
+			android:id="@+id/row_arriveBy"
+		    android:layout_width="fill_parent" 
+		    android:layout_height="wrap_content" 
+		    android:text="arrive by"
+		    android:textStyle="bold"
+		    android:textColor="#999999"
+		    android:textSize="10px"
+		    />
+		    <TextView  
+			android:id="@+id/row_arriveBy_time"
+		    android:layout_width="fill_parent" 
+		    android:layout_height="wrap_content" 
+		    android:text="00:00"
+		    android:textStyle="bold"
+		    android:textColor="#000000"
+		    android:textSize="12px"
+		    android:gravity="right"
+		    />
+		    
+		    <TextView  
+			android:id="@+id/row_leavIn"
+		    android:layout_width="fill_parent" 
+		    android:layout_height="wrap_content" 
+		    android:text="leave in"
+		    android:textStyle="bold"
+		    android:textColor="#999999"
+		    android:textSize="10px"
+		    />
+		    <TextView  
+			android:id="@+id/row_leaveIn_time"
+		    android:layout_width="fill_parent" 
+		    android:layout_height="wrap_content" 
+		    android:text="now"
+		    android:textStyle="bold"
+		    android:textColor="#000000"
+		    android:textSize="12px"
+		    android:gravity="right"
+		    />
+		
+	</LinearLayout>
+	
+	<LinearLayout 
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:orientation="vertical"
+		android:paddingLeft="4px"
+		android:paddingRight="1px"
+		>
+			<ImageView 
+			android:id="@+id/row_step1"
+			android:layout_width="35px" 
+			android:layout_height="35px" 
+			android:src="@drawable/temp" 
+			>
+			</ImageView>
+			<TextView  
+			android:id="@+id/row_step1_length"
+		    android:layout_width="fill_parent" 
+		    android:layout_height="wrap_content" 
+		    android:text="0.0 mi"
+		    android:textStyle="bold"
+		    android:textColor="#000000"
+		    android:textSize="10px"
+		    android:gravity="center"
+		    />
+		    
+	</LinearLayout>
+
+	<LinearLayout 
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:orientation="vertical"
+		android:paddingLeft="4px"
+		android:paddingRight="1px"
+		>
+			<ImageView 
+			android:id="@+id/row_step2"
+			android:layout_width="35px" 
+			android:layout_height="35px" 
+			android:src="@drawable/temp" 
+			>
+			</ImageView>
+			<TextView  
+			android:id="@+id/row_step2_length"
+		    android:layout_width="fill_parent" 
+		    android:layout_height="wrap_content" 
+		    android:text="0.0 mi"
+		    android:textStyle="bold"
+		    android:textColor="#000000"
+		    android:textSize="10px"
+		    android:gravity="center"
+		    />
+		    
+	</LinearLayout>
+	
+	
+	<LinearLayout 
+	android:layout_width="wrap_content"
+	android:layout_height="wrap_content"
+	android:orientation="vertical"
+	android:paddingLeft="4px"
+	android:paddingRight="1px"
+	>
+			<ImageView 
+			android:id="@+id/row_step3"
+			android:layout_width="35px" 
+			android:layout_height="35px" 
+			android:src="@drawable/temp" 
+			>
+			</ImageView>
+			<TextView  
+			android:id="@+id/row_step3_length"
+		    android:layout_width="fill_parent" 
+		    android:layout_height="wrap_content" 
+		    android:text="0.0 mi"
+		    android:textStyle="bold"
+		    android:textColor="#000000"
+		    android:textSize="10px"
+		    android:gravity="center"
+		    />
+			
+	</LinearLayout>
+	
+	<LinearLayout 
+	android:layout_width="wrap_content"
+	android:layout_height="wrap_content"
+	android:orientation="vertical"
+	android:paddingLeft="4px"
+	android:paddingRight="1px"
+	>
+	
+			<ImageView 
+			android:id="@+id/row_step4"
+			android:layout_width="35px" 
+			android:layout_height="35px" 
+			android:src="@drawable/temp" 
+			>
+			</ImageView>	
+			<TextView  
+			android:id="@+id/row_step4_length"
+		    android:layout_width="fill_parent" 
+		    android:layout_height="wrap_content" 
+		    android:text="0.0 mi"
+		    android:textStyle="bold"
+		    android:textColor="#000000"
+		    android:textSize="10px"
+		    android:gravity="center"
+		    />
+			
+	</LinearLayout>
+	
+	<ImageView 
+			android:id="@+id/row_arrow"
+			android:layout_width="13px" 
+			android:layout_height="19px" 
+			android:src="@drawable/ic_arrow" 
+			android:layout_gravity="center_vertical"
+			>
+			</ImageView>
+	
+</LinearLayout>	
+
+	<LinearLayout 
+	android:layout_width="wrap_content"
+	android:layout_height="wrap_content"
+	android:orientation="horizontal"
+	>
+	
+	<TextView  
+	android:id="@+id/row_departBy"
+    android:layout_width="wrap_content" 
+    android:layout_height="wrap_content" 
+    android:text="depart by"
+    android:textStyle="bold"
+    android:textColor="#000000"
+    android:textSize="10px"
+    android:paddingRight="8px"
+    />
+    
+    <TextView  
+	android:id="@+id/row_departBy_time1"
+    android:layout_width="wrap_content"  
+    android:layout_height="wrap_content" 
+    android:text="00:00"
+    android:textStyle="bold"
+    android:textColor="#000000"
+    android:textSize="10px"
+    android:paddingRight="20px"
+    />
+    <TextView  
+	android:id="@+id/row_departBy_time2"
+    android:layout_width="wrap_content" 
+    android:layout_height="wrap_content" 
+    android:text="00:00"
+    android:textStyle="bold"
+    android:textColor="#000000"
+    android:textSize="10px"
+    android:paddingRight="20px"
+    />
+    <TextView  
+	android:id="@+id/row_departBy_time3"
+    android:layout_width="wrap_content" 
+    android:layout_height="wrap_content" 
+    android:text="00:00"
+    android:textStyle="bold"
+    android:textColor="#000000"
+    android:textSize="10px"
+    android:paddingRight="20px"
+    />
+    <TextView  
+	android:id="@+id/row_departBy_time4"
+    android:layout_width="fill_parent" 
+    android:layout_height="wrap_content" 
+    android:text="00:00"
+    android:textStyle="bold"
+    android:textColor="#000000"
+    android:textSize="10px"
+    />
+    
+    </LinearLayout>
+</LinearLayout>
