@@ -7,7 +7,7 @@
     >
     
 	<TextView  
-	android:id="@+id/text_place"
+	android:id="@+id/header1"
     android:layout_width="fill_parent" 
     android:layout_height="wrap_content" 
     android:text="@string/title_places"
@@ -17,103 +17,8 @@
     android:paddingBottom="15px"
     />
     
-<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	android:id="@+id/main_layout"
-    android:orientation="vertical"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    >
-    
-    <!-- ROW 1  -->
-    <TableRow>
-    
-    	<ImageButton
-		android:id="@+id/select_crnt"
-		android:src="@drawable/ic_button_05"
-		android:layout_width="40px"
-		android:layout_height="40px"
-		android:layout_alignParentRight="true"
-		>
-		</ImageButton>
-    
-		<TextView  
-		android:id="@+id/text_crnt"
-	    android:layout_width="wrap_content" 
-	    android:layout_height="wrap_content" 
-	    android:text="Use Current Location"
-	    android:textColor="#000000"
-	    android:textSize="18px"
-	    android:layout_gravity="center_vertical"
-	    />
-	
-		
-	
-	</TableRow>
-	
-	<!-- ROW 2 -->
-	<TableRow>
-	
-		<ImageButton
-		android:id="@+id/select_map"
-		android:src="@drawable/ic_button_05"
-		android:layout_width="40px"
-		android:layout_height="40px"
-		android:layout_alignParentRight="true"
-		>
-		</ImageButton>
-	
-		<TextView  
-		android:id="@+id/text_map"
-	    android:layout_width="wrap_content" 
-	    android:layout_height="wrap_content" 
-	    android:text="Select on Map"
-	    android:textColor="#000000"
-	    android:textSize="18px"
-	    android:layout_gravity="center_vertical"
-	    />
-	
-	</TableRow>
 
-	<!-- ROW 3 -->
-	<TableRow>
-	
-		<ImageButton
-		android:id="@+id/select_pop"
-		android:src="@drawable/ic_button_05"
-		android:layout_width="40px"
-		android:layout_height="40px"
-		android:layout_alignParentRight="true"
-		>
-		</ImageButton>
-	
-		<TextView  
-		android:id="@+id/text_pop"
-	    android:layout_width="wrap_content" 
-	    android:layout_height="wrap_content" 
-	    android:text="Show Popular Places..."
-	    android:textColor="#000000"
-	    android:textSize="18px"
-	    android:layout_gravity="center_vertical"
-	    />
-	
-	</TableRow>
+	<ListView android:id="@+id/listView1" android:layout_height="wrap_content" android:layout_width="fill_parent">
+	</ListView>
 
-	<View android:id="@+id/divider2"
-    android:background="@drawable/gradient"
-    android:layout_width="fill_parent"
-    android:layout_height="1dp" />
-
-	<TextView  
-	android:id="@+id/text_fav"
-    android:layout_width="fill_parent" 
-    android:layout_height="wrap_content" 
-    android:text="Favorites"
-    android:textColor="#000000"
-    android:textSize="18px"
-    android:textStyle="bold"
-    android:paddingBottom="15px"
-    />
-	<ListView android:id="@+id/listView1" android:layout_height="wrap_content" android:layout_width="fill_parent"></ListView>
-
-</TableLayout>
 </LinearLayout>
