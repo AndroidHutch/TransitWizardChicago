@@ -16,43 +16,60 @@ import com.google.android.maps.MapView;
 import com.google.android.maps.Overlay;
 
 public class Map extends MapActivity{
-
+	int ORIGIN;
 		class MapOverlay extends com.google.android.maps.Overlay
 		{
+			
 			public boolean onTap(GeoPoint p, MapView mapView)
 			{
 				Geocoder geoCoder = new Geocoder(
 	                    getBaseContext(), Locale.getDefault());
-				// Currently Displays address from tap coords on every tap
+				if (ORIGIN == 0)
+				{
+					TransitGenieMain.request.originLatitude = (p.getLatitudeE6() / 1E6);
+					TransitGenieMain.request.originLongitude = (p.getLongitudeE6() / 1E6);
+				}
+				else
+				{
+					TransitGenieMain.request.destLatitude = (p.getLatitudeE6() / 1E6);
+					TransitGenieMain.request.destLongitude = (p.getLongitudeE6() / 1E6);
+				}
+				finish();
+					// Currently Displays address from tap coords on every tap
 				// Could decrease lag by showing "Select this Location" and
 				// parsing coords only when Select is hit instead of every tap
-	                try {
-	                    List<Address> addresses = geoCoder.getFromLocation(
-	                        p.getLatitudeE6()  / 1E6, 
-	                        p.getLongitudeE6() / 1E6, 1);
-	 
-	                    String add = "";
-	                    if (addresses.size() > 0) 
-	                    {
-	                        for (int i=0; i<addresses.get(0).getMaxAddressLineIndex(); 
-	                             i++)
-	                           add += addresses.get(0).getAddressLine(i) + "\n";
-	                    }
+//	                try {
+//	                    List<Address> addresses = geoCoder.getFromLocation(
+//	                        p.getLatitudeE6()  / 1E6, 
+//	                        p.getLongitudeE6() / 1E6, 1);
+//	 
+//	                    String add = "";
+//	                    if (addresses.size() > 0) 
+//	                    {
+//	                        for (int i=0; i<addresses.get(0).getMaxAddressLineIndex(); 
+//	                             i++)
+//	                           add += addresses.get(0).getAddressLine(i) + "\n";
+//	                    }
 	 //TODO Make pop up of address, return Geopoint if address selected
-	                    
-	                    Toast.makeText(getBaseContext(), add, Toast.LENGTH_SHORT).show();
-	                }
-	                catch (IOException e) {                
-	                    e.printStackTrace();
-	                }   
+//	                    String add = "";
+//	                    add = Double.toString(p.getLatitudeE6() / 1E6) + Double.toString(p.getLongitudeE6() / 1E6);
+//	                    Toast.makeText(getBaseContext(), add, Toast.LENGTH_SHORT).show();
+	                //}
+//	                catch (IOException e) {                
+//	                    e.printStackTrace();
+//	                }   
 	                return true;
 			}
+				
+			
 
 		}
 		@Override
 		public void onCreate(Bundle savedInstanceState)
 		{
 		super.onCreate(savedInstanceState);
+		final Bundle b = getIntent().getExtras();
+        ORIGIN = b.getInt("origin", 0);
 		setContentView(R.layout.map);
 		MapView mapView = (MapView) findViewById(R.id.map);
 	    mapView.setBuiltInZoomControls(true);

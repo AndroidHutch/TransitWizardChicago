@@ -1,7 +1,13 @@
 package com.hutchdesign.transitgenie;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.xml.parsers.ParserConfigurationException;
+
+import org.w3c.dom.Document;
+import org.xml.sax.SAXException;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -22,6 +28,18 @@ public class Routes extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.transit);
         
+        try {
+			TransitGenieMain.request.buildRoutes();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ParserConfigurationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SAXException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
         ListView AllRoutes = (ListView) findViewById(R.id.RouteListView);
         
         

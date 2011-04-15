@@ -1,11 +1,16 @@
 package com.hutchdesign.transitgenie;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
+import java.util.Locale;
 
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.location.Address;
+import android.location.Geocoder;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
@@ -14,6 +19,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 //New lines bc svn is picky
 
@@ -85,7 +91,7 @@ public class places extends Activity {
         setContentView(R.layout.places);
         final Context mContext = this;
         final Bundle b = getIntent().getExtras();
-        
+        ORIGIN = b.getInt("origin", 0);		//Retrieve variable origin from main class
         //Import header (TextView) from places.xml
         TextView header = (TextView) findViewById(R.id.header1);
         
@@ -99,7 +105,7 @@ public class places extends Activity {
         }
         
         
-        ORIGIN = b.getInt("origin", 0);		//Retrieve variable origin from main class
+       
         
         LIST.addAll(Arrays.asList(MENU));
         MAIN_LIST = (ListView) findViewById(R.id.listView1);
@@ -130,7 +136,43 @@ public class places extends Activity {
                   	//SELECT ON MAP
                   	case 1:
                   		Intent i = new Intent( mContext, Map.class);
-        	            startActivity(i);
+                  		b.putInt("origin", ORIGIN);	//Pass to Places activity that user is requesting origin.
+        	    		i.putExtras(b);
+        	            startActivityForResult(i,1);
+        	            Geocoder geoCoder = new Geocoder(
+        	                    getBaseContext(), Locale.getDefault());
+        	            double mapLat, mapLong;
+        	            if( ORIGIN == 0 ){mapLat = TransitGenieMain.request.originLatitude; mapLong = TransitGenieMain.request.originLongitude;}
+        	            else{mapLat = TransitGenieMain.request.destLatitude; mapLong = TransitGenieMain.request.destLongitude;}
+//        	            List<Address> addresses = geoCoder.getFromLocation(
+//    	                        p.getLatitudeE6()  / 1E6, 
+//    	                        p.getLongitudeE6() / 1E6, 1);
+//    	 
+    	                String add = "";
+
+        	            
+						List<Address> addresses;
+						try {
+							addresses = geoCoder.getFromLocation(mapLat, mapLong, 1);
+						
+						
+	                    if (addresses.size() > 0) add = addresses.get(0).getAddressLine(0);
+//	                    {
+//	                        for (int count=0; count<addresses.get(0).getMaxAddressLineIndex(); 
+//	                             count++)
+//	                           add += addresses.get(0).getAddressLine(count) + "\n";
+//	                    }
+						} catch (IOException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+        	            if(ORIGIN == 0)	{ b.putString("origin_string", add); }
+                  		else			{ b.putString("destin_string", add); }
+        	            //Toast.makeText(getBaseContext(), add, Toast.LENGTH_SHORT).show();
+        	            i = getIntent();
+        	            i.putExtras(b);
+        	            setResult(RESULT_OK, i);
+        	            finish();
                   		break;
                   		
                   	//********************

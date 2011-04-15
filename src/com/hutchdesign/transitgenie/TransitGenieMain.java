@@ -25,11 +25,11 @@ import android.widget.TextView;
 
 public class TransitGenieMain extends Activity {
     protected static final int ORIGIN_REQUEST = 0;
-
+    public static Request request = new Request();
+    //Document[] routes;
     Bundle b;	//Holds data passed between main activity and places activity
     //Set up Request URL 
-    Request request = new Request();
-    Document[] routes;
+    
     
 	/** Called when the activity is first created. */
     @Override
@@ -38,12 +38,14 @@ public class TransitGenieMain extends Activity {
         setContentView(R.layout.main);
         
         b = new Bundle();
-        
+        double originLongitude = -87.839341;
+    	double originLatitude = 41.823309;
+    	double destLongitude = -87.635990;
+    	double destLatitude = 41.878884;
         //Import Buttons from main.xml
         Button button_go = (Button)findViewById(R.id.button_go);			//"Go" button on main screen (=> User is ready for routes)
         ImageButton button_origin = (ImageButton)findViewById(R.id.button_origin);	//User wishes to choose origin.
         ImageButton button_destn = (ImageButton)findViewById(R.id.button_destn);		//User wishes to choose destination.
-        
         button_go.setOnClickListener(new View.OnClickListener(){	
 	    	public void onClick(View v){
 	    		
@@ -69,8 +71,9 @@ public class TransitGenieMain extends Activity {
 	    		
 	    		
 	    		//Run Routes activity
-				//TODO ALLIE: Send routes doc array to Routes.class to display
 	    		Intent i = new Intent(getApplicationContext(), Routes.class);
+	    		//b.putDouble("originLong", originLongitude);
+	    		
 	            startActivity(i);
 	    	}
         });
