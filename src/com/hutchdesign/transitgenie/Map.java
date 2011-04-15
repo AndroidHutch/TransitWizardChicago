@@ -22,8 +22,6 @@ public class Map extends MapActivity{
 			
 			public boolean onTap(GeoPoint p, MapView mapView)
 			{
-				Geocoder geoCoder = new Geocoder(
-	                    getBaseContext(), Locale.getDefault());
 				if (ORIGIN == 0)
 				{
 					TransitGenieMain.request.originLatitude = (p.getLatitudeE6() / 1E6);
@@ -34,30 +32,10 @@ public class Map extends MapActivity{
 					TransitGenieMain.request.destLatitude = (p.getLatitudeE6() / 1E6);
 					TransitGenieMain.request.destLongitude = (p.getLongitudeE6() / 1E6);
 				}
+				//TODO Make pop up of "Select this location?", return when verified
+				setResult(RESULT_OK);
 				finish();
-					// Currently Displays address from tap coords on every tap
-				// Could decrease lag by showing "Select this Location" and
-				// parsing coords only when Select is hit instead of every tap
-//	                try {
-//	                    List<Address> addresses = geoCoder.getFromLocation(
-//	                        p.getLatitudeE6()  / 1E6, 
-//	                        p.getLongitudeE6() / 1E6, 1);
-//	 
-//	                    String add = "";
-//	                    if (addresses.size() > 0) 
-//	                    {
-//	                        for (int i=0; i<addresses.get(0).getMaxAddressLineIndex(); 
-//	                             i++)
-//	                           add += addresses.get(0).getAddressLine(i) + "\n";
-//	                    }
-	 //TODO Make pop up of address, return Geopoint if address selected
-//	                    String add = "";
-//	                    add = Double.toString(p.getLatitudeE6() / 1E6) + Double.toString(p.getLongitudeE6() / 1E6);
-//	                    Toast.makeText(getBaseContext(), add, Toast.LENGTH_SHORT).show();
-	                //}
-//	                catch (IOException e) {                
-//	                    e.printStackTrace();
-//	                }   
+
 	                return true;
 			}
 				

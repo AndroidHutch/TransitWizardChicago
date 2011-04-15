@@ -65,6 +65,7 @@ public class Request {
 
 	public Document[] buildRoutes() throws IOException,
 			ParserConfigurationException, SAXException {
+		buildURL();
 		URL url = new URL(
 				"http://www.transitgenie.com:8080/path_xml?version=2.3&origlon=-87.839341&origlat=41.823309&destlon=-87.635990&destlat=41.878884&dep_time=1279296315&max_results=3&walking_speed=1.300000&seqno=6&street_mode=%22walk%22&transit_mode=%22Both%22");
 		// try {

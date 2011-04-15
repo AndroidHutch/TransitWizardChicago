@@ -28,6 +28,11 @@ public class Routes extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.transit);
         
+
+        ListView AllRoutes = (ListView) findViewById(R.id.RouteListView);
+        
+        
+        List<SingleRoute> RouteList = new ArrayList<SingleRoute>();
         try {
 			TransitGenieMain.request.buildRoutes();
 		} catch (IOException e) {
@@ -40,11 +45,6 @@ public class Routes extends Activity {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-        ListView AllRoutes = (ListView) findViewById(R.id.RouteListView);
-        
-        
-        List<SingleRoute> RouteList = new ArrayList<SingleRoute>();
-        
         RouteList.add(new SingleRoute("12:34", new String[] {"one", "two"}));
 			//Add all items from Document to RouteList
         
