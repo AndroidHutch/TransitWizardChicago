@@ -70,7 +70,8 @@ android:background="#FFFFFF">
 			<ImageView 
 			android:id="@+id/row_step1"
 			android:layout_width="35px" 
-			android:layout_height="35px" 
+			android:layout_height="37px" 
+			android:paddingTop="2px" 
 			android:src="@drawable/temp" 
 			>
 			</ImageView>
@@ -97,7 +98,8 @@ android:background="#FFFFFF">
 			<ImageView 
 			android:id="@+id/row_step2"
 			android:layout_width="35px" 
-			android:layout_height="35px" 
+			android:layout_height="37px" 
+			android:paddingTop="2px" 
 			android:src="@drawable/temp" 
 			>
 			</ImageView>
@@ -125,7 +127,8 @@ android:background="#FFFFFF">
 			<ImageView 
 			android:id="@+id/row_step3"
 			android:layout_width="35px" 
-			android:layout_height="35px" 
+			android:layout_height="37px" 
+			android:paddingTop="2px"
 			android:src="@drawable/temp" 
 			>
 			</ImageView>
@@ -153,7 +156,8 @@ android:background="#FFFFFF">
 			<ImageView 
 			android:id="@+id/row_step4"
 			android:layout_width="35px" 
-			android:layout_height="35px" 
+			android:layout_height="37px" 
+			android:paddingTop="2px"
 			android:src="@drawable/temp" 
 			>
 			</ImageView>	
@@ -170,14 +174,17 @@ android:background="#FFFFFF">
 			
 	</LinearLayout>
 	
+	<RelativeLayout android:layout_width="fill_parent" android:layout_height="fill_parent">
 	<ImageView 
 			android:id="@+id/row_arrow"
 			android:layout_width="13px" 
 			android:layout_height="19px" 
 			android:src="@drawable/ic_arrow" 
-			android:layout_gravity="center_vertical"
+			android:layout_alignParentRight="true"
+			android:layout_centerVertical="true"
 			>
 			</ImageView>
+	</RelativeLayout>
 	
 </LinearLayout>	
 

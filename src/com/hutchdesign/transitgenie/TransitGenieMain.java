@@ -1,6 +1,13 @@
 package com.hutchdesign.transitgenie;
 
 
+import java.io.IOException;
+import java.net.MalformedURLException;
+
+import javax.xml.parsers.ParserConfigurationException;
+
+import org.xml.sax.SAXException;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -52,14 +59,14 @@ public class TransitGenieMain extends Activity {
 	    	public void onClick(View v){
 	    		
 	    		//TODO: Fix this crashing
-	    		/*try {
+	    		try {
 					request.buildURL();
 				} catch (MalformedURLException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
 	    		try {
-					routes = request.buildRoutes();
+					request.buildRoutes();
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -69,7 +76,7 @@ public class TransitGenieMain extends Activity {
 				} catch (SAXException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
-				}*/
+				}
 	    		
 	    		
 	    		//Run Routes activity
@@ -137,8 +144,7 @@ public class TransitGenieMain extends Activity {
     public class MyLocationListener implements LocationListener
 
     {
-    	@Override
-    public void onLocationChanged(Location loc)
+    	public void onLocationChanged(Location loc)
 
     {
 
@@ -162,8 +168,6 @@ public class TransitGenieMain extends Activity {
     }
 
 
-    @Override
-
     public void onProviderDisabled(String provider)
 
     {
@@ -176,8 +180,6 @@ public class TransitGenieMain extends Activity {
 
     }
 
-
-    @Override
 
     public void onProviderEnabled(String provider)
 
@@ -192,8 +194,6 @@ public class TransitGenieMain extends Activity {
     Toast.LENGTH_SHORT).show();
 
     }
-
-    @Override
 
     public void onStatusChanged(String provider, int status, Bundle extras)
 

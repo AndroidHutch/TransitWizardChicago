@@ -3,6 +3,7 @@ package com.hutchdesign.transitgenie;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import javax.xml.parsers.ParserConfigurationException;
 
@@ -28,13 +29,10 @@ public class Routes extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.transit);
         
-
-        ListView AllRoutes = (ListView) findViewById(R.id.RouteListView);
+        Document[] allRoutes = null;
         
-        
-        List<SingleRoute> RouteList = new ArrayList<SingleRoute>();
         try {
-			TransitGenieMain.request.buildRoutes();
+			allRoutes = TransitGenieMain.request.buildRoutes();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -45,12 +43,24 @@ public class Routes extends Activity {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-        RouteList.add(new SingleRoute("12:34", new String[] {"one", "two"}));
-			//Add all items from Document to RouteList
+		if(allRoutes == null)
+		{
+			Toast.makeText(getApplicationContext(), "Error: No Routes Found.", Toast.LENGTH_SHORT).show();
+			finish();
+		}
+		
+        ListView AllRoutes = (ListView) findViewById(R.id.RouteListView);	//Load ListView from .xml       
+        List<SingleRoute> RouteList = new ArrayList<SingleRoute>();			//Create ArrayList of Routes.
         
-        RouteAdapter adapter = new RouteAdapter(this, RouteList);
-        
-        AllRoutes.setAdapter(adapter);
+        //Parse and separate Documents.
+        for(int x=0; x<allRoutes.length; ++x) 
+        {
+        	RouteList.add(new SingleRoute(allRoutes[x]));
+        	
+        }
+     
+        RouteAdapter adapter = new RouteAdapter(this, RouteList);			//Add ArrayList to adapter.
+        AllRoutes.setAdapter(adapter);										//Set ListView adapter.
         
        	
     }//End onCreate
