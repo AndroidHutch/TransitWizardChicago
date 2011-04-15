@@ -1,16 +1,8 @@
 package com.hutchdesign.transitgenie;
 
-import java.io.IOException;
-import java.net.MalformedURLException;
-
-import javax.xml.parsers.ParserConfigurationException;
-
-import org.w3c.dom.Document;
-import org.xml.sax.SAXException;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.database.Cursor;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -19,7 +11,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.TextView;
 
 //TODO: Wrap .xml files in in Scroll Views
 
@@ -38,10 +29,6 @@ public class TransitGenieMain extends Activity {
         setContentView(R.layout.main);
         
         b = new Bundle();
-        double originLongitude = -87.839341;
-    	double originLatitude = 41.823309;
-    	double destLongitude = -87.635990;
-    	double destLatitude = 41.878884;
         //Import Buttons from main.xml
         Button button_go = (Button)findViewById(R.id.button_go);			//"Go" button on main screen (=> User is ready for routes)
         ImageButton button_origin = (ImageButton)findViewById(R.id.button_origin);	//User wishes to choose origin.
