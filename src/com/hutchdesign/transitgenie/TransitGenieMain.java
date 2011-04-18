@@ -58,25 +58,6 @@ public class TransitGenieMain extends Activity {
         button_go.setOnClickListener(new View.OnClickListener(){	
 	    	public void onClick(View v){
 	    		
-	    		//TODO: Fix this crashing
-	    		try {
-					request.buildURL();
-				} catch (MalformedURLException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-	    		try {
-					request.buildRoutes();
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (ParserConfigurationException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (SAXException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
 	    		
 	    		
 	    		//Run Routes activity

@@ -52,4 +52,20 @@ public class SingleRoute
 		step4 = e.getChildNodes().item(3).getLocalName();
 		
 	}//End setImmediateData()
+	
+	/*
+	 * Test to read dom tree new InputSource(url.openStream())); for(int k =
+	 * 0; k < numberRequests; k++){ Element rootElement =
+	 * documents[k].getDocumentElement();
+	 * 
+	 * NodeList nodes = rootElement.getChildNodes();
+	 * 
+	 * for( int i=0; i<nodes.getLength(); i++){ Node node = nodes.item(i);
+	 * 
+	 * if(node instanceof Element){ //a child element to process Element
+	 * child = (Element) node; NamedNodeMap map = child.getAttributes();
+	 * for( int j = 0; j < map.getLength(); j++)
+	 * System.out.println(map.item(j).getNodeName());
+	 * //System.out.println(attribute); } } }
+	 */
 }

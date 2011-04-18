@@ -49,6 +49,7 @@ public class Routes extends Activity {
 			finish();
 		}
 		
+		
         ListView AllRoutes = (ListView) findViewById(R.id.RouteListView);	//Load ListView from .xml       
         List<SingleRoute> RouteList = new ArrayList<SingleRoute>();			//Create ArrayList of Routes.
         
@@ -61,7 +62,22 @@ public class Routes extends Activity {
      
         RouteAdapter adapter = new RouteAdapter(this, RouteList);			//Add ArrayList to adapter.
         AllRoutes.setAdapter(adapter);										//Set ListView adapter.
-        
+		
+        /*
+		 * Test to read dom tree new InputSource(url.openStream())); for(int k =
+		 * 0; k < numberRequests; k++){ Element rootElement =
+		 * documents[k].getDocumentElement();
+		 * 
+		 * NodeList nodes = rootElement.getChildNodes();
+		 * 
+		 * for( int i=0; i<nodes.getLength(); i++){ Node node = nodes.item(i);
+		 * 
+		 * if(node instanceof Element){ //a child element to process Element
+		 * child = (Element) node; NamedNodeMap map = child.getAttributes();
+		 * for( int j = 0; j < map.getLength(); j++)
+		 * System.out.println(map.item(j).getNodeName());
+		 * //System.out.println(attribute); } } }
+		 */
        	
     }//End onCreate
     

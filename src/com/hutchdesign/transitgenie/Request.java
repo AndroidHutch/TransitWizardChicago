@@ -42,7 +42,7 @@ public class Request {
 	public double originLatitude = 41.823309;
 	public double destLongitude = -87.635990;
 	public double destLatitude = 41.878884;
-	public double queryTime = 1234;
+	public double queryTime = 1279296315;
 	public int maxResults = 1;
 	public double walkingSpeed = 1.30;
 	public double sequenceNumber = 6;
