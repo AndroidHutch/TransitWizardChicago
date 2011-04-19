@@ -49,7 +49,7 @@ public class RouteAdapter extends BaseAdapter implements OnClickListener {
         leave.setText(curr.leaveIn);
         
         ImageView step1 = (ImageView) convertView.findViewById(R.id.row_step1);
-        setStepImage(step1, curr.step1);
+        setStepImage(step1, curr.steps[0]);
         
         
         return convertView;

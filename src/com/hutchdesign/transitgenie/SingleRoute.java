@@ -2,6 +2,7 @@ package com.hutchdesign.transitgenie;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.NodeList;
 
 //getElementsByTagName()
@@ -17,7 +18,7 @@ public class SingleRoute
 	private Document DOC;
 	String arrival;		//arrival time ("Arrive by xx:xx")
 	String leaveIn; 	//initial depart time ("Leave in x Minutes")
-	String step1, step2, step3, step4;
+	String[] steps = new String[5];
 	
 	public SingleRoute(Document i) {
         this.DOC = i;		//Import Document.
@@ -45,13 +46,37 @@ public class SingleRoute
 			int aHour = (int) (a / 1000) / 3600;	//Convert to proper hour
 			int aMin  = (int) (a / 1000) / 60;		//Convert to proper minute
 		arrival = "" + aHour + ":" + aMin;			//Store depart time
-		
-		step1 = e.getChildNodes().item(0).getLocalName();
-		step2 = e.getChildNodes().item(1).getLocalName();
-		step3 = e.getChildNodes().item(2).getLocalName();
-		step4 = e.getChildNodes().item(3).getLocalName();
+		int count = 0;
+		//while(e.hasChildNodes()){
+		steps[0] = e.getChildNodes().item(0).getNodeName();
+		//count++;
+	//}
+
 		
 	}//End setImmediateData()
+	
+	/*
+	 * Example request working with <routes> as root node (ie nodes.item(0) = <route>:
+	 
+	 
+	NodeList nodes = rootElement.getChildNodes();
+    System.out.println("getLocalName() = " + nodes.item(0).getLocalName());
+    System.out.println("getNodeName() = " + nodes.item(0).getNodeName());
+    System.out.println("getNodeValue() = " + nodes.item(0).getNodeValue());
+    System.out.println("getNodeType() =" + nodes.item(0).getNodeType());
+    NamedNodeMap map = nodes.item(0).getAttributes();
+    System.out.println("Get Attribute 0 = " + map.item(0));
+    System.out.println("Child = " + nodes.item(0).getChildNodes().item(0).getNodeName());
+	
+	Example request results:
+	
+	getLocalName() = null
+	getNodeName() = route
+	getNodeValue() = null
+	getNodeType() =1
+	Get Attribute 0 = arr_time="1279303255"
+	Child = walk
+	*/
 	
 	/*
 	 * Test to read dom tree new InputSource(url.openStream())); for(int k =
