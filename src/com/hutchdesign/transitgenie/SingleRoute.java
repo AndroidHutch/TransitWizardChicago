@@ -48,7 +48,7 @@ public class SingleRoute
 		arrival = "" + aHour + ":" + aMin;			//Store depart time
 		int count = 0;
 		//while(e.hasChildNodes()){
-		steps[0] = e.getChildNodes().item(0).getNodeName();
+		//steps[0] = e.getChildNodes().item(0).getNodeName();
 		//count++;
 	//}
 

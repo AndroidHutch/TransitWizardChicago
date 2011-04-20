@@ -24,6 +24,9 @@ public class Map extends MapActivity {
 				TransitGenieMain.request.destLongitude = (p.getLongitudeE6() / 1E6);
 			}
 			// TODO Make pop up of "Select this location?", return when verified
+			//Reset GPS Flag
+    		TransitGenieMain.DEST_GPS = 0;
+    		TransitGenieMain.ORIGIN_GPS = 0;
 			setResult(RESULT_OK);
 			finish();
 

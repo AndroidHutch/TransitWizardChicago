@@ -28,6 +28,8 @@ import android.widget.Toast;
 
 public class TransitGenieMain extends Activity {
     protected static final int ORIGIN_REQUEST = 0;
+    public static int ORIGIN_GPS = 1;
+    public static int DEST_GPS = 1;
     public static Request request = new Request();
     //Document[] routes;
     Bundle b;	//Holds data passed between main activity and places activity
@@ -45,10 +47,8 @@ public class TransitGenieMain extends Activity {
 
         LocationListener mlocListener = new MyLocationListener();
         
-
         mlocManager.requestLocationUpdates( LocationManager.GPS_PROVIDER, 0, 0, mlocListener);
-
-
+        //mlocManager.getLastKnownLocation(LOCATION_SERVICE);
         
         b = new Bundle();
         //Import Buttons from main.xml
@@ -76,7 +76,8 @@ public class TransitGenieMain extends Activity {
          */
         button_origin.setOnClickListener(new View.OnClickListener(){	
 	    	public void onClick(View v){
-	    		
+	    		// reset GPS Flag
+	    		ORIGIN_GPS = 0;
 	    		//Run places activity
 	    		Intent i = new Intent(getApplicationContext(), places.class);
 	    		

@@ -106,7 +106,9 @@ public class places extends Activity {
 				case 0:
 					if (ORIGIN == 0) {
 						b.putString("origin_string", "Use Current Location");
+						TransitGenieMain.ORIGIN_GPS = 1;
 					} else {
+						TransitGenieMain.DEST_GPS = 1;
 						b.putString("destin_string", "Use Current Location");
 					}
 
@@ -151,8 +153,10 @@ public class places extends Activity {
 				// ANY POPULAR PLACE
 				default:
 					if (ORIGIN == 0) {
+						TransitGenieMain.ORIGIN_GPS = 0;
 						b.putString("origin_string", LIST.get(position));
 					} else {
+						TransitGenieMain.DEST_GPS = 0;
 						b.putString("destin_string", LIST.get(position));
 					}
 
