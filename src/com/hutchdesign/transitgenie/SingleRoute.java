@@ -1,10 +1,14 @@
 package com.hutchdesign.transitgenie;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.NodeList;
 
+import android.text.format.DateFormat;
 //getElementsByTagName()
 
 /*
@@ -18,7 +22,7 @@ public class SingleRoute
 	private Document DOC;
 	String arrival;		//arrival time ("Arrive by xx:xx")
 	String leaveIn; 	//initial depart time ("Leave in x Minutes")
-	String[] steps = new String[5];
+	String[] steps = new String[4];
 	
 	public SingleRoute(Document i) {
         this.DOC = i;		//Import Document.
@@ -38,22 +42,63 @@ public class SingleRoute
 	{
 		Element e = (Element) DOC.getElementsByTagName("route").item(0); //Element <route>
 		
+		SimpleDateFormat date = new SimpleDateFormat("h:mm a");
+		Calendar cal = Calendar.getInstance();
+		
+		//NodeList nodes 		= DOC.getChildNodes();
+		//NamedNodeMap map1 	= nodes.item(0).getAttributes();
+		
 		int d = Integer.parseInt(e.getAttribute("dep_time"));	//Depart time now stored in milliseconds
-			int dMin  = (int) (d / 1000) / 60;		//Convert to proper minute
-		leaveIn = "" + dMin + "min";				//Store depart time
+			
+			//int dMin  = (int) (d / 1000) / 60;		//Convert to proper minute
+		leaveIn = ""  + " min";				//Store depart time
+		//leaveIn = "" + d;
 		
 		int a = Integer.parseInt(e.getAttribute("arr_time"));	//Arrival time now stored in milliseconds
-			int aHour = (int) (a / 1000) / 3600;	//Convert to proper hour
-			int aMin  = (int) (a / 1000) / 60;		//Convert to proper minute
-		arrival = "" + aHour + ":" + aMin;			//Store depart time
-		int count = 0;
-		//while(e.hasChildNodes()){
-		//steps[0] = e.getChildNodes().item(0).getNodeName();
-		//count++;
-	//}
+			cal.setTimeInMillis(a);
+		arrival = "" + date.format(cal.getTime());
+		
+		NodeList children = e.getChildNodes();
+		for(int x=0; x<4; ++x)
+		{
+			if(children.item(x) != null)
+			{
+				String nodeName = children.item(x).getNodeName();
+				
+				if(nodeName.equals("transit"))
+				{
+					NamedNodeMap attr = children.item(x).getAttributes();
+					steps[x] = attr.item(0).getNodeValue();
+					
+				}
+				else
+				{	
+					steps[x] = nodeName;
+				}
+			}
+		}
+		/*
+		steps[0] = children.item(0).getNodeName();
+		steps[1] = children.item(1).getNodeName();
+		steps[2] = children.item(2).getNodeName();
+		*/
+		/*int count = 0;
+		while(e.getChildNodes().item(count) != null && count < 5){
+			steps[count] = e.getChildNodes().item(count).getNodeName();
+			count++;
+		}*/
 
 		
 	}//End setImmediateData()
+	
+	public String getArrival()
+	{
+		if(arrival == null)
+		{
+			return "error";
+		}
+		return arrival;
+	}
 	
 	/*
 	 * Example request working with <routes> as root node (ie nodes.item(0) = <route>:

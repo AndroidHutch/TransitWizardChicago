@@ -15,7 +15,8 @@ android:background="#FFFFFF">
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:orientation="vertical"
-		android:paddingLeft="2px"
+		android:paddingLeft="6px"
+		android:paddingRight="5px"
 		>
 		
 			<TextView  
@@ -64,14 +65,12 @@ android:background="#FFFFFF">
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:orientation="vertical"
-		android:paddingLeft="4px"
-		android:paddingRight="1px"
+		android:layout_margin="5px"
 		>
 			<ImageView 
 			android:id="@+id/row_step1"
 			android:layout_width="35px" 
 			android:layout_height="37px" 
-			android:paddingTop="2px" 
 			android:src="@drawable/temp" 
 			>
 			</ImageView>
@@ -92,14 +91,12 @@ android:background="#FFFFFF">
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:orientation="vertical"
-		android:paddingLeft="4px"
-		android:paddingRight="1px"
+		android:layout_margin="5px"
 		>
 			<ImageView 
 			android:id="@+id/row_step2"
 			android:layout_width="35px" 
 			android:layout_height="37px" 
-			android:paddingTop="2px" 
 			android:src="@drawable/temp" 
 			>
 			</ImageView>
@@ -121,14 +118,12 @@ android:background="#FFFFFF">
 	android:layout_width="wrap_content"
 	android:layout_height="wrap_content"
 	android:orientation="vertical"
-	android:paddingLeft="4px"
-	android:paddingRight="1px"
+	android:layout_margin="5px"
 	>
 			<ImageView 
 			android:id="@+id/row_step3"
 			android:layout_width="35px" 
 			android:layout_height="37px" 
-			android:paddingTop="2px"
 			android:src="@drawable/temp" 
 			>
 			</ImageView>
@@ -149,15 +144,13 @@ android:background="#FFFFFF">
 	android:layout_width="wrap_content"
 	android:layout_height="wrap_content"
 	android:orientation="vertical"
-	android:paddingLeft="4px"
-	android:paddingRight="1px"
+	android:layout_margin="5px"
 	>
 	
 			<ImageView 
 			android:id="@+id/row_step4"
 			android:layout_width="35px" 
 			android:layout_height="37px" 
-			android:paddingTop="2px"
 			android:src="@drawable/temp" 
 			>
 			</ImageView>	
@@ -202,7 +195,7 @@ android:background="#FFFFFF">
     android:textStyle="bold"
     android:textColor="#000000"
     android:textSize="10px"
-    android:paddingRight="8px"
+    android:paddingRight="15px"
     />
     
     <TextView  

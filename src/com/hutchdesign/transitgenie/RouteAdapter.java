@@ -5,10 +5,9 @@ import java.util.List;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -35,7 +34,9 @@ public class RouteAdapter extends BaseAdapter implements OnClickListener {
     }
 
     public View getView(int position, View convertView, ViewGroup viewGroup) {
+    	
         SingleRoute curr = routeList.get(position);
+        
         if (convertView == null) {
             LayoutInflater inflater = (LayoutInflater) context
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -43,14 +44,22 @@ public class RouteAdapter extends BaseAdapter implements OnClickListener {
         }
         
         TextView arrival = (TextView) convertView.findViewById(R.id.row_arriveBy_time);
-        arrival.setText(curr.arrival);
+        arrival.setText(curr.getArrival());
         
         TextView leave = (TextView) convertView.findViewById(R.id.row_leaveIn_time);
         leave.setText(curr.leaveIn);
         
+        //Import ImageViews which represent modes of transportation for steps #1-4
         ImageView step1 = (ImageView) convertView.findViewById(R.id.row_step1);
-        setStepImage(step1, curr.steps[0]);
+        ImageView step2 = (ImageView) convertView.findViewById(R.id.row_step2);
+        ImageView step3 = (ImageView) convertView.findViewById(R.id.row_step3);
+        ImageView step4 = (ImageView) convertView.findViewById(R.id.row_step4);
         
+        //Detmine & Set proper image
+        setStepImage(step1, curr.steps[0]);
+        setStepImage(step2, curr.steps[1]);
+        setStepImage(step3, curr.steps[2]);
+        setStepImage(step4, curr.steps[3]);
         
         return convertView;
     }
@@ -62,15 +71,19 @@ public class RouteAdapter extends BaseAdapter implements OnClickListener {
     
     private void setStepImage(ImageView i, String step)
     {
+    	if(step == null){
+    		i.setImageResource(R.drawable.filler);		//Blank Image
+    		return; }
+    	if(step.equals("walk")){
+			i.setImageResource(R.drawable.walk_icon_small);
+			return;	}
     	if(step.equals("PACE")){	
     		i.setImageResource(R.drawable.pace);	
     		return; }
     	if(step.equals("CTA")){ 	
     		i.setImageResource(R.drawable.cta0);	
     		return; }
-		if(step.equals("walk")){
-			i.setImageResource(R.drawable.walk_icon_small);
-			return;	}
+		
 		
 		i.setImageResource(R.drawable.unknown_vehicle_icon);
     }
