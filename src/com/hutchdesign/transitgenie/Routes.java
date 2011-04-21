@@ -1,6 +1,7 @@
 package com.hutchdesign.transitgenie;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -30,7 +31,12 @@ public class Routes extends Activity {
         setContentView(R.layout.transit);
         
         Document[] allRoutes = null;
-        
+        try {
+			TransitGenieMain.request.buildURL();
+		} catch (MalformedURLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
         try {
 			allRoutes = TransitGenieMain.request.buildRoutes();
 		} catch (IOException e) {
