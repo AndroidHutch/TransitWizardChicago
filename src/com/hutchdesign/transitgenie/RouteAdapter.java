@@ -2,23 +2,30 @@ package com.hutchdesign.transitgenie;
 
 import java.util.List;
 
+import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 public class RouteAdapter extends BaseAdapter implements OnClickListener {
     private Context context;
+    private Activity parent;
 
     private List<SingleRoute> routeList;
 
-    public RouteAdapter(Context context, List<SingleRoute> routeList) {
+    public RouteAdapter(Context context, List<SingleRoute> routeList, Activity p) {
         this.context = context;
         this.routeList = routeList;
+        this.parent = p;
     }
 
     public int getCount() {
@@ -32,7 +39,7 @@ public class RouteAdapter extends BaseAdapter implements OnClickListener {
     public long getItemId(int position) {
         return position;
     }
-
+    
     public View getView(int position, View convertView, ViewGroup viewGroup) {
     	
         SingleRoute curr = routeList.get(position);
@@ -42,6 +49,8 @@ public class RouteAdapter extends BaseAdapter implements OnClickListener {
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = inflater.inflate(R.layout.row, null);
         }
+        
+        curr.setImmediateData();	//Set variables needed
         
         TextView arrival = (TextView) convertView.findViewById(R.id.row_arriveBy_time);
         arrival.setText(curr.getArrival());
@@ -61,12 +70,23 @@ public class RouteAdapter extends BaseAdapter implements OnClickListener {
         setStepImage(step3, curr.steps[2]);
         setStepImage(step4, curr.steps[3]);
         
+        //Import TextViews which show length of walk or bus number
+        TextView txt1 = (TextView) convertView.findViewById(R.id.row_step1_text);
+        TextView txt2 = (TextView) convertView.findViewById(R.id.row_step2_text);
+        TextView txt3 = (TextView) convertView.findViewById(R.id.row_step3_text);
+        TextView txt4 = (TextView) convertView.findViewById(R.id.row_step4_text);
+        
+        //Set Text under images
+        setStepText(txt1, curr.stepText[0]);
+        setStepText(txt2, curr.stepText[1]);
+        setStepText(txt3, curr.stepText[2]);
+        setStepText(txt4, curr.stepText[3]);
+        
+        TextView pos = (TextView) convertView.findViewById(R.id.row_pos);
+        pos.setText(String.valueOf(position));
+
+        convertView.setOnClickListener(this);
         return convertView;
-    }
-
-    public void onClick(View view) {
-    	//Go to Route Detail for this route
-
     }
     
     private void setStepImage(ImageView i, String step)
@@ -81,11 +101,35 @@ public class RouteAdapter extends BaseAdapter implements OnClickListener {
     		i.setImageResource(R.drawable.pace);	
     		return; }
     	if(step.equals("CTA")){ 	
-    		i.setImageResource(R.drawable.cta0);	
+    		i.setImageResource(R.drawable.cta_bus);	
+    		return; }
+    	if(step.equals("METRA")){ 	
+    		i.setImageResource(R.drawable.metra);	
     		return; }
 		
+    	//Train Images
+    	if(step.equals("G")){
+    		i.setImageResource(R.drawable.cta_green);	
+    		return; }
+    	//TODO: Figure out remaining tags & add proper images.
 		
 		i.setImageResource(R.drawable.unknown_vehicle_icon);
     }
+    
+    private void setStepText(TextView t, String s)
+    {
+    	if(s == null){
+    		t.setText(""); 
+    		return; }
+    	t.setText(s);
+    }
 
+    public void onClick(View view) {
+    	//Go to Route Detail for this route
+    	TextView pos = (TextView) view.findViewById(R.id.row_pos);
+        int p = Integer.valueOf((String) pos.getText());
+
+    	Routes a  = (Routes) parent;
+    	a.getDetail(p);
+    }
 }

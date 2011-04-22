@@ -1,11 +1,13 @@
 package com.hutchdesign.transitgenie;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import android.text.format.DateFormat;
@@ -23,10 +25,14 @@ public class SingleRoute
 	String arrival;		//arrival time ("Arrive by xx:xx")
 	String leaveIn; 	//initial depart time ("Leave in x Minutes")
 	String[] steps = new String[4];
+	String[] stepText = new String[4];
+	NodeList allSteps;
+	Element routeNode;
 	
 	public SingleRoute(Document i) {
         this.DOC = i;		//Import Document.
-        setImmediateData();		//Set (some) variables.
+        routeNode = (Element) DOC.getElementsByTagName("route").item(0); //Element <route>
+        allSteps = routeNode.getChildNodes();
 	}
 	
 	
@@ -38,55 +44,82 @@ public class SingleRoute
 	 * so is only pulled from Document if user chooses route based on summary)
 	 * 
 	 */
-	private void setImmediateData()
-	{
-		Element e = (Element) DOC.getElementsByTagName("route").item(0); //Element <route>
-		
+	public void setImmediateData()
+	{	
 		SimpleDateFormat date = new SimpleDateFormat("h:mm a");
 		Calendar cal = Calendar.getInstance();
 		
 		//NodeList nodes 		= DOC.getChildNodes();
 		//NamedNodeMap map1 	= nodes.item(0).getAttributes();
 		
-		int d = Integer.parseInt(e.getAttribute("dep_time"));	//Depart time now stored in milliseconds
+		int d = Integer.parseInt(routeNode.getAttribute("dep_time"));	//Depart time now stored in milliseconds
 			
 			//int dMin  = (int) (d / 1000) / 60;		//Convert to proper minute
 		leaveIn = ""  + " min";				//Store depart time
 		//leaveIn = "" + d;
 		
-		int a = Integer.parseInt(e.getAttribute("arr_time"));	//Arrival time now stored in milliseconds
+		int a = Integer.parseInt(routeNode.getAttribute("arr_time"));	//Arrival time now stored in milliseconds
 			cal.setTimeInMillis(a);
 		arrival = "" + date.format(cal.getTime());
 		
-		NodeList children = e.getChildNodes();
 		for(int x=0; x<4; ++x)
 		{
-			if(children.item(x) != null)
+			if(allSteps.item(x) != null)
 			{
-				String nodeName = children.item(x).getNodeName();
+				String nodeName = allSteps.item(x).getNodeName();
+				NamedNodeMap attr = allSteps.item(x).getAttributes();	//Get current Node's attributes
 				
-				if(nodeName.equals("transit"))
+				if(nodeName.equals("transit")) //public transit node
 				{
-					NamedNodeMap attr = children.item(x).getAttributes();
-					steps[x] = attr.item(0).getNodeValue();
+					String temp = attr.item(0).getNodeValue();	//Agency Id
+					String type = attr.item(1).getNodeValue();	//Route type
+					String rtid = attr.item(2).getNodeValue();  //Route Id
 					
+					if(temp.equals("CTA") && type.equals("1"))	//Route is a CTA train.
+					{
+						temp = rtid;	//Step is now the route ID corresponding to which train
+						
+						
+						String temp2 = attr.item(3).getNodeValue();
+						temp2.replace(' ', '\n');
+						stepText[x] = temp2;	//Set step text to long id name (eg. "Green Line")
+					}
+					else 
+					{
+						stepText[x] = rtid;		//Set step text to id name (eg. bus number)
+					}
+					steps[x] = temp;
 				}
-				else
+				else //walk node
 				{	
 					steps[x] = nodeName;
+					NodeList s = allSteps.item(x).getChildNodes();
+					double num = 0;
+					String temp = "0";
+					
+					for(int y=0; y<s.getLength(); ++y)
+					{
+						NamedNodeMap attr1 = s.item(y).getAttributes();
+						if(s.item(y).getNodeName().equals("start"))
+						{
+							temp = attr1.item(0).getNodeValue();
+						}
+						else
+						{
+							temp = attr1.item(1).getNodeValue();
+						}
+						num += Integer.valueOf(temp);
+					} 
+					//num now holds length of walk in (meters?)
+					//convert to miles...
+					num = (num / (1609.344));
+					String miles = String.valueOf(num).substring(0, 3) + "mi";
+					stepText[x] = miles;
+					
 				}
+				
 			}
 		}
-		/*
-		steps[0] = children.item(0).getNodeName();
-		steps[1] = children.item(1).getNodeName();
-		steps[2] = children.item(2).getNodeName();
-		*/
-		/*int count = 0;
-		while(e.getChildNodes().item(count) != null && count < 5){
-			steps[count] = e.getChildNodes().item(count).getNodeName();
-			count++;
-		}*/
 
 		
 	}//End setImmediateData()

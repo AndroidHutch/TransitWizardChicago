@@ -14,12 +14,14 @@ import org.xml.sax.SAXException;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class Routes extends Activity {
@@ -29,6 +31,9 @@ public class Routes extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.transit);
+        
+        TextView instr = (TextView) findViewById(R.id.route_instr);
+        instr.setText("Click row for route details.\nControls on top adjust origin/destination\nand arrival/departure time preferences.");
         
         Document[] allRoutes = null;
         try {
@@ -66,7 +71,7 @@ public class Routes extends Activity {
         	//Toast.makeText(getApplicationContext(), RouteList.get(0).arrival, Toast.LENGTH_SHORT).show();
         //}
      
-        RouteAdapter adapter = new RouteAdapter(this, RouteList);			//Add ArrayList to adapter.
+        RouteAdapter adapter = new RouteAdapter(this, RouteList, this);				//Add ArrayList to adapter.
         routeListView.setAdapter(adapter);										//Set ListView adapter.
 		
         /*
@@ -86,5 +91,11 @@ public class Routes extends Activity {
 		 */
        	
     }//End onCreate
+    
+    public void getDetail(int p)
+    {
+    	Intent i = new Intent(getApplicationContext(), RouteDetail.class);
+        startActivity(i);
+    }
     
 }//End main class.

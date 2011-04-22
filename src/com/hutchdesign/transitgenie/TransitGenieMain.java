@@ -57,13 +57,8 @@ public class TransitGenieMain extends Activity {
         ImageButton button_destn = (ImageButton)findViewById(R.id.button_destn);		//User wishes to choose destination.
         button_go.setOnClickListener(new View.OnClickListener(){	
 	    	public void onClick(View v){
-	    		
-	    		
-	    		
 	    		//Run Routes activity
 	    		Intent i = new Intent(getApplicationContext(), Routes.class);
-	    		//b.putDouble("originLong", originLongitude);
-	    		
 	            startActivity(i);
 	    	}
         });

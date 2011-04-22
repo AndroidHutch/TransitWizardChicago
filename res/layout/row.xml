@@ -75,7 +75,7 @@ android:background="#FFFFFF">
 			>
 			</ImageView>
 			<TextView  
-			android:id="@+id/row_step1_length"
+			android:id="@+id/row_step1_text"
 		    android:layout_width="fill_parent" 
 		    android:layout_height="wrap_content" 
 		    android:text="0.0 mi"
@@ -101,7 +101,7 @@ android:background="#FFFFFF">
 			>
 			</ImageView>
 			<TextView  
-			android:id="@+id/row_step2_length"
+			android:id="@+id/row_step2_text"
 		    android:layout_width="fill_parent" 
 		    android:layout_height="wrap_content" 
 		    android:text="0.0 mi"
@@ -128,7 +128,7 @@ android:background="#FFFFFF">
 			>
 			</ImageView>
 			<TextView  
-			android:id="@+id/row_step3_length"
+			android:id="@+id/row_step3_text"
 		    android:layout_width="fill_parent" 
 		    android:layout_height="wrap_content" 
 		    android:text="0.0 mi"
@@ -155,7 +155,7 @@ android:background="#FFFFFF">
 			>
 			</ImageView>	
 			<TextView  
-			android:id="@+id/row_step4_length"
+			android:id="@+id/row_step4_text"
 		    android:layout_width="fill_parent" 
 		    android:layout_height="wrap_content" 
 		    android:text="0.0 mi"
@@ -239,4 +239,23 @@ android:background="#FFFFFF">
     />
     
     </LinearLayout>
+    
+    	<TextView  
+	android:id="@+id/row_pos"
+    android:layout_width="wrap_content" 
+    android:layout_height="wrap_content" 
+    android:text="0"
+    android:textSize="0px"
+    android:visibility="gone"
+    />
+    
+<LinearLayout android:layout_height="wrap_content" android:layout_width="fill_parent" android:id="@+id/loadingLayout"
+android:background="#FFFFFF" android:gravity="center" android:visibility="gone">
+	<ProgressBar 
+	android:id="@+id/loading"
+	android:layout_width="wrap_content" 
+	android:layout_height="wrap_content" 
+	android:indeterminate="true">
+	</ProgressBar>
+</LinearLayout>
 </LinearLayout>
