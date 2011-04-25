@@ -114,6 +114,7 @@ public class DetailAdapter extends BaseAdapter implements OnClickListener {
 				stepTo.setText(attr1.item(0).getNodeValue());
 				num += Integer.valueOf(temp);
 			} 
+			
 			//num now holds length of walk in meters.
 			//convert to miles...
 			num = (num / (1609.344));
