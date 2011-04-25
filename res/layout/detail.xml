@@ -9,8 +9,7 @@
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:orientation="vertical"
-		android:paddingLeft="6px"
-		android:paddingRight="5px"
+		android:layout_margin="5px"
 		>
 		
 			<ImageView 
@@ -21,64 +20,91 @@
 			>	
 			</ImageView>	
 			<TextView  
-			android:id="@+id/row_arriveBy"
+			android:id="@+id/detail_length"
 		    android:layout_width="fill_parent" 
 		    android:layout_height="wrap_content" 
-		    android:text="arrive by"
+		    android:gravity="center_horizontal"
+		    android:text="0.0 mi"
 		    android:textStyle="bold"
-		    android:textColor="#999999"
+		    android:textColor="#000000"
 		    android:textSize="10px"
 		    />
 		    
 		
 	</LinearLayout>
-	
-	<LinearLayout 
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:orientation="vertical"
-		android:layout_margin="5px"
-		>
-			<TextView  
-			android:id="@+id/row_step1_text"
-		    android:layout_width="fill_parent" 
-		    android:layout_height="wrap_content" 
-		    android:text="0.0 mi"
-		    android:textStyle="bold"
-		    android:textColor="#000000"
-		    android:textSize="10px"
-		    android:gravity="center"
-		    />
-		    
-	</LinearLayout>
 
-	<LinearLayout 
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:orientation="vertical"
-		android:layout_margin="5px"
-		>
-			<ImageView 
-			android:id="@+id/row_step2"
-			android:layout_width="35px" 
-			android:layout_height="37px" 
-			android:src="@drawable/temp" 
-			>
-			</ImageView>
+	<TableLayout 
+	android:layout_width="fill_parent" 
+	android:id="@+id/detail_tableLayout" 
+	android:layout_height="wrap_content" >
+		
+		<TableRow android:layout_marginBottom="2px">
 			<TextView  
-			android:id="@+id/row_step2_text"
+			android:id="@+id/detail_title_from"
 		    android:layout_width="fill_parent" 
 		    android:layout_height="wrap_content" 
-		    android:text="0.0 mi"
+		    android:text="FROM"
 		    android:textStyle="bold"
 		    android:textColor="#000000"
 		    android:textSize="10px"
-		    android:gravity="center"
+		    android:gravity="right"
+		    android:layout_marginRight="5px"
+		    />
+		    <TextView  
+			android:id="@+id/detail_text_from"
+		    android:layout_width="fill_parent" 
+		    android:layout_height="wrap_content" 
+		    android:text="Here"
+		    android:textColor="#000000"
+		    android:textSize="14px"
 		    />
 		    
-	</LinearLayout>
-	
-	
-	
+	   	</TableRow> 
+	   
+	   	<TableRow android:layout_marginBottom="2px">
+		    <TextView  
+			android:id="@+id/detail_title_to"
+		    android:layout_width="fill_parent" 
+		    android:layout_height="wrap_content" 
+		    android:text="TO"
+		    android:textStyle="bold"
+		    android:textColor="#000000"
+		    android:textSize="10px"
+		    android:gravity="right"
+		    android:layout_marginRight="5px"
+		    />
+		    <TextView  
+			android:id="@+id/detail_text_to"
+		    android:layout_width="fill_parent" 
+		    android:layout_height="wrap_content" 
+		    android:text="There"
+		    android:textColor="#000000"
+		    android:textSize="14px"
+		    />
+		</TableRow>
+		
+		<TableRow>
+		    <TextView  
+			android:id="@+id/detail_title_for"
+		    android:layout_width="fill_parent" 
+		    android:layout_height="wrap_content" 
+		    android:text="FOR"
+		    android:textStyle="bold"
+		    android:textColor="#000000"
+		    android:textSize="10px"
+		    android:gravity="right"
+		    android:layout_marginRight="5px" 
+		    />		    
+		    <TextView  
+			android:id="@+id/detail_text_for"
+		    android:layout_width="fill_parent" 
+		    android:layout_height="wrap_content" 
+		    android:text="0 minutes"
+		    android:textColor="#000000"
+		    android:textSize="14px"
+		    />    
+	    </TableRow>
+	    
+	    </TableLayout>
 	
 </LinearLayout>

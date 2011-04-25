@@ -62,17 +62,17 @@ public class Routes extends Activity {
 		
 		
         ListView routeListView = (ListView) findViewById(R.id.RouteListView);	//Load ListView from .xml       
-        List<SingleRoute> RouteList = new ArrayList<SingleRoute>();			//Create ArrayList of Routes.
+        List<SingleRoute> RouteList = new ArrayList<SingleRoute>();				//Create ArrayList of Routes.
         
         //Parse and separate Documents.
         //for(int x=0; x<allRoutes.length; ++x) 
         //{
         	RouteList.add(new SingleRoute(allRoutes[0]));
-        	//Toast.makeText(getApplicationContext(), RouteList.get(0).arrival, Toast.LENGTH_SHORT).show();
+        	Toast.makeText(getApplicationContext(), RouteList.get(0).arrival, Toast.LENGTH_SHORT).show();
         //}
      
-        RouteAdapter adapter = new RouteAdapter(this, RouteList, this);				//Add ArrayList to adapter.
-        routeListView.setAdapter(adapter);										//Set ListView adapter.
+        RouteAdapter adapter = new RouteAdapter(this, this, RouteList);		//Add ArrayList to adapter.
+        routeListView.setAdapter(adapter);									//Set ListView adapter.
 		
         /*
 		 * Test to read dom tree new InputSource(url.openStream())); for(int k =

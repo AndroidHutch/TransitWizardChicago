@@ -22,7 +22,7 @@ public class RouteAdapter extends BaseAdapter implements OnClickListener {
 
     private List<SingleRoute> routeList;
 
-    public RouteAdapter(Context context, List<SingleRoute> routeList, Activity p) {
+    public RouteAdapter(Context context, Activity p, List<SingleRoute> routeList) {
         this.context = context;
         this.routeList = routeList;
         this.parent = p;
@@ -47,9 +47,10 @@ public class RouteAdapter extends BaseAdapter implements OnClickListener {
         if (convertView == null) {
             LayoutInflater inflater = (LayoutInflater) context
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            
             convertView = inflater.inflate(R.layout.row, null);
         }
-        
+
         curr.setImmediateData();	//Set variables needed
         
         TextView arrival = (TextView) convertView.findViewById(R.id.row_arriveBy_time);
@@ -82,9 +83,10 @@ public class RouteAdapter extends BaseAdapter implements OnClickListener {
         setStepText(txt3, curr.stepText[2]);
         setStepText(txt4, curr.stepText[3]);
         
+        //Store index of route
         TextView pos = (TextView) convertView.findViewById(R.id.row_pos);
         pos.setText(String.valueOf(position));
-
+        
         convertView.setOnClickListener(this);
         return convertView;
     }
@@ -125,11 +127,13 @@ public class RouteAdapter extends BaseAdapter implements OnClickListener {
     }
 
     public void onClick(View view) {
+    	
     	//Go to Route Detail for this route
     	TextView pos = (TextView) view.findViewById(R.id.row_pos);
         int p = Integer.valueOf((String) pos.getText());
 
     	Routes a  = (Routes) parent;
     	a.getDetail(p);
+
     }
 }

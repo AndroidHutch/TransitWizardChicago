@@ -51,10 +51,13 @@ public class TransitGenieMain extends Activity {
         //mlocManager.getLastKnownLocation(LOCATION_SERVICE);
         
         b = new Bundle();
+        
         //Import Buttons from main.xml
         Button button_go = (Button)findViewById(R.id.button_go);			//"Go" button on main screen (=> User is ready for routes)
         ImageButton button_origin = (ImageButton)findViewById(R.id.button_origin);	//User wishes to choose origin.
         ImageButton button_destn = (ImageButton)findViewById(R.id.button_destn);		//User wishes to choose destination.
+        
+        //Go Button
         button_go.setOnClickListener(new View.OnClickListener(){	
 	    	public void onClick(View v){
 	    		//Run Routes activity
