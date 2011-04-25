@@ -26,14 +26,25 @@ import android.widget.Toast;
 
 public class Routes extends Activity {
 	
+	Bundle b;
+	public static List<SingleRoute> RouteList;
+	
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.transit);
         
+        b = getIntent().getExtras();
+        
+        //Import TextViews to be updated
         TextView instr = (TextView) findViewById(R.id.route_instr);
-        instr.setText("Click row for route details.\nControls on top adjust origin/destination\nand arrival/departure time preferences.");
+        TextView orig = (TextView) findViewById(R.id.transit_origin1);
+        TextView dest = (TextView) findViewById(R.id.transit_destn1);
+        
+        instr.setText("Click row for route details.\nUse button on top to adjust arrival/departure time preferences.");
+        orig.setText(b.getString("origin_string"));
+        dest.setText("To " +  b.getString("destin_string"));
         
         Document[] allRoutes = null;
         try {
@@ -57,18 +68,18 @@ public class Routes extends Activity {
 		if(allRoutes == null)
 		{
 			Toast.makeText(getApplicationContext(), "Error: No Routes Found.", Toast.LENGTH_SHORT).show();
-			finish();
+			this.finish();
 		}
 		
-		
+		else {
+			
         ListView routeListView = (ListView) findViewById(R.id.RouteListView);	//Load ListView from .xml       
-        List<SingleRoute> RouteList = new ArrayList<SingleRoute>();				//Create ArrayList of Routes.
+        RouteList = new ArrayList<SingleRoute>();				//Create ArrayList of Routes.
         
         //Parse and separate Documents.
         //for(int x=0; x<allRoutes.length; ++x) 
         //{
         	RouteList.add(new SingleRoute(allRoutes[0]));
-        	Toast.makeText(getApplicationContext(), RouteList.get(0).arrival, Toast.LENGTH_SHORT).show();
         //}
      
         RouteAdapter adapter = new RouteAdapter(this, this, RouteList);		//Add ArrayList to adapter.
@@ -89,12 +100,15 @@ public class Routes extends Activity {
 		 * System.out.println(map.item(j).getNodeName());
 		 * //System.out.println(attribute); } } }
 		 */
-       	
+		
+		}
     }//End onCreate
     
     public void getDetail(int p)
     {
     	Intent i = new Intent(getApplicationContext(), RouteDetail.class);
+    	b.putInt("position", p);
+    	i.putExtras(b);
         startActivity(i);
     }
     

@@ -53,9 +53,15 @@ public class RouteAdapter extends BaseAdapter implements OnClickListener {
 
         curr.setImmediateData();	//Set variables needed
         
+        //Show arrival time
         TextView arrival = (TextView) convertView.findViewById(R.id.row_arriveBy_time);
         arrival.setText(curr.getArrival());
         
+        //Show first depart time
+        TextView dep1 = (TextView) convertView.findViewById(R.id.row_departBy_time1);
+        dep1.setText(curr.depart);
+        
+        //Show "Leave in x min"
         TextView leave = (TextView) convertView.findViewById(R.id.row_leaveIn_time);
         leave.setText(curr.leaveIn);
         

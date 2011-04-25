@@ -51,6 +51,8 @@ public class TransitGenieMain extends Activity {
         //mlocManager.getLastKnownLocation(LOCATION_SERVICE);
         
         b = new Bundle();
+        b.putString("origin_string", "Current Location");
+        b.putString("destin_string", "Current Location");
         
         //Import Buttons from main.xml
         Button button_go = (Button)findViewById(R.id.button_go);			//"Go" button on main screen (=> User is ready for routes)
@@ -62,6 +64,7 @@ public class TransitGenieMain extends Activity {
 	    	public void onClick(View v){
 	    		//Run Routes activity
 	    		Intent i = new Intent(getApplicationContext(), Routes.class);
+	    		i.putExtras(b);
 	            startActivity(i);
 	    	}
         });
@@ -193,6 +196,7 @@ public class TransitGenieMain extends Activity {
         	
         	EditText origin = (EditText) findViewById(R.id.text_origin2);
         	origin.setText(bundl.getString("origin_string"));
+        	b.putString("origin_string", bundl.getString("origin_string"));
         	
 					            // Perform a query to the contact's content provider for the contact's name
 								//  Cursor cursor = getContentResolver().query(data.getData(),
@@ -209,6 +213,7 @@ public class TransitGenieMain extends Activity {
         {
         	EditText destn = (EditText) findViewById(R.id.text_destn2);
         	destn.setText(bundl.getString("destin_string"));
+        	b.putString("destin_string", bundl.getString("destin_string"));
         }
         
         else if(resultCode == Activity.RESULT_CANCELED)

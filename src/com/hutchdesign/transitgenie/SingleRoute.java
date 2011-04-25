@@ -22,8 +22,9 @@ import android.text.format.DateFormat;
 public class SingleRoute 
 {
 	private Document DOC;
-	String arrival;		//arrival time ("Arrive by xx:xx")
-	String leaveIn; 	//initial depart time ("Leave in x Minutes")
+	String arrival;		//arrival time (Arrive by "xx:xx")
+	String depart;		//initial depart time (Depart by "xx:xx")
+	String leaveIn; 	//initial depart time from current time (Leave in "x" Minutes)
 	String[] steps = new String[4];
 	String[] stepText = new String[4];
 	NodeList allSteps;
@@ -40,7 +41,7 @@ public class SingleRoute
 	 * 
 	 * Set variables needed for summary of route
 	 * (Viewed on Routes screen)
-	 * (Deatiled info only needed for RouteDetail scren, 
+	 * (Detailed info only needed for RouteDetail scren, 
 	 * so is only pulled from Document if user chooses route based on summary)
 	 * 
 	 */
@@ -53,10 +54,12 @@ public class SingleRoute
 		//NamedNodeMap map1 	= nodes.item(0).getAttributes();
 		
 		int d = Integer.parseInt(routeNode.getAttribute("dep_time"));	//Depart time now stored in milliseconds
+			cal.setTimeInMillis(d);
+		depart = "" + date.format(cal.getTime());
 			
-			//int dMin  = (int) (d / 1000) / 60;		//Convert to proper minute
-		leaveIn = ""  + " min";				//Store depart time
-		//leaveIn = "" + d;
+			int now = (int) System.currentTimeMillis();
+			int diff = (int) ((d-now) / 1000) / 60;
+		leaveIn = diff  + " min";				//Store depart time
 		
 		int a = Integer.parseInt(routeNode.getAttribute("arr_time"));	//Arrival time now stored in milliseconds
 			cal.setTimeInMillis(a);
@@ -121,8 +124,23 @@ public class SingleRoute
 			}
 		}
 
-		
 	}//End setImmediateData()
+	
+	
+	/* SET DETAIL DATA ------------------------------------------------------
+	 * 
+	 * Set variables needed for full detail of route
+	 * 
+	 */
+	
+	public void setDetailData()
+	{
+		
+		
+		
+		
+		
+	}
 	
 	public String getArrival()
 	{

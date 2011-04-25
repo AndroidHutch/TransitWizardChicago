@@ -14,12 +14,13 @@
     >
     	
 		
-		<LinearLayout
-	    android:orientation="vertical"
-	    android:layout_width="wrap_content"
-	    android:layout_height="wrap_content"
-	    android:padding="5px"
-	    >
+	<TableLayout 
+	android:layout_width="wrap_content" 
+	android:id="@+id/detail_tableLayout" 
+	android:layout_height="wrap_content" 
+	android:padding="4px">
+	
+		<TableRow android:background="#FFFFFF">
 	    	<TextView  
 			android:id="@+id/transit_origin1"
 		    android:layout_width="fill_parent" 
@@ -30,7 +31,11 @@
 		    android:background="#FFFFFF"
 		    android:textSize="12px"
 		    android:paddingLeft="4px"
+		    android:paddingRight="4px"
 		    />
+		    
+		</TableRow>
+		<TableRow android:paddingTop="2px">
 		    <TextView  
 			android:id="@+id/transit_destn1"
 		    android:layout_width="fill_parent" 
@@ -41,9 +46,28 @@
 		    android:background="#FFFFFF"
 		    android:textSize="12px"
 		    android:paddingLeft="4px"
+		    android:paddingRight="4px"
 		    />
-		</LinearLayout>
-    	
+		</TableRow>
+
+	</TableLayout>
+	
+	
+		<RelativeLayout 
+		android:id="@+id/relativeLayout1" 
+		android:layout_width="fill_parent" 
+		android:layout_height="fill_parent">
+		
+		<ImageButton 
+		android:layout_width="wrap_content" 
+		android:layout_height="wrap_content" 
+		android:src="@drawable/time_small" 
+		android:id="@+id/transit_button"
+		android:layout_alignParentRight="true"
+		>
+		</ImageButton>
+		
+		</RelativeLayout>
     
     </LinearLayout>
 

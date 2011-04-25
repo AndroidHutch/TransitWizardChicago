@@ -154,10 +154,10 @@ public class places extends Activity {
 				default:
 					if (ORIGIN == 0) {
 						TransitGenieMain.ORIGIN_GPS = 0;
-						b.putString("origin_string", LIST.get(position));
+						b.putString("origin_string", LIST.get(position).trim());
 					} else {
 						TransitGenieMain.DEST_GPS = 0;
-						b.putString("destin_string", LIST.get(position));
+						b.putString("destin_string", LIST.get(position).trim());
 					}
 
 					// TODO: Return Latitude/Logitude for Popular Places.
