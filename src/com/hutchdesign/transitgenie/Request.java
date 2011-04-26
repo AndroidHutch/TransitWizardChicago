@@ -53,7 +53,6 @@ public class Request {
 
 	// URL requestURL = new URL(requestString);
 	public void buildURL() throws MalformedURLException {
-		queryTime = System.currentTimeMillis();
 		String requestString = "http://" + server + "/path_xml?version="
 				+ version + "&origlon=" + originLongitude + "&origlat="
 				+ originLatitude + "&destlon=" + destLongitude + "&destlat="
