@@ -1,5 +1,9 @@
 package com.hutchdesign.transitgenie;
 
+import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -46,9 +50,36 @@ public class RouteDetail extends Activity {
     }//End onCreate
 
 	public void showMap(int p) {
-		
+		Node selectedNode = selectedRoute.allSteps.item(p);
+		String nodeName = selectedNode.getNodeName();		//Get name of Node (e.g. "walk" or "transit")
+        NamedNodeMap attr = selectedNode.getAttributes();	//Get current Node's attributes
+        String startLat, startLong, endLat, endLong;
+        startLat = startLong = endLat = endLong = "0";
+        //endLat = "";
+        if(nodeName.equals("transit")) //public transit node
+		{
+			startLat = attr.item(12).getNodeValue();	//Stop Latitude
+			startLong = attr.item(13).getNodeValue();	//Stop Longitude
+
+		}
+		else //walk node
+		{	
+			
+			NodeList s = selectedNode.getChildNodes().item(0).getChildNodes().item(0).getChildNodes(); // Get Points
+			NamedNodeMap startPoints = s.item(0).getAttributes();
+			NamedNodeMap endPoints = s.item(s.getLength() - 1).getAttributes();
+			startLat = startPoints.item(0).getNodeValue();
+			startLong = startPoints.item(1).getNodeValue();
+			endLat = endPoints.item(0).getNodeValue();
+			endLong = endPoints.item(1).getNodeValue();
+		} 
+        
 		Intent i = new Intent(getApplicationContext(), MapStep.class);
-    	b.putInt("position", p);
+    	b.putString("type", nodeName);
+    	b.putString("startLat", startLat);
+    	b.putString("startLong", startLong);
+    	b.putString("endLat", endLat);
+    	b.putString("endLong", endLong);
     	i.putExtras(b);
         startActivity(i);
 	}
