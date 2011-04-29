@@ -3,17 +3,13 @@ package com.hutchdesign.transitgenie;
 import java.util.List;
 
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
 public class RouteAdapter extends BaseAdapter implements OnClickListener {
@@ -55,7 +51,7 @@ public class RouteAdapter extends BaseAdapter implements OnClickListener {
         
         //Show arrival time
         TextView arrival = (TextView) convertView.findViewById(R.id.row_arriveBy_time);
-        arrival.setText(curr.getArrival());
+        arrival.setText(curr.arrival);
         
         //Show first depart time
         TextView dep1 = (TextView) convertView.findViewById(R.id.row_departBy_time1);

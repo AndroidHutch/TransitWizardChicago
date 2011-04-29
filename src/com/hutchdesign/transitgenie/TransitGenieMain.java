@@ -1,12 +1,31 @@
+/* Transit Genie Android 
+ * v. 1.0
+ * Code by Mike Hutcheson and Allie Curry
+ * 
+ * -------------------------------------
+ * Transit Genie Android Main Activity
+ * -------------------------------------
+ * Simple screen for users to see their selected origin/destination.
+ * Starts upon application launch.
+ * 
+ * Layout used: main.xml
+ * 
+ * Includes: 
+ * 
+ * 		A) Two EditText boxes holding String version of current origin and destination selections.
+ * 			Default values are "Use Current Location" for both EditText boxes.
+ * 			Users may also directly type into the boxes (e.g. An address, Landmark).
+ * 
+ * 		B) Two "..." (aka "more") buttons to start 'places' Activity, (See .xml for clarification)
+ * 			where users select their origin/destination from a list of popular places/favorites,
+ * 			or via a Google Map.
+ * 
+ * 		C) "Go" button which starts 'Routes' Activity.
+ * 			Which then implements the process of requesting routes from server.
+ * 
+ */
+
 package com.hutchdesign.transitgenie;
-
-
-import java.io.IOException;
-import java.net.MalformedURLException;
-
-import javax.xml.parsers.ParserConfigurationException;
-
-import org.xml.sax.SAXException;
 
 import android.app.Activity;
 import android.content.Context;
@@ -23,8 +42,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
-
-//TODO: Wrap .xml files in in Scroll Views
 
 public class TransitGenieMain extends Activity {
     protected static final int ORIGIN_REQUEST = 0;
@@ -55,16 +72,17 @@ public class TransitGenieMain extends Activity {
         b.putString("destin_string", "Current Location");
         
         //Import Buttons from main.xml
-        Button button_go = (Button)findViewById(R.id.button_go);			//"Go" button on main screen (=> User is ready for routes)
-        ImageButton button_origin = (ImageButton)findViewById(R.id.button_origin);	//User wishes to choose origin.
-        ImageButton button_destn = (ImageButton)findViewById(R.id.button_destn);		//User wishes to choose destination.
+        Button button_go = (Button)findViewById(R.id.button_go);					//"Go" button on main screen (=> User is ready for routes)
+        ImageButton button_origin = (ImageButton)findViewById(R.id.button_origin);	//Selected when user wishes to choose origin.
+        ImageButton button_destn = (ImageButton)findViewById(R.id.button_destn);	//Selected when user wishes to choose destination.
         
-        //Go Button
+        //"Go" Button Listener
         button_go.setOnClickListener(new View.OnClickListener(){	
 	    	public void onClick(View v){
+	    		
 	    		//Run Routes activity
 	    		Intent i = new Intent(getApplicationContext(), Routes.class);
-	    		i.putExtras(b);
+	    		i.putExtras(b);		// Bundle needed in next Activity to utilize Strings representing origin and destination.
 	            startActivity(i);
 	    	}
         });
@@ -82,14 +100,9 @@ public class TransitGenieMain extends Activity {
 	    		//Run places activity
 	    		Intent i = new Intent(getApplicationContext(), places.class);
 	    		
-	    		b.putInt("origin", 0);	//Pass to Places activity that user is requesting origin.
-	    		i.putExtras(b);
-	    		
+	    		b.putInt("origin", 0);	//Set in Bundle 'b' that user is requesting origin.
+	    		i.putExtras(b);			//Pass Bundle 'b' to Places activity via Intent 'i'.
 	    		startActivityForResult(i, 0);
-	    		//startActivityForResult(i, ORIGIN_REQUEST);
-	            
-	            //TODO: Grab origin selection from places activity
-	            //possible reference: http://thedevelopersinfo.wordpress.com/2009/10/15/passing-data-between-activities-in-android/
 	    	}
         });
         
@@ -106,9 +119,8 @@ public class TransitGenieMain extends Activity {
 	    		//Run places activity
 	    		Intent i = new Intent(getApplicationContext(), places.class);
 	    		
-	    		b.putInt("origin", 1);	//Pass to Places activity that user is requesting destination.
-	    		i.putExtras(b);
-	    		
+	    		b.putInt("origin", 1);	//Set in Bundle 'b' that user is requesting destination.
+	    		i.putExtras(b);			//Pass Bundle 'b' to Places activity via Intent 'i'.
 	            startActivityForResult(i, 1);
 	            
 	            //TODO: Grab destination selection from places activity
@@ -125,68 +137,61 @@ public class TransitGenieMain extends Activity {
     /* Class My Location Listener */
 
     public class MyLocationListener implements LocationListener
-
     {
     	public void onLocationChanged(Location loc)
-
-    {
-
-    loc.getLatitude();
-
-    loc.getLongitude();
-
-    String Text = "My current location is: " +
-
-    "Latitud = " + loc.getLatitude() +
-
-    "Longitud = " + loc.getLongitude();
-
-
-    Toast.makeText( getApplicationContext(),
-
-    Text,
-
-    Toast.LENGTH_SHORT).show();
-
-    }
-
-
-    public void onProviderDisabled(String provider)
-
-    {
-
-    Toast.makeText( getApplicationContext(),
-
-    "Gps Disabled",
-
-    Toast.LENGTH_SHORT ).show();
-
-    }
-
-
-    public void onProviderEnabled(String provider)
-
-    {
-
-    Toast.makeText( getApplicationContext(),
-
-    "Gps Enabled",
-    +
+	    {
+	
+		    loc.getLatitude();
+		
+		    loc.getLongitude();
+		
+		    String Text = "My current location is: " +
+		
+		    "Latitud = " + loc.getLatitude() +
+		
+		    "Longitud = " + loc.getLongitude();
+		
+		
+		    Toast.makeText( getApplicationContext(),
+		    Text,
+		    Toast.LENGTH_SHORT).show();
+	
+	    }
+	
+	
+	    public void onProviderDisabled(String provider)
+	
+	    {
+	    	Toast.makeText( getApplicationContext(),
+		    "Gps Disabled",
+		    Toast.LENGTH_SHORT ).show();
+	
+	    }
+	
+	
+	    public void onProviderEnabled(String provider)
+	
+	    {
+	
+	    	Toast.makeText( getApplicationContext(),
+		    "Gps Enabled",
+		    Toast.LENGTH_SHORT).show();
+	
+	    }
+	
+	    public void onStatusChanged(String provider, int status, Bundle extras)
+	    {
+	
+	
+	    }
+	    
+    }//End MyLocationListener
     
-
-    Toast.LENGTH_SHORT).show();
-
-    }
-
-    public void onStatusChanged(String provider, int status, Bundle extras)
-
-    {
-
-
-    }
-
-    }
-    
+    /*
+    *	OnActivityResult is called upon the places.class Activity finishing.
+    *	Used to receive Bundle from places,
+    *   And set appropriate text in origin or destination editText (imported from main.xml).
+    */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
     	Bundle bundl = data.getExtras();
@@ -222,7 +227,9 @@ public class TransitGenieMain extends Activity {
         
     }
     
-    //Customize Menu
+    //Custom Menu
+    //	Utilizes manu_main.xml
+    //	Contains selections: 'Settings', 'Depart Time', 'About'
     @Override
     public boolean onCreateOptionsMenu(Menu menu) 
     {

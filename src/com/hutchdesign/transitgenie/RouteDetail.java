@@ -1,10 +1,5 @@
 package com.hutchdesign.transitgenie;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.w3c.dom.Node;
-
 import android.app.Activity;
 import android.os.Bundle;
 import android.widget.ImageButton;

@@ -1,30 +1,28 @@
+
+
 package com.hutchdesign.transitgenie;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
-import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import android.text.format.DateFormat;
-//getElementsByTagName()
-
 /*
- * 	int seconds = (int) ((milliseconds / 1000) % 60);
-	int minutes = (int) ((milliseconds / 1000) / 60);
  * 
+ * 	int seconds = (int) ((milliseconds / 1000) % 60);
+ *	int minutes = (int) ((milliseconds / 1000) / 60);
+ *
  */
 
 public class SingleRoute 
 {
 	private Document DOC;
-	String arrival;		//arrival time (Arrive by "xx:xx")
-	String depart;		//initial depart time (Depart by "xx:xx")
-	String leaveIn; 	//initial depart time from current time (Leave in "x" Minutes)
+	String arrival = "";	//arrival time (Arrive by "xx:xx")
+	String depart = "";		//initial depart time (Depart by "xx:xx")
+	String leaveIn = ""; 	//initial depart time from current time (Leave in "x" Minutes)
 	String[] steps = new String[4];
 	String[] stepText = new String[4];
 	NodeList allSteps;
@@ -41,8 +39,8 @@ public class SingleRoute
 	 * 
 	 * Set variables needed for summary of route
 	 * (Viewed on Routes screen)
-	 * (Detailed info only needed for RouteDetail scren, 
-	 * so is only pulled from Document if user chooses route based on summary)
+	 * (Detailed info only needed for RouteDetail screen, 
+	 *  additional detail is pulled from Document in RouteDetail Activity)
 	 * 
 	 */
 	public void setImmediateData()
@@ -140,15 +138,6 @@ public class SingleRoute
 		
 		
 		
-	}
-	
-	public String getArrival()
-	{
-		if(arrival == null)
-		{
-			return "error";
-		}
-		return arrival;
 	}
 	
 	/*

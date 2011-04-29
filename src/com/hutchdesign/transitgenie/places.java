@@ -70,7 +70,7 @@ public class places extends Activity {
 	ArrayList<String> LIST = new ArrayList<String>();
 	ArrayAdapter<String> ADAP;
 	/** Called when the activity is first created. */
-	@SuppressWarnings("unchecked")
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
