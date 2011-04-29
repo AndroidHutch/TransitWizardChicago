@@ -36,8 +36,8 @@ public class Request {
 	public double originLatitude = 41.823309;
 	public double destLongitude = -87.635990;
 	public double destLatitude = 41.878884;
-	public double queryTime = 1279296315;
-	public int maxResults = 1;
+	public long queryTime = 1279296315;
+	public int maxResults = 3;
 	public double walkingSpeed = 1.30;
 	public double sequenceNumber = 6;
 	public String streetMode = "walk";
@@ -47,6 +47,7 @@ public class Request {
 
 	// URL requestURL = new URL(requestString);
 	public void buildURL() throws MalformedURLException {
+		queryTime = (System.currentTimeMillis() / 1000L);
 		String requestString = "http://" + server + "/path_xml?version="
 				+ version + "&origlon=" + originLongitude + "&origlat="
 				+ originLatitude + "&destlon=" + destLongitude + "&destlat="
@@ -60,11 +61,11 @@ public class Request {
 
 	public Document[] buildRoutes() throws IOException,
 			ParserConfigurationException, SAXException {
-		//buildURL();
-		URL url = new URL(
-				"http://www.transitgenie.com:8080/path_xml?version=2.3&origlon=-87.839341&origlat=41.823309&destlon=-87.635990&destlat=41.878884&dep_time=1279296315&max_results=3&walking_speed=1.300000&seqno=6&street_mode=%22walk%22&transit_mode=%22Both%22");
-		// try {
-		int numberRequests = 1;
+		buildURL();
+//		URL url = new URL(
+//				"http://www.transitgenie.com:8080/path_xml?version=2.3&origlon=-87.839341&origlat=41.823309&destlon=-87.635990&destlat=41.878884&dep_time=1279296315&max_results=3&walking_speed=1.300000&seqno=6&street_mode=%22walk%22&transit_mode=%22Both%22");
+//		// try {
+		//int numberRequests = 1;
 		// /* Get a SAXParser from the SAXPArserFactory. */
 		// SAXParserFactory spf = SAXParserFactory.newInstance();
 		// SAXParser sp = spf.newSAXParser();
@@ -74,7 +75,7 @@ public class Request {
 		// /* Create a new ContentHandler and apply it to the XML-Reader*/
 		// RequestHandler requestHandler = new RequestHandler();
 		// xr.setContentHandler(requestHandler);
-		InputStream in = url.openStream();
+		InputStream in = requestURL.openStream();
 		Writer writer = new StringWriter();
 
 		char[] buffer = new char[1024];
@@ -108,7 +109,7 @@ public class Request {
 				.newInstance();
 
 		DocumentBuilder builder = builderFactory.newDocumentBuilder();
-		Document documents[] = new Document[10];
+		Document documents[] = new Document[maxResults];
 
 		// Trim off excess beginnings from regex, last string is junk
 		// for (int i = 0; i < xmlSplit.length - 1; i++){
@@ -117,12 +118,15 @@ public class Request {
 		// System.out.println(xmlSplit[i]);
 		// }
 		// System.out.println("Split OK");
-		for (int i = 0; i < numberRequests; i++) {
+		for (int i = 0; i < maxResults; i++) {
+			try{
 			documents[i] = builder
 					.parse(new InputSource(new ByteArrayInputStream(xmlSplit[i]
 							.substring(xmlSplit[i].indexOf("<?xml"),
 									xmlSplit[i].lastIndexOf(">") + 1).getBytes(
 									"utf-8"))));
+			}
+			catch(Exception e){break;}
 		}
 		return documents;
 		

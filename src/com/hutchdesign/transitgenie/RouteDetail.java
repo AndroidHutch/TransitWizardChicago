@@ -1,6 +1,7 @@
 package com.hutchdesign.transitgenie;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.ImageButton;
 import android.widget.ListView;
@@ -38,10 +39,18 @@ public class RouteDetail extends Activity {
        	selectedRoute = Routes.RouteList.get(position);	//Get SingleRoute from RouteList to be displayed in detailed form.
        	
         ListView routeListView = (ListView) findViewById(R.id.RouteListView);		//Load ListView from .xml
-        DetailAdapter adapter = new DetailAdapter(this, selectedRoute.allSteps);	//Add NodeList to adapter.
+        DetailAdapter adapter = new DetailAdapter(this, this, selectedRoute.allSteps);	//Add NodeList to adapter.
         routeListView.setAdapter(adapter);											//Set ListView adapter.
         	
        	
     }//End onCreate
+
+	public void showMap(int p) {
+		
+		Intent i = new Intent(getApplicationContext(), MapStep.class);
+    	b.putInt("position", p);
+    	i.putExtras(b);
+        startActivity(i);
+	}
     
 }//End main class.

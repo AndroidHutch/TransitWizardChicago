@@ -120,10 +120,15 @@ public class Routes extends Activity {
         RouteList = new ArrayList<SingleRoute>();		//Create ArrayList of SingleRoutes.
         
         //Parse and separate Documents.
-        //for(int x=0; x<allRoutes.length; ++x) 
-        //{
-        	RouteList.add(new SingleRoute(allRoutes[0]));
-        //}
+        for(int x=0; x<allRoutes.length; ++x) 
+        {
+        	try{
+        	RouteList.add(new SingleRoute(allRoutes[x]));
+        	}
+        	catch(Exception e){
+    			Toast.makeText(getApplicationContext(), "Error at Route:" + x, Toast.LENGTH_SHORT).show();
+        		continue;}
+        }
      
         RouteAdapter adapter = new RouteAdapter(this, this, RouteList);		//Add ArrayList to adapter.
         routeListView.setAdapter(adapter);									//Set ListView adapter.

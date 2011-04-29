@@ -4,6 +4,7 @@ import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import android.app.Activity;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,14 +13,16 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class DetailAdapter extends BaseAdapter implements OnClickListener {
     private Context context;
-
+    private Activity parentActivity;
     private NodeList stepList;
-
-    public DetailAdapter(Context context, NodeList stepList) {
+    
+    public DetailAdapter(Context context, Activity parentActivity, NodeList stepList) {
         this.context = context;
+        this.parentActivity = parentActivity;
         this.stepList = stepList;
     }
 
@@ -124,7 +127,8 @@ public class DetailAdapter extends BaseAdapter implements OnClickListener {
         
         
         
-        
+        TextView pos = (TextView) convertView.findViewById(R.id.row_pos);
+        pos.setText(String.valueOf(position));
         
         convertView.setOnClickListener(this);
         return convertView;
@@ -170,5 +174,11 @@ public class DetailAdapter extends BaseAdapter implements OnClickListener {
     	
     	//TODO: Go to map for this step.
 
+    	//stepList.
+    	TextView pos = (TextView) view.findViewById(R.id.row_pos);
+        
+    	int p = Integer.valueOf((String) pos.getText());
+    	RouteDetail a  = (RouteDetail) parentActivity;
+    	a.showMap(p);
     }
 }
