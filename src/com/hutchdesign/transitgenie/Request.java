@@ -57,6 +57,8 @@ public class Request {
 				+ "%22&transit_mode=%22" + transitMode + "%22"; // &udid=%22" + currentDevice + "%22";
 
 		requestURL = new URL(requestString);
+//		String date = new java.text.SimpleDateFormat("MM/dd/yyyy HH:mm:ss").format(new java.util.Date (attribute*1000));
+//	    System.out.println(date);
 	}
 
 	public Document[] buildRoutes() throws IOException,
