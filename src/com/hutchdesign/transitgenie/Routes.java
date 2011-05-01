@@ -13,6 +13,8 @@
  * Displays these routes in a custom ListView ('RouteListView' from transit.xml)
  * 			-> See RouteDetail.java which translates ArrayList of SingleRoute's,
  * 			into the text/images (from row.xml) displayed in the list.
+ * Contains additional methods utilized by ListView adapters (RouteAdapter, DetailAdapter) for proper variable display.
+ * 
  * 
  * Layout used: transit.xml
  * 
@@ -67,6 +69,7 @@ import org.xml.sax.SAXException;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -159,6 +162,85 @@ public class Routes extends Activity {
     	b.putInt("position", p);
     	i.putExtras(b);
         startActivity(i);
+    }
+    
+    //------------------------------------------------------------------------------------------------------
+    //ADDITIONAL METHODS...
+    
+    //setStepImage displays appropriate route image (in ImageView 'i') based on attribute String 'step'
+    public static void setStepImage(ImageView i, String step)
+    {
+    	if(step == null){
+    		i.setImageResource(R.drawable.filler);		//Blank Image
+    		return; }
+    	if(step.equals("walk")){
+			i.setImageResource(R.drawable.walk_icon_small);
+			return;	}
+    	if(step.equals("PACE")){	
+    		i.setImageResource(R.drawable.pace);	
+    		return; }
+    	if(step.equals("CTA")){ 	
+    		i.setImageResource(R.drawable.cta_bus);	
+    		return; }
+    	if(step.equals("METRA")){ 	
+    		i.setImageResource(R.drawable.metra);	
+    		return; }
+		
+    	//Train Images
+    	if(step.equals("G")){
+    		i.setImageResource(R.drawable.cta_green);	
+    		return; }
+    	if(step.equals("Blue")){
+    		i.setImageResource(R.drawable.cta_blue);	
+    		return; }
+    	if(step.equals("Brown")){
+    		i.setImageResource(R.drawable.cta_brown);	
+    		return; }
+    	if(step.equals("Pink")){
+    		i.setImageResource(R.drawable.cta_pink);	
+    		return; }
+    	if(step.equals("Purple")){
+    		i.setImageResource(R.drawable.cta_purple);	
+    		return; }
+    	if(step.equals("O")){
+    		i.setImageResource(R.drawable.cta_orange);	
+    		return; }
+    	if(step.equals("R") || step.equals("Red")){
+    		i.setImageResource(R.drawable.cta_red);	
+    		return; }
+    	if(step.equals("Y") || step.equals("Yellow")){
+    		i.setImageResource(R.drawable.cta_yellow);	
+    		return; }
+		
+		i.setImageResource(R.drawable.unknown_vehicle_icon);
+    }
+    
+    //setStepText used to prevent NullPointerExceptions.
+    public static void setStepText(TextView t, String s)
+    {
+    	if(s == null){
+    		t.setText(""); 
+    		return; }
+    	t.setText(s);
+    }
+    
+    //convertFromMeters returns value of x in either miles or feet in the form of a String.
+    public static String convertFromMeters(double x)
+    {
+    	String ans = "";		//String to be returned
+		double x_miles = (x / (1609.344));		//Convert x to miles.
+		
+		if(x_miles < 0.1)
+		{
+			int feet = (int) (x/3.2808399);		//Convert x to feet.
+			ans = String.valueOf(feet) + "ft";
+		}
+		else
+		{
+			ans = String.valueOf(x_miles).substring(0, 3) + "mi";
+		}
+    	
+    	return ans;
     }
     
 }//End main class.

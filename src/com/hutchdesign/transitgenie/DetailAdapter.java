@@ -1,3 +1,19 @@
+/* Transit Genie Android 
+ * v. 1.0
+ * Code by Mike Hutcheson and Allie Curry
+ * 
+ * --------------
+ * DetailAdapter
+ * --------------
+ * Adapter for custom ListView in RouteDetail.java.
+ * Initialized with a List of Nodes corresponding to each step in the current route.
+ * 		e.g. Node walk -> Node transit -> Node walk
+ * Each Node in the List becomes a "row" in the custom ListView.
+ * 		-> Attributes from a Node are displayed in widgets stored in detail.xml.
+ * Ensures that on user click, map corresponding to step is displayed.
+ * 
+ */
+
 package com.hutchdesign.transitgenie;
 
 import org.w3c.dom.NamedNodeMap;
@@ -13,7 +29,6 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 public class DetailAdapter extends BaseAdapter implements OnClickListener {
     private Context context;
@@ -86,11 +101,11 @@ public class DetailAdapter extends BaseAdapter implements OnClickListener {
 				stepTag.setText(rtid);		//Set step text to id name (eg. bus number)
 			}
 			
-			setStepImage(stepImage, temp);		//Set image corresponding to step
+			Routes.setStepImage(stepImage, temp);		//Set image corresponding to step
 		}
 		else //walk node
 		{	
-			setStepImage(stepImage, nodeName);		//Set image corresponding to step
+			Routes.setStepImage(stepImage, nodeName);		//Set image corresponding to step
 			NodeList s = curr.getChildNodes();
 			double num = 0;
 			String temp = "0";
@@ -116,85 +131,23 @@ public class DetailAdapter extends BaseAdapter implements OnClickListener {
 				else
 				{
 					temp = attr1.item(1).getNodeValue();
-					stepTo.setText(attr1.item(0).getNodeValue()); 
+					stepTo.setText(attr1.item(0).getNodeValue());
 				}
 				
 				num += Integer.valueOf(temp);
 			} 
 			
-			String finalLength = "";
-			//num now holds length of walk in (meters?)
-			//convert to miles...
-			double num_miles = (num / (1609.344));
-			if(num_miles < 0.1) //convert 
-			{
-				int feet = (int) (num/3.2808399);
-				finalLength = String.valueOf(feet) + "ft";
-			}
-			else
-			{
-				finalLength = String.valueOf(num_miles).substring(0, 3) + "mi";
-			}
-			
-			stepTag.setText(finalLength);
+			stepTag.setText(Routes.convertFromMeters(num));
 			
 		}
         //END SET IMAGE AND TAG  -------------------------------------------------------------------
-        
-        
-        
+
+        //View position is stored for use in onClick
         TextView pos = (TextView) convertView.findViewById(R.id.row_pos);
         pos.setText(String.valueOf(position));
         
         convertView.setOnClickListener(this);
         return convertView;
-    }
-    
-    private void setStepImage(ImageView i, String step)
-    {
-    	if(step == null){
-    		i.setImageResource(R.drawable.filler);		//Blank Image
-    		return; }
-    	if(step.equals("walk")){
-			i.setImageResource(R.drawable.walk_icon_small);
-			return;	}
-    	if(step.equals("PACE")){	
-    		i.setImageResource(R.drawable.pace);	
-    		return; }
-    	if(step.equals("CTA")){ 	
-    		i.setImageResource(R.drawable.cta_bus);	
-    		return; }
-    	if(step.equals("METRA")){ 	
-    		i.setImageResource(R.drawable.metra);	
-    		return; }
-		
-    	//Train Images
-    	if(step.equals("G")){
-    		i.setImageResource(R.drawable.cta_green);	
-    		return; }
-    	if(step.equals("Blue")){
-    		i.setImageResource(R.drawable.cta_blue);	
-    		return; }
-    	if(step.equals("Brown")){
-    		i.setImageResource(R.drawable.cta_brown);	
-    		return; }
-    	if(step.equals("Pink")){
-    		i.setImageResource(R.drawable.cta_pink);	
-    		return; }
-    	if(step.equals("Purple")){
-    		i.setImageResource(R.drawable.cta_purple);	
-    		return; }
-    	if(step.equals("O")){
-    		i.setImageResource(R.drawable.cta_orange);	
-    		return; }
-    	if(step.equals("R") || step.equals("Red")){
-    		i.setImageResource(R.drawable.cta_red);	
-    		return; }
-    	if(step.equals("Y") || step.equals("Yellow")){
-    		i.setImageResource(R.drawable.cta_yellow);	
-    		return; }
-		
-		i.setImageResource(R.drawable.unknown_vehicle_icon);
     }
     
     public void onClick(View view) 

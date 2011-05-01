@@ -1,3 +1,18 @@
+/* Transit Genie Android 
+ * v. 1.0
+ * Code by Mike Hutcheson and Allie Curry
+ * 
+ * -------------
+ * RouteAdapter
+ * -------------
+ * Adapter for custom ListView in Routes.java.
+ * Initialized with a List of SingleRoute's.
+ * Each SingleRoute in the List becomes a "row" in the custom ListView.
+ * 		-> Variables from a SingleRoute are displayed in widgets stored in row.xml.
+ * Ensures that on user click, detailed version of route is displayed.
+ * 		-> Send SingleRoute from list to RouteDetail Activity.
+ */
+
 package com.hutchdesign.transitgenie;
 
 import java.util.List;
@@ -68,10 +83,10 @@ public class RouteAdapter extends BaseAdapter implements OnClickListener {
         ImageView step4 = (ImageView) convertView.findViewById(R.id.row_step4);
         
         //Detmine & Set proper image
-        setStepImage(step1, curr.steps[0]);
-        setStepImage(step2, curr.steps[1]);
-        setStepImage(step3, curr.steps[2]);
-        setStepImage(step4, curr.steps[3]);
+        Routes.setStepImage(step1, curr.steps[0]);
+        Routes.setStepImage(step2, curr.steps[1]);
+        Routes.setStepImage(step3, curr.steps[2]);
+        Routes.setStepImage(step4, curr.steps[3]);
         
         //Import TextViews which show length of walk or bus number
         TextView txt1 = (TextView) convertView.findViewById(R.id.row_step1_text);
@@ -80,72 +95,17 @@ public class RouteAdapter extends BaseAdapter implements OnClickListener {
         TextView txt4 = (TextView) convertView.findViewById(R.id.row_step4_text);
         
         //Set Text under images
-        setStepText(txt1, curr.stepText[0]);
-        setStepText(txt2, curr.stepText[1]);
-        setStepText(txt3, curr.stepText[2]);
-        setStepText(txt4, curr.stepText[3]);
+        Routes.setStepText(txt1, curr.stepText[0]);
+        Routes.setStepText(txt2, curr.stepText[1]);
+        Routes.setStepText(txt3, curr.stepText[2]);
+        Routes.setStepText(txt4, curr.stepText[3]);
         
-        //Store index of route
+        //View position is stored for use in onClick
         TextView pos = (TextView) convertView.findViewById(R.id.row_pos);
         pos.setText(String.valueOf(position));
         
         convertView.setOnClickListener(this);
         return convertView;
-    }
-    
-    private void setStepImage(ImageView i, String step)
-    {
-    	if(step == null){
-    		i.setImageResource(R.drawable.filler);		//Blank Image
-    		return; }
-    	if(step.equals("walk")){
-			i.setImageResource(R.drawable.walk_icon_small);
-			return;	}
-    	if(step.equals("PACE")){	
-    		i.setImageResource(R.drawable.pace);	
-    		return; }
-    	if(step.equals("CTA")){ 	
-    		i.setImageResource(R.drawable.cta_bus);	
-    		return; }
-    	if(step.equals("METRA")){ 	
-    		i.setImageResource(R.drawable.metra);	
-    		return; }
-		
-    	//Train Images
-    	if(step.equals("G")){
-    		i.setImageResource(R.drawable.cta_green);	
-    		return; }
-    	if(step.equals("Blue")){
-    		i.setImageResource(R.drawable.cta_blue);	
-    		return; }
-    	if(step.equals("Brown")){
-    		i.setImageResource(R.drawable.cta_brown);	
-    		return; }
-    	if(step.equals("Pink")){
-    		i.setImageResource(R.drawable.cta_pink);	
-    		return; }
-    	if(step.equals("Purple")){
-    		i.setImageResource(R.drawable.cta_purple);	
-    		return; }
-    	if(step.equals("O")){
-    		i.setImageResource(R.drawable.cta_orange);	
-    		return; }
-    	if(step.equals("R") || step.equals("Red")){
-    		i.setImageResource(R.drawable.cta_red);	
-    		return; }
-    	if(step.equals("Y") || step.equals("Yellow")){
-    		i.setImageResource(R.drawable.cta_yellow);	
-    		return; }
-		
-		i.setImageResource(R.drawable.unknown_vehicle_icon);
-    }
-    
-    private void setStepText(TextView t, String s)
-    {
-    	if(s == null){
-    		t.setText(""); 
-    		return; }
-    	t.setText(s);
     }
 
     public void onClick(View view) {

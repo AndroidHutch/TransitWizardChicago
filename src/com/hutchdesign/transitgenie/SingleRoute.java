@@ -1,3 +1,16 @@
+/* Transit Genie Android 
+ * v. 1.0
+ * Code by Mike Hutcheson and Allie Curry
+ * 
+ * ------------
+ * SingleRoute
+ * ------------
+ * Initialized with a DOM tree stored in a Document.
+ * Used as an item in a custom ListView for Routes.java.
+ * Parses DOM tree for variable data needed for RouteAdapter.
+ * 	 ...RouteAdapter then 'translates' the variable data to widgets.
+ * 
+ */
 
 
 package com.hutchdesign.transitgenie;
@@ -11,7 +24,7 @@ import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.NodeList;
 
 /*
- * 
+ *  NOTE:
  * 	int seconds = (int) ((milliseconds / 1000) % 60);
  *	int minutes = (int) ((milliseconds / 1000) / 60);
  *
@@ -47,22 +60,23 @@ public class SingleRoute
 	{	
 		SimpleDateFormat date = new SimpleDateFormat("h:mm a");
 		Calendar cal = Calendar.getInstance();
-		
-		//NodeList nodes 		= DOC.getChildNodes();
-		//NamedNodeMap map1 	= nodes.item(0).getAttributes();
-		
+
+		//DEPART TIME
 		long d = Long.parseLong(routeNode.getAttribute("dep_time")); //Depart time now stored in milliseconds
 			cal.setTimeInMillis(d);
 		depart = "" + date.format(cal.getTime());
 			
+		//"LEAVE IN X MINUTES"
 			//long now = System.currentTimeMillis();
 			long diff = 0; //(cal.getTimeInMillis() - now) /(1000*60);
-		leaveIn = diff  + " min";				//Store depart time
+		leaveIn = diff  + " min";				//Store depart time (relative to current time, eg. "+5 min")
 		
+		//ARRIVAL TIME
 		long a = Long.parseLong(routeNode.getAttribute("arr_time"));	//Arrival time now stored in milliseconds
 			cal.setTimeInMillis(a);
 		arrival = "" + date.format(cal.getTime());
 		
+		//Get appropriate images and labels for first 4 route steps.
 		for(int x=0; x<4; ++x)
 		{
 			if(allSteps.item(x) != null)
@@ -79,7 +93,6 @@ public class SingleRoute
 					if(temp.equals("CTA") && type.equals("1"))	//Route is a CTA train.
 					{
 						temp = rtid;	//Step is now the route ID corresponding to which train
-						
 						
 						String temp2 = attr.item(3).getNodeValue();
 						temp2.replace(' ', '\n');
@@ -112,44 +125,13 @@ public class SingleRoute
 						num += Integer.valueOf(temp);
 					} 
 					
-					String length = "";
-					//num now holds length of walk in (meters?)
-					//convert to miles...
-					double num_miles = (num / (1609.344));
-					if(num_miles < 0.1)
-					{
-						int feet = (int) (num/3.2808399);
-						length = String.valueOf(feet) + "ft";
-					}
-					else
-					{
-						length = String.valueOf(num_miles).substring(0, 3) + "mi";
-					}
-					
-					stepText[x] = length;
-					
+					stepText[x] = Routes.convertFromMeters(num);	//Convert total length from meters to miles or feet.
 				}
 				
 			}
 		}
 
 	}//End setImmediateData()
-	
-	
-	/* SET DETAIL DATA ------------------------------------------------------
-	 * 
-	 * Set variables needed for full detail of route
-	 * 
-	 */
-	
-	public void setDetailData()
-	{
-		
-		
-		
-		
-		
-	}
 	
 	/*
 	 * Example request working with <routes> as root node (ie nodes.item(0) = <route>:

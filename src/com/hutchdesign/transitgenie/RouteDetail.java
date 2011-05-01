@@ -1,3 +1,18 @@
+/* Transit Genie Android 
+ * v. 1.0
+ * Code by Mike Hutcheson and Allie Curry
+ * 
+ * ---------------------
+ * RouteDetail Activity
+ * ---------------------
+ * Created upon selection of route from Routes Activity.
+ * Displays detailed version of selected route.
+ * 		-> Achieved with a custom ListView.
+ * Shows Google map upon user selection of a specific step
+ * 		or shows Google map of all steps if map button pressed.
+ * 
+ */
+
 package com.hutchdesign.transitgenie;
 
 import org.w3c.dom.NamedNodeMap;
