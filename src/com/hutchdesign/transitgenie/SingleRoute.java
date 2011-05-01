@@ -51,15 +51,15 @@ public class SingleRoute
 		//NodeList nodes 		= DOC.getChildNodes();
 		//NamedNodeMap map1 	= nodes.item(0).getAttributes();
 		
-		int d = Integer.parseInt(routeNode.getAttribute("dep_time"));	//Depart time now stored in milliseconds
+		long d = Long.parseLong(routeNode.getAttribute("dep_time")); //Depart time now stored in milliseconds
 			cal.setTimeInMillis(d);
 		depart = "" + date.format(cal.getTime());
 			
-			int now = (int) System.currentTimeMillis();
-			int diff = (int) ((d-now) / 1000) / 60;
+			//long now = System.currentTimeMillis();
+			long diff = 0; //(cal.getTimeInMillis() - now) /(1000*60);
 		leaveIn = diff  + " min";				//Store depart time
 		
-		int a = Integer.parseInt(routeNode.getAttribute("arr_time"));	//Arrival time now stored in milliseconds
+		long a = Long.parseLong(routeNode.getAttribute("arr_time"));	//Arrival time now stored in milliseconds
 			cal.setTimeInMillis(a);
 		arrival = "" + date.format(cal.getTime());
 		
@@ -111,11 +111,22 @@ public class SingleRoute
 						}
 						num += Integer.valueOf(temp);
 					} 
+					
+					String length = "";
 					//num now holds length of walk in (meters?)
 					//convert to miles...
-					num = (num / (1609.344));
-					String miles = String.valueOf(num).substring(0, 3) + "mi";
-					stepText[x] = miles;
+					double num_miles = (num / (1609.344));
+					if(num_miles < 0.1)
+					{
+						int feet = (int) (num/3.2808399);
+						length = String.valueOf(feet) + "ft";
+					}
+					else
+					{
+						length = String.valueOf(num_miles).substring(0, 3) + "mi";
+					}
+					
+					stepText[x] = length;
 					
 				}
 				

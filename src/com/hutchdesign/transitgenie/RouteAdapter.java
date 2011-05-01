@@ -115,7 +115,27 @@ public class RouteAdapter extends BaseAdapter implements OnClickListener {
     	if(step.equals("G")){
     		i.setImageResource(R.drawable.cta_green);	
     		return; }
-    	//TODO: Figure out remaining tags & add proper images.
+    	if(step.equals("Blue")){
+    		i.setImageResource(R.drawable.cta_blue);	
+    		return; }
+    	if(step.equals("Brown")){
+    		i.setImageResource(R.drawable.cta_brown);	
+    		return; }
+    	if(step.equals("Pink")){
+    		i.setImageResource(R.drawable.cta_pink);	
+    		return; }
+    	if(step.equals("Purple")){
+    		i.setImageResource(R.drawable.cta_purple);	
+    		return; }
+    	if(step.equals("O")){
+    		i.setImageResource(R.drawable.cta_orange);	
+    		return; }
+    	if(step.equals("R") || step.equals("Red")){
+    		i.setImageResource(R.drawable.cta_red);	
+    		return; }
+    	if(step.equals("Y") || step.equals("Yellow")){
+    		i.setImageResource(R.drawable.cta_yellow);	
+    		return; }
 		
 		i.setImageResource(R.drawable.unknown_vehicle_icon);
     }

@@ -94,33 +94,49 @@ public class DetailAdapter extends BaseAdapter implements OnClickListener {
 			NodeList s = curr.getChildNodes();
 			double num = 0;
 			String temp = "0";
+			boolean fromIsSet = false;
 			
 			for(int y=0; y<s.getLength(); ++y)
 			{
 				NamedNodeMap attr1 = s.item(y).getAttributes();
-				if(s.item(y).getNodeName().equals("start"))
+				String walkNodeName = s.item(y).getNodeName();	//= "street" or "start" or "end"
+				
+				if(!fromIsSet) //Set starting point to first street name.
 				{
-					temp = attr1.item(0).getNodeValue();
+					stepFrom.setText(attr1.item(0).getNodeValue());
+					fromIsSet = true; //starting point is set
+				}
+				
+				
+				if(walkNodeName.equals("start") || walkNodeName.equals("end"))
+				{
+					temp = attr1.item(0).getNodeValue();	//grab length of step in meters
+					fromIsSet = false; //starting point needs to be reset
 				}
 				else
 				{
 					temp = attr1.item(1).getNodeValue();
-					
-					if(y == 1)
-					{
-						stepFrom.setText(attr1.item(0).getNodeValue());
-					}
+					stepTo.setText(attr1.item(0).getNodeValue()); 
 				}
 				
-				stepTo.setText(attr1.item(0).getNodeValue());
 				num += Integer.valueOf(temp);
 			} 
 			
-			//num now holds length of walk in meters.
+			String finalLength = "";
+			//num now holds length of walk in (meters?)
 			//convert to miles...
-			num = (num / (1609.344));
-			String miles = String.valueOf(num).substring(0, 3) + "mi";
-			stepTag.setText(miles);
+			double num_miles = (num / (1609.344));
+			if(num_miles < 0.1) //convert 
+			{
+				int feet = (int) (num/3.2808399);
+				finalLength = String.valueOf(feet) + "ft";
+			}
+			else
+			{
+				finalLength = String.valueOf(num_miles).substring(0, 3) + "mi";
+			}
+			
+			stepTag.setText(finalLength);
 			
 		}
         //END SET IMAGE AND TAG  -------------------------------------------------------------------
@@ -156,19 +172,31 @@ public class DetailAdapter extends BaseAdapter implements OnClickListener {
     	if(step.equals("G")){
     		i.setImageResource(R.drawable.cta_green);	
     		return; }
-    	//TODO: Figure out remaining tags & add proper images.
+    	if(step.equals("Blue")){
+    		i.setImageResource(R.drawable.cta_blue);	
+    		return; }
+    	if(step.equals("Brown")){
+    		i.setImageResource(R.drawable.cta_brown);	
+    		return; }
+    	if(step.equals("Pink")){
+    		i.setImageResource(R.drawable.cta_pink);	
+    		return; }
+    	if(step.equals("Purple")){
+    		i.setImageResource(R.drawable.cta_purple);	
+    		return; }
+    	if(step.equals("O")){
+    		i.setImageResource(R.drawable.cta_orange);	
+    		return; }
+    	if(step.equals("R") || step.equals("Red")){
+    		i.setImageResource(R.drawable.cta_red);	
+    		return; }
+    	if(step.equals("Y") || step.equals("Yellow")){
+    		i.setImageResource(R.drawable.cta_yellow);	
+    		return; }
 		
 		i.setImageResource(R.drawable.unknown_vehicle_icon);
     }
     
-    private void setStepText(TextView t, String s)
-    {
-    	if(s == null){
-    		t.setText(""); 
-    		return; }
-    	t.setText(s);
-    }
-
     public void onClick(View view) 
     {
     	
