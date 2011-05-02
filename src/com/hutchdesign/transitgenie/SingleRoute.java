@@ -63,17 +63,17 @@ public class SingleRoute
 
 		//DEPART TIME
 		long d = Long.parseLong(routeNode.getAttribute("dep_time")); //Depart time now stored in milliseconds
-			cal.setTimeInMillis(d);
+			cal.setTimeInMillis(d * 1000L);
 		depart = "" + date.format(cal.getTime());
 			
-		//"LEAVE IN X MINUTES"
-			//long now = System.currentTimeMillis();
-			long diff = 0; //(cal.getTimeInMillis() - now) /(1000*60);
-		leaveIn = diff  + " min";				//Store depart time (relative to current time, eg. "+5 min")
+			long now = System.currentTimeMillis();
+			long diff = ((d*1000L-now) / 1000) / 60;
+		leaveIn = diff  + " min";				//Store depart time
+
 		
 		//ARRIVAL TIME
 		long a = Long.parseLong(routeNode.getAttribute("arr_time"));	//Arrival time now stored in milliseconds
-			cal.setTimeInMillis(a);
+			cal.setTimeInMillis(a * 1000L);
 		arrival = "" + date.format(cal.getTime());
 		
 		//Get appropriate images and labels for first 4 route steps.

@@ -1,19 +1,3 @@
-/* Transit Genie Android 
- * v. 1.0
- * Code by Mike Hutcheson and Allie Curry
- * 
- * --------------
- * DetailAdapter
- * --------------
- * Adapter for custom ListView in RouteDetail.java.
- * Initialized with a List of Nodes corresponding to each step in the current route.
- * 		e.g. Node walk -> Node transit -> Node walk
- * Each Node in the List becomes a "row" in the custom ListView.
- * 		-> Attributes from a Node are displayed in widgets stored in detail.xml.
- * Ensures that on user click, map corresponding to step is displayed.
- * 
- */
-
 package com.hutchdesign.transitgenie;
 
 import org.w3c.dom.NamedNodeMap;
@@ -22,6 +6,7 @@ import org.w3c.dom.NodeList;
 
 import android.app.Activity;
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -29,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class DetailAdapter extends BaseAdapter implements OnClickListener {
     private Context context;
@@ -101,48 +87,56 @@ public class DetailAdapter extends BaseAdapter implements OnClickListener {
 				stepTag.setText(rtid);		//Set step text to id name (eg. bus number)
 			}
 			
-			Routes.setStepImage(stepImage, temp);		//Set image corresponding to step
+			setStepImage(stepImage, temp);		//Set image corresponding to step
 		}
 		else //walk node
 		{	
-			Routes.setStepImage(stepImage, nodeName);		//Set image corresponding to step
+			setStepImage(stepImage, nodeName);		//Set image corresponding to step
 			NodeList s = curr.getChildNodes();
 			double num = 0;
 			String temp = "0";
-			boolean fromIsSet = false;
-			
+			int timeDif = 0;
 			for(int y=0; y<s.getLength(); ++y)
 			{
 				NamedNodeMap attr1 = s.item(y).getAttributes();
-				String walkNodeName = s.item(y).getNodeName();	//= "street" or "start" or "end"
-				
-				if(!fromIsSet) //Set starting point to first street name.
+				Log.i("Detail", s.item(y).getNodeName());
+				if(s.item(y).getNodeName().equals("start") || s.item(y).getNodeName().equals("end"))
 				{
-					stepFrom.setText(attr1.item(0).getNodeValue());
-					fromIsSet = true; //starting point is set
-				}
-				
-				
-				if(walkNodeName.equals("start") || walkNodeName.equals("end"))
-				{
-					temp = attr1.item(0).getNodeValue();	//grab length of step in meters
-					fromIsSet = false; //starting point needs to be reset
+					Log.i("startNode", "inside start node");
+					temp = attr1.item(0).getNodeValue();
+					timeDif = (Integer.parseInt(attr1.item(3).getNodeValue()) - 
+					Integer.parseInt(attr1.item(2).getNodeValue()));
+					
 				}
 				else
 				{
 					temp = attr1.item(1).getNodeValue();
-					stepTo.setText(attr1.item(0).getNodeValue());
+					Log.i("StreetNode", attr1.item(3).getNodeValue() + " , " + attr1.item(3).getNodeName() );
+					timeDif = (Integer.parseInt(attr1.item(4).getNodeValue()) - 
+							Integer.parseInt(attr1.item(3).getNodeValue()));
+					if(y == 1)
+					{
+						stepFrom.setText(attr1.item(0).getNodeValue());
+					}
 				}
-				
+				if( timeDif > 60 )
+					{stepFor.setText(Integer.toString(timeDif / 60) + " min");}
+				else{ stepFor.setText(Integer.toString(timeDif) + " sec");}
+				stepTo.setText(attr1.item(0).getNodeValue());
 				num += Integer.valueOf(temp);
 			} 
 			
-			stepTag.setText(Routes.convertFromMeters(num));
+			//num now holds length of walk in meters.
+			//convert to miles...
+			num = (num / (1609.344));
+			String miles = String.valueOf(num).substring(0, 3) + "mi";
+			stepTag.setText(miles);
 			
 		}
         //END SET IMAGE AND TAG  -------------------------------------------------------------------
-
-        //View position is stored for use in onClick
+        
+        
+        
         TextView pos = (TextView) convertView.findViewById(R.id.row_pos);
         pos.setText(String.valueOf(position));
         
@@ -150,6 +144,41 @@ public class DetailAdapter extends BaseAdapter implements OnClickListener {
         return convertView;
     }
     
+    private void setStepImage(ImageView i, String step)
+    {
+    	if(step == null){
+    		i.setImageResource(R.drawable.filler);		//Blank Image
+    		return; }
+    	if(step.equals("walk")){
+			i.setImageResource(R.drawable.walk_icon_small);
+			return;	}
+    	if(step.equals("PACE")){	
+    		i.setImageResource(R.drawable.pace);	
+    		return; }
+    	if(step.equals("CTA")){ 	
+    		i.setImageResource(R.drawable.cta_bus);	
+    		return; }
+    	if(step.equals("METRA")){ 	
+    		i.setImageResource(R.drawable.metra);	
+    		return; }
+		
+    	//Train Images
+    	if(step.equals("G")){
+    		i.setImageResource(R.drawable.cta_green);	
+    		return; }
+    	//TODO: Figure out remaining tags & add proper images.
+		
+		i.setImageResource(R.drawable.unknown_vehicle_icon);
+    }
+    
+    private void setStepText(TextView t, String s)
+    {
+    	if(s == null){
+    		t.setText(""); 
+    		return; }
+    	t.setText(s);
+    }
+
     public void onClick(View view) 
     {
     	
