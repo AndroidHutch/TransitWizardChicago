@@ -86,11 +86,11 @@ public class DetailAdapter extends BaseAdapter implements OnClickListener {
 				stepTag.setText(rtid);		//Set step text to id name (eg. bus number)
 			}
 			
-			setStepImage(stepImage, temp);		//Set image corresponding to step
+			Routes.setStepImage(stepImage, temp);		//Set image corresponding to step
 		}
 		else //walk node
 		{	
-			setStepImage(stepImage, nodeName);		//Set image corresponding to step
+			Routes.setStepImage(stepImage, nodeName);		//Set image corresponding to step
 			NodeList s = curr.getChildNodes();
 			double num = 0;
 			String temp = "0";
@@ -141,41 +141,6 @@ public class DetailAdapter extends BaseAdapter implements OnClickListener {
         
         convertView.setOnClickListener(this);
         return convertView;
-    }
-    
-    private void setStepImage(ImageView i, String step)
-    {
-    	if(step == null){
-    		i.setImageResource(R.drawable.filler);		//Blank Image
-    		return; }
-    	if(step.equals("walk")){
-			i.setImageResource(R.drawable.walk_icon_small);
-			return;	}
-    	if(step.equals("PACE")){	
-    		i.setImageResource(R.drawable.pace);	
-    		return; }
-    	if(step.equals("CTA")){ 	
-    		i.setImageResource(R.drawable.cta_bus);	
-    		return; }
-    	if(step.equals("METRA")){ 	
-    		i.setImageResource(R.drawable.metra);	
-    		return; }
-		
-    	//Train Images
-    	if(step.equals("G")){
-    		i.setImageResource(R.drawable.cta_green);	
-    		return; }
-    	//TODO: Figure out remaining tags & add proper images.
-		
-		i.setImageResource(R.drawable.unknown_vehicle_icon);
-    }
-    
-    private void setStepText(TextView t, String s)
-    {
-    	if(s == null){
-    		t.setText(""); 
-    		return; }
-    	t.setText(s);
     }
 
     public void onClick(View view) 
