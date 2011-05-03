@@ -20,10 +20,10 @@
 	android:layout_height="wrap_content" 
 	android:padding="4px">
 	
-		<TableRow>
+		<TableRow android:paddingBottom="5px">
 			<Button 
-			android:id="@+id/button_star_origin" 
-			android:background="@drawable/custom_button_star"
+			android:id="@+id/button_fav_origin" 
+			android:background="@drawable/custom_button_add"
 			android:width="30px" 
 			android:height="30px"
 			android:layout_gravity="center_vertical"
@@ -33,23 +33,34 @@
 		
 	    	<TextView  
 			android:id="@+id/transit_origin1"
-		    android:layout_width="fill_parent" 
-		    android:layout_height="wrap_content" 
+		    android:layout_width="wrap_content" 
+		    android:layout_height="fill_parent" 
 		    android:text="origin"
 		    android:textStyle="bold"
 		    android:textColor="#000000"
-		    android:background="#FFFFFF"
 		    android:textSize="16px"
 		    android:paddingLeft="4px"
+		    android:gravity="center_vertical"
+		    android:background="#FFFFFF"
+		    />
+		    <TextView  
+		    android:layout_width="fill_parent" 
+		    android:layout_height="fill_parent" 
+		    android:text="origin"
+		    android:textStyle="bold"
+		    android:textColor="#b6b6b6"
+		    android:background="#FFFFFF"
+		    android:textSize="12px"
+		    android:gravity="right"
 		    android:paddingRight="4px"
-		    android:layout_gravity="center_vertical"
 		    />
 		    
 		</TableRow>
+		
 		<TableRow android:paddingTop="2px">
 			<Button 
-			android:id="@+id/button_star_origin" 
-			android:background="@drawable/custom_button_star"
+			android:id="@+id/button_fav_dest" 
+			android:background="@drawable/custom_button_add"
 			android:width="30px" 
 			android:height="30px"
 			android:layout_gravity="center_vertical"
@@ -60,7 +71,7 @@
 		    <TextView  
 			android:id="@+id/transit_destn1"
 		    android:layout_width="fill_parent" 
-		    android:layout_height="wrap_content" 
+		    android:layout_height="fill_parent" 
 		    android:text="destination"
 		    android:textStyle="bold"
 		    android:textColor="#000000"
@@ -68,7 +79,18 @@
 		    android:textSize="16px"
 		    android:paddingLeft="4px"
 		    android:paddingRight="4px"
-		    android:layout_gravity="center_vertical"
+		    android:gravity="center_vertical"
+		    />
+		    <TextView  
+		    android:layout_width="fill_parent" 
+		    android:layout_height="fill_parent" 
+		    android:text="dest."
+		    android:textStyle="bold"
+		    android:textColor="#b6b6b6"
+		    android:background="#FFFFFF"
+		    android:textSize="12px"
+		    android:gravity="right"
+		    android:paddingRight="4px"
 		    />
 		</TableRow>
 
@@ -109,7 +131,6 @@
 	    android:layout_width="fill_parent" 
 	    android:layout_height="wrap_content" 
 	    android:text="Click row for route details.\nControls on top adjust origin/destination\nand arrival/departure time preferences."
-	    android:textStyle="bold"
 	    android:textColor="#000000"
 	    android:textSize="12px"
 	    android:gravity="center"

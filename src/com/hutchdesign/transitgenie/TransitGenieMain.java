@@ -55,7 +55,7 @@ public class TransitGenieMain extends Activity {
     public static Request request = new Request();
     
     public static SQLHelper SQL_HELPER;
-    Cursor CURSOR;
+    public static Cursor CURSOR;
     Bundle b;	//Holds data passed between main activity and places activity
     
     
@@ -127,7 +127,6 @@ public class TransitGenieMain extends Activity {
          */
         button_destn.setOnClickListener(new View.OnClickListener(){	
 	    	public void onClick(View v){
-	    		
 	    		//Run places activity
 	    		Intent i = new Intent(getApplicationContext(), places.class);
 	    		
@@ -290,6 +289,35 @@ public class TransitGenieMain extends Activity {
     		allNames.add(CURSOR.getString(1));
 
     	return allNames;
+    }
+    
+  //Add a favorite location to the database
+    public static void addFavorite(String name, double latitude, double longitude) 
+    {
+      SQLiteDatabase db = SQL_HELPER.getWritableDatabase();
+      ContentValues values = new ContentValues();
+      
+      //Add variables to SQLHelper
+      values.put(SQLHelper.NAME, name);
+      values.put(SQLHelper.LAT, latitude);
+      values.put(SQLHelper.LON, longitude);
+      
+      //Add current data in SQLHelper to database
+      db.insert(SQLHelper.TABLE, null, values);
+    }
+    
+    //Delete favorite based on route name
+	public void deleteFavoriteByName(String name)
+    {
+    	SQLiteDatabase db = SQL_HELPER.getReadableDatabase();
+    	db.delete(SQLHelper.TABLE, SQLHelper.NAME + "=?", new String[]{name});
+    }
+    
+    //Delete favoirte based on database row id
+    public void deleteFavoriteById(long id)
+    {
+    	SQLiteDatabase db = SQL_HELPER.getReadableDatabase();
+    	db.delete(SQLHelper.TABLE, "_id=?", new String[]{String.valueOf(id)});
     }
     
     

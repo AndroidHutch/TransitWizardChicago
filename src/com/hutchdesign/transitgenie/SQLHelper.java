@@ -28,8 +28,8 @@ public class SQLHelper extends SQLiteOpenHelper {
 		String sql = "create table " + TABLE + "( " + BaseColumns._ID
 				+ " integer primary key autoincrement, " 
 				+ NAME + " text not null, "
-				+ LAT + " long, "
-				+ LON + " long);";
+				+ LAT + " double, "
+				+ LON + " double);";
 		Log.d("EventsData", "onCreate: " + sql);
 		db.execSQL(sql);
 	}
@@ -45,33 +45,5 @@ public class SQLHelper extends SQLiteOpenHelper {
 		if (sql != null)
 			db.execSQL(sql);
 	}
-
-	 //Add a favorite location to the database
-    public void addFavorite(String name, long latitude, long longitude) 
-    {
-      SQLiteDatabase db = getWritableDatabase();
-      ContentValues values = new ContentValues();
-      
-      //Add variables to SQLHelper
-      values.put(SQLHelper.NAME, name);
-      values.put(SQLHelper.LAT, latitude);
-      values.put(SQLHelper.LON, longitude);
-      
-      //Add current data in SQLHelper to database
-      db.insert(SQLHelper.TABLE, null, values);
-    }
     
-    //Delete favorite based on route name
-	public void deleteFavoriteByName(String name)
-    {
-    	SQLiteDatabase db = getReadableDatabase();
-    	db.delete(SQLHelper.TABLE, SQLHelper.NAME + "=?", new String[]{name});
-    }
-    
-    //Delete favoirte based on database row id
-    public void deleteFavoriteById(long id)
-    {
-    	SQLiteDatabase db = getReadableDatabase();
-    	db.delete(SQLHelper.TABLE, "_id=?", new String[]{String.valueOf(id)});
-    }
 }

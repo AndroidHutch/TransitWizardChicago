@@ -36,7 +36,7 @@ public class Request {
 	public double originLatitude = 41.823309;
 	public double destLongitude = -87.635990;
 	public double destLatitude = 41.878884;
-	public long queryTime = System.currentTimeMillis();//1279296315;
+	public long queryTime = System.currentTimeMillis();
 	public int maxResults = 3;
 	public double walkingSpeed = 1.30;
 	public double sequenceNumber = 6;

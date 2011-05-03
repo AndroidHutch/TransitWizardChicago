@@ -67,8 +67,13 @@ import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -92,11 +97,30 @@ public class Routes extends Activity {
         TextView orig = (TextView) findViewById(R.id.transit_origin1);
         TextView dest = (TextView) findViewById(R.id.transit_destn1);
         
-        instr.setText("Click row for route details.\nUse button on top to adjust arrival/departure time preferences.");	//Instructions for user
-        orig.setText(b.getString("origin_string"));				//Origin in form of String (imported from TransitGenieMain)
-        dest.setText("To " +  b.getString("destin_string"));	//Destination in form of String (imported from TransitGenieMain)
+        instr.setText("Click row for route details.\nUse clock button on top to adjust arrival/departure time.\nUse \"+\" button to add location to favorites.");	//Instructions for user
+        orig.setText(b.getString("origin_string"));		//Origin in form of String (imported from TransitGenieMain)
+        dest.setText(b.getString("destin_string"));		//Destination in form of String (imported from TransitGenieMain)
         
+        //Import Add to Favorites Buttons
+        Button fav_origin = (Button) findViewById(R.id.button_fav_origin);
+        Button fav_dest = (Button) findViewById(R.id.button_fav_dest);
+        
+        //Add onClickListeners to add to favorites buttons.
+        fav_origin.setOnClickListener(new View.OnClickListener(){	
+	    	public void onClick(View v){
+	    		showDialog(0);
+	    	}
+        });
+        fav_dest.setOnClickListener(new View.OnClickListener(){	
+	    	public void onClick(View v){
+	    		showDialog(1);
+	    	}
+        });
+        //-------------------------------------------------------
+        
+        //RETRIEVE DOCUMENT
         Document[] allRoutes = null;	//Array of DOM trees, each representing a singular route.
+        
         try { //Call on Request class (initialized in TransitGenieMain) to build URL.
 			TransitGenieMain.request.buildURL();	
 		} catch (MalformedURLException e1) {
@@ -117,8 +141,9 @@ public class Routes extends Activity {
 			this.finish();
 		}
 		
-		else {
-			
+		
+		//CREATE CUSTOM LIST VIEW
+		else {	
         ListView routeListView = (ListView) findViewById(R.id.RouteListView);	//Load ListView from .xml       
         RouteList = new ArrayList<SingleRoute>();		//Create ArrayList of SingleRoutes.
         
@@ -242,5 +267,59 @@ public class Routes extends Activity {
     	
     	return ans;
     }
+    
+    //DIALOG CREATION
+    protected Dialog onCreateDialog(int i) 
+	{
+		switch(i) {
+		case 0:	//Origin		 
+			AlertDialog.Builder builder = new AlertDialog.Builder(this);
+			final String name = b.getString("origin_string");
+			
+			builder.setMessage("Add " + name + " to favorites?")
+			       .setCancelable(false)
+			       .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+			           public void onClick(DialogInterface dialog, int id) {
+			        	   //ADD TO DATABASE
+			        	   Double lat = TransitGenieMain.request.originLatitude;
+			        	   Double lon = TransitGenieMain.request.originLongitude;
+			        	   TransitGenieMain.addFavorite(name, lat, lon); 
+			           }
+			       })
+			       .setNegativeButton("No", new DialogInterface.OnClickListener() {
+			           public void onClick(DialogInterface dialog, int id) {
+			                dialog.cancel();
+			           }
+			       });
+			AlertDialog alert = builder.create();
+			alert.show();
+			break;
+			
+		case 1:	//Destination		 
+			AlertDialog.Builder builder1 = new AlertDialog.Builder(this);
+			final String name1 = b.getString("destin_string");
+			
+			builder1.setMessage("Add " + name1 + " to favorites?")
+			       .setCancelable(false)
+			       .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+			           public void onClick(DialogInterface dialog, int id) {
+			        	   //ADD TO DATABASE
+			        	   Double lat = TransitGenieMain.request.destLatitude;
+			        	   Double lon = TransitGenieMain.request.destLongitude;
+			        	   TransitGenieMain.addFavorite(name1, lat, lon); 
+			           }
+			       })
+			       .setNegativeButton("No", new DialogInterface.OnClickListener() {
+			           public void onClick(DialogInterface dialog, int id) {
+			                dialog.cancel();
+			           }
+			       });
+			AlertDialog alert1 = builder1.create();
+			alert1.show();
+			break;
+		}
+		
+		return null;
+	}//END DIALOG CREATION
     
 }//End main class.

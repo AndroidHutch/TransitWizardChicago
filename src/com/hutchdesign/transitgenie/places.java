@@ -19,6 +19,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 //New lines bc svn is picky
 
@@ -38,7 +39,7 @@ public class places extends Activity {
 			"\tUniversity of Illinois\n\t at Chicago", "\tWillis Tower" };
 	
     // List of "latitude,longitude" of popular places
-    static final String POPULAR_LOC[] = { "0,0", // First spot is empty since 1st element of POPULAR is = "Hide Popular Places"
+    static final String POPULAR_LOC[] = {
 		"41.866334,-87.606526",	// Adler Planetarium
 		"41.875803,-87.618347",	// Buckingham Fountain
 		"41.879579,-87.623885",	// Chicago Art Institute
@@ -153,24 +154,38 @@ public class places extends Activity {
 				// *****************************
 				// ANY POPULAR PLACE OR FAVORITE
 				default:
-					if (!isPopShowing) // Popular Places are NOT displayed. -> User selected a favorite
-					{
-						
-						
+					double lat = 0;
+					double lon = 0;
+					
+					if (!isPopShowing || position > 17) // Popular Places are NOT displayed,
+					{									//OR position is below popular places. => User selected a favorite 
+						int p = position-3;
+						if(position > 17) { p -= 15; }
+						TransitGenieMain.CURSOR.moveToPosition(p);	//Point to Table row corresponding to selected favorite
+						lat = TransitGenieMain.CURSOR.getDouble(2);
+						lon = TransitGenieMain.CURSOR.getDouble(3);
+					}
+					else //User selected a popular location
+					{	
+						String temp = POPULAR_LOC[position-3];	//Retrieve latitude/longitude in for of a String
+						int comma = temp.indexOf(',');			//Retrieve index of comma between latitude & longitude
+						lat = Double.valueOf(temp.substring(0,comma));
+						lon = Double.valueOf(temp.substring(comma+1));
 					}
 					
 					//Send location name (String) to Bundle
+					//& Set latitude/longitude in Request class
 					if (ORIGIN == 0) {
 						TransitGenieMain.ORIGIN_GPS = 0;
 						b.putString("origin_string", LIST.get(position).trim());
+						TransitGenieMain.request.originLatitude = lat;
+						TransitGenieMain.request.originLongitude = lon;
 					} else {
 						TransitGenieMain.DEST_GPS = 0;
 						b.putString("destin_string", LIST.get(position).trim());
+						TransitGenieMain.request.destLatitude = lat;
+						TransitGenieMain.request.destLongitude = lon;
 					}
-
-					// TODO: Return Latitude/Logitude for Popular Places.
-					// b.putString("latitude", "...");
-					// b.putString("longitude", "...");
 
 					intent = getIntent();
 					intent.putExtras(b);
