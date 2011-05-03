@@ -27,9 +27,14 @@
 
 package com.hutchdesign.transitgenie;
 
+import java.util.ArrayList;
+
 import android.app.Activity;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -48,9 +53,10 @@ public class TransitGenieMain extends Activity {
     public static int ORIGIN_GPS = 1;
     public static int DEST_GPS = 1;
     public static Request request = new Request();
-    //Document[] routes;
+    
+    public static SQLHelper SQL_HELPER;
+    Cursor CURSOR;
     Bundle b;	//Holds data passed between main activity and places activity
-    //Set up Request URL 
     
     
 	/** Called when the activity is first created. */
@@ -59,14 +65,17 @@ public class TransitGenieMain extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
         
+        //Initialize SQL Database helper and cursor
+        SQL_HELPER = new SQLHelper(this);
+        CURSOR = getFavorites();
+        
         //Set up GPS location manager
         LocationManager mlocManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
-
         LocationListener mlocListener = new MyLocationListener();
-        
         mlocManager.requestLocationUpdates( LocationManager.GPS_PROVIDER, 0, 0, mlocListener);
         //mlocManager.getLastKnownLocation(LOCATION_SERVICE);
         
+        //Initialize Bundle and set default values
         b = new Bundle();
         b.putString("origin_string", "Current Location");
         b.putString("destin_string", "Current Location");
@@ -76,7 +85,10 @@ public class TransitGenieMain extends Activity {
         ImageButton button_origin = (ImageButton)findViewById(R.id.button_origin);	//Selected when user wishes to choose origin.
         ImageButton button_destn = (ImageButton)findViewById(R.id.button_destn);	//Selected when user wishes to choose destination.
         
-        //"Go" Button Listener
+
+        /* * * * * * * * * * * * * 
+         * "GO" Button Listener  *
+         * * * * * * * * * * * * */
         button_go.setOnClickListener(new View.OnClickListener(){	
 	    	public void onClick(View v){
 	    		
@@ -100,12 +112,12 @@ public class TransitGenieMain extends Activity {
 	    		//Run places activity
 	    		Intent i = new Intent(getApplicationContext(), places.class);
 	    		
+	    		b.putStringArrayList("favs", getFavoritesArrayList());
 	    		b.putInt("origin", 0);	//Set in Bundle 'b' that user is requesting origin.
 	    		i.putExtras(b);			//Pass Bundle 'b' to Places activity via Intent 'i'.
 	    		startActivityForResult(i, 0);
 	    	}
         });
-        
         
         /*
          * SET DESTINATION
@@ -119,6 +131,7 @@ public class TransitGenieMain extends Activity {
 	    		//Run places activity
 	    		Intent i = new Intent(getApplicationContext(), places.class);
 	    		
+	    		b.putStringArrayList("favs", getFavoritesArrayList());
 	    		b.putInt("origin", 1);	//Set in Bundle 'b' that user is requesting destination.
 	    		i.putExtras(b);			//Pass Bundle 'b' to Places activity via Intent 'i'.
 	            startActivityForResult(i, 1);
@@ -140,7 +153,6 @@ public class TransitGenieMain extends Activity {
     {
     	public void onLocationChanged(Location loc)
 	    {
-	
 		    loc.getLatitude();
 		
 		    loc.getLongitude();
@@ -160,7 +172,6 @@ public class TransitGenieMain extends Activity {
 	
 	
 	    public void onProviderDisabled(String provider)
-	
 	    {
 	    	Toast.makeText( getApplicationContext(),
 		    "Gps Disabled",
@@ -170,7 +181,6 @@ public class TransitGenieMain extends Activity {
 	
 	
 	    public void onProviderEnabled(String provider)
-	
 	    {
 	
 	    	Toast.makeText( getApplicationContext(),
@@ -214,7 +224,8 @@ public class TransitGenieMain extends Activity {
         }
         
         //If the request went well (OK) and the request was for destination
-        else if(resultCode == Activity.RESULT_OK)
+        //Note: requestCode = 1 => Destination Request
+        else if(resultCode == Activity.RESULT_OK && requestCode == 1) 
         {
         	EditText destn = (EditText) findViewById(R.id.text_destn2);
         	destn.setText(bundl.getString("destin_string"));
@@ -256,5 +267,40 @@ public class TransitGenieMain extends Activity {
 		return true;
     }
     
+    //-----------------------------------------------------------
+    //METHODS NEEDED FOR SQL DATABASE
+
+    //Retrieve all favorite locations from the database
+    private Cursor getFavorites() 
+    {
+    	SQLiteDatabase db = SQL_HELPER.getReadableDatabase();
+    	Cursor cursor = db.query(SQLHelper.TABLE, null, null, null, null, null, null);
+  
+    	startManagingCursor(cursor);
+    	return cursor;
+    }
     
+    //Retrieve all favorite locations from the database in the form of an array list
+    private ArrayList<String> getFavoritesArrayList() 
+    {
+    	ArrayList<String> allNames = new ArrayList<String>();
+    	CURSOR.moveToFirst();
+    	
+    	while (CURSOR.moveToNext())
+    		allNames.add(CURSOR.getString(1));
+
+    	return allNames;
+    }
+    
+    
+    @Override
+    public void onDestroy() 
+    {
+    	super.onDestroy();
+    	
+    	if(CURSOR != null)
+    		CURSOR.close();
+    	if(SQL_HELPER != null)
+    		SQL_HELPER.close();
+    }  
 }//End main class.

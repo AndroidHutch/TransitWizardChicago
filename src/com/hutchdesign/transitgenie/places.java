@@ -25,40 +25,36 @@ import android.widget.TextView;
 public class places extends Activity {
 
 	// List of menu choices
-	static final String MENU[] = { "Use Current Location", "Select on Map",
+	private static final String MENU[] = { "Use Current Location", "Select on Map",
 			"Show Popular Places", };
 
 	// List of popular places in Chicago.
-	static final String POPULAR[] = { "Hide Popular Places",
+	private static final String POPULAR[] = { "Hide Popular Places",
 			"\tAdler Planetarium", "\tBuckingham Fountain",
 			"\tChicago Art Institute", "\tField Museum",
 			"\tJohn Hancock Center", "\tLicoln Park Zoo", "\tMagnificent Mile",
 			"\tMcCormick Place", "\tMidway Airport", "\tMillennium Park",
 			"\tNavy Pier", "\tNorth Avenue Beach", "\tOak Street Beach",
 			"\tUniversity of Illinois\n\t at Chicago", "\tWillis Tower" };
-
-	// List of "latitude,longitude" of popular places
-	static final String POPULAR_LOC[] = { "0,0", // First spot is empty since
-													// 1st element of POPULAR is
-													// not a place
-													// (="Hide Popular Places")
-			"0,0", // Adler Planetarium
-			"0,0", // Buckingham Fountain
-			"0,0", // Chicago Art Institute
-			"0,0", // Field Museum
-			"0,0", // John Hancock Center
-			"0,0", // Licoln Park Zoo
-			"0,0", // Magnificent Mile
-			"0,0", // McCormick Place
-			"0,0", // Midway Airport
-			"0,0", // Millennium Park
-			"0,0", // Navy Pier
-			"0,0", // North Avenue Beach
-			"0,0", // Oak Street Beach
-			"0,0", // University of Illinois Chicago
-			"0,0" // Willis Tower
-	};
-
+	
+    // List of "latitude,longitude" of popular places
+    static final String POPULAR_LOC[] = { "0,0", // First spot is empty since 1st element of POPULAR is = "Hide Popular Places"
+		"41.866334,-87.606526",	// Adler Planetarium
+		"41.875803,-87.618347",	// Buckingham Fountain
+		"41.879579,-87.623885",	// Chicago Art Institute
+		"41.866178,-87.617712",	// Field Museum
+		"41.898803,-87.623616",	// John Hancock Center
+		"41.920752,-87.632828",	// Licoln Park Zoo
+		"41.899594,-87.624421",	// Magnificent Mile
+		"41.852811,-87.611718",	// McCormick Place
+		"41.78831,-87.740692",	// Midway Airport
+		"41.882105,-87.622957",	// Millennium Park
+		"41.891416,-87.609959",	// Navy Pier
+		"41.914199,-87.624497",	// North Avenue Beach
+		"41.902893,-87.622722",	// Oak Street Beach
+		"41.869622,-87.649481",	// University of Illinois Chicago
+		"41.87886,-87.635837"	// Willis Tower
+    };
 	private int ORIGIN; // variable passed in from main activity. = 1 when user
 						// is setting Origin (else, destination)
 	private ListView MAIN_LIST;
@@ -68,6 +64,7 @@ public class places extends Activity {
 	Bundle b;
 	boolean isPopShowing = false;
 	ArrayList<String> LIST = new ArrayList<String>();
+	ArrayList<String> FAVORITES;
 	ArrayAdapter<String> ADAP;
 	/** Called when the activity is first created. */
 	
@@ -76,10 +73,12 @@ public class places extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.places);
 		final Context mContext = this;
-		b = getIntent().getExtras();
-		ORIGIN = b.getInt("origin", 0); // Retrieve variable origin from main
-										// class
-		// Import header (TextView) from places.xml
+		
+		b = getIntent().getExtras();	
+		ORIGIN = b.getInt("origin", 0); 			// Retrieve variable origin from main class
+		FAVORITES = b.getStringArrayList("favs"); 	//Retrieve favorite route names taken from local database.
+
+		//Import header (TextView) from places.xml
 		TextView header = (TextView) findViewById(R.id.header1);
 
 		if (ORIGIN == 0) {
@@ -89,6 +88,7 @@ public class places extends Activity {
 		}
 
 		LIST.addAll(Arrays.asList(MENU));
+		LIST.addAll(FAVORITES);
 		MAIN_LIST = (ListView) findViewById(R.id.listView1);
 		ADAP = (new ArrayAdapter<String>(places.this,
 				android.R.layout.simple_list_item_1, LIST));
@@ -118,7 +118,7 @@ public class places extends Activity {
 					finish();
 					break;
 
-				// ********************
+				// *************
 				// SELECT ON MAP
 				case 1:
 					Intent i = new Intent(mContext, Map.class);
@@ -129,14 +129,14 @@ public class places extends Activity {
 
 					break;
 
-				// ********************
+				// ***************************
 				// SHOW OR HIDE POPULAR PLACES
 				case 2:
 					if (!isPopShowing) // Popular Places are NOT displayed. ->
 										// User wants them to be.
 					{
 						LIST.remove(2);
-						LIST.addAll(Arrays.asList(POPULAR));
+						LIST.addAll(2, Arrays.asList(POPULAR));
 						ADAP.notifyDataSetChanged();
 						isPopShowing = true;
 					} else // Popular Places are diplayed. -> User wants to hide
@@ -144,14 +144,22 @@ public class places extends Activity {
 					{
 						LIST.clear();
 						LIST.addAll(Arrays.asList(MENU));
+						LIST.addAll(FAVORITES);
 						ADAP.notifyDataSetChanged();
 						isPopShowing = false;
 					}
 					break;
 
-				// ********************
-				// ANY POPULAR PLACE
+				// *****************************
+				// ANY POPULAR PLACE OR FAVORITE
 				default:
+					if (!isPopShowing) // Popular Places are NOT displayed. -> User selected a favorite
+					{
+						
+						
+					}
+					
+					//Send location name (String) to Bundle
 					if (ORIGIN == 0) {
 						TransitGenieMain.ORIGIN_GPS = 0;
 						b.putString("origin_string", LIST.get(position).trim());
