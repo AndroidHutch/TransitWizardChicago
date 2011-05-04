@@ -13,6 +13,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.TableRow;
 import android.widget.TextView;
 
 public class DetailAdapter extends BaseAdapter implements OnClickListener {
@@ -74,9 +75,10 @@ public class DetailAdapter extends BaseAdapter implements OnClickListener {
         	//Import widgets to set alight time
         	TextView stepAlightTitle = (TextView) convertView.findViewById(R.id.detail_title_alight);
         	TextView stepAlight = (TextView) convertView.findViewById(R.id.detail_text_alight);
+        	TableRow row1 =(TableRow) convertView.findViewById(R.id.detail_row);
         	stepAlightTitle.setVisibility(0);	//Set the label "ALIGHT" to visible
         	stepAlight.setVisibility(0);
-        
+        	row1.setVisibility(0);
         	
         	long board = Long.parseLong(attr.item(9).getNodeValue());	//Board Time
         	long alight = Long.parseLong(attr.item(15).getNodeValue()); //Alight Time

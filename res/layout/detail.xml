@@ -103,7 +103,8 @@
 		    android:textColor="#000000"
 		    android:textSize="14px"
 		    />  
-
+		    </TableRow>
+		    <TableRow android:visibility="gone" android:id="@+id/detail_row">
 		    <TextView  
 			android:id="@+id/detail_title_alight"
 		    android:layout_width="fill_parent" 
