@@ -60,7 +60,10 @@ package com.hutchdesign.transitgenie;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.w3c.dom.Document;
@@ -121,13 +124,8 @@ public class Routes extends Activity {
         //RETRIEVE DOCUMENT
         Document[] allRoutes = null;	//Array of DOM trees, each representing a singular route.
         
-        try { //Call on Request class (initialized in TransitGenieMain) to build URL.
-			TransitGenieMain.request.buildURL();	
-		} catch (MalformedURLException e1) {
-			e1.printStackTrace();
-		}
-        try { //Call on Request class (initialized in TransitGenieMain) to populate allRoutes array.
-			allRoutes = TransitGenieMain.request.buildRoutes();	
+        try {
+			allRoutes = TransitGenieMain.request.buildRoutes();
 		} catch (IOException e) {
 			e.printStackTrace();
 		} catch (ParserConfigurationException e) {
@@ -218,7 +216,7 @@ public class Routes extends Activity {
     	if(step.equals("Blue")){
     		i.setImageResource(R.drawable.cta_blue);	
     		return; }
-    	if(step.equals("Brown")){
+    	if(step.equals("Brn")){
     		i.setImageResource(R.drawable.cta_brown);	
     		return; }
     	if(step.equals("Pink")){
@@ -227,7 +225,7 @@ public class Routes extends Activity {
     	if(step.equals("Purple")){
     		i.setImageResource(R.drawable.cta_purple);	
     		return; }
-    	if(step.equals("O")){
+    	if(step.startsWith("O")){
     		i.setImageResource(R.drawable.cta_orange);	
     		return; }
     	if(step.equals("R") || step.equals("Red")){
@@ -266,6 +264,17 @@ public class Routes extends Activity {
 		}
     	
     	return ans;
+    }
+    
+    //Format milliseconds to time format mm:hh a (e.g. 12:00 pm)
+    public static String formatMillis(long m)
+    {
+    	SimpleDateFormat date = new SimpleDateFormat("h:mm a");
+		Calendar cal = Calendar.getInstance();
+		
+		cal.setTimeInMillis(m * 1000L);
+		
+		return "" + date.format(cal.getTime());
     }
     
     //DIALOG CREATION

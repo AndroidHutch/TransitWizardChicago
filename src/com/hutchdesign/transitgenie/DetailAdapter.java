@@ -66,6 +66,23 @@ public class DetailAdapter extends BaseAdapter implements OnClickListener {
 
         if(nodeName.equals("transit")) //public transit node
 		{
+        	//Change label "FOR" to "BOARD"
+        	//(walk nodes display "FOR x minutes" ...
+        	//transit nodes display "BOARD 00:00 ALIGHT 00:00")
+        	stepForTitle.setText("BOARD");
+        	
+        	//Import widgets to set alight time
+        	TextView stepAlightTitle = (TextView) convertView.findViewById(R.id.detail_title_alight);
+        	TextView stepAlight = (TextView) convertView.findViewById(R.id.detail_text_alight);
+        	stepAlightTitle.setVisibility(0);	//Set the label "ALIGHT" to visible
+        	stepAlight.setVisibility(0);
+        
+        	
+        	long board = Long.parseLong(attr.item(9).getNodeValue());	//Board Time
+        	long alight = Long.parseLong(attr.item(15).getNodeValue()); //Alight Time
+        	stepFor.setText(Routes.formatMillis(board));
+        	stepAlight.setText(Routes.formatMillis(alight));
+        	
 			String temp = attr.item(0).getNodeValue();	//Agency Id
 			String type = attr.item(1).getNodeValue();	//Route type
 			String rtid = attr.item(2).getNodeValue();  //Route Id

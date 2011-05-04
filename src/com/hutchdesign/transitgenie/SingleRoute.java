@@ -114,7 +114,8 @@ public class SingleRoute
 					for(int y=0; y<s.getLength(); ++y)
 					{
 						NamedNodeMap attr1 = s.item(y).getAttributes();
-						if(s.item(y).getNodeName().equals("start"))
+						if(s.item(y).getNodeName().equals("start")
+								|| s.item(y).getNodeName().equals("end"))
 						{
 							temp = attr1.item(0).getNodeValue();
 						}

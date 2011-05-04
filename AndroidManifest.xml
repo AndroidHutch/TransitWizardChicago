@@ -11,7 +11,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".places"></activity>
-        <activity android:name=".Routes"></activity>
+        <activity android:name=".Routes" android:screenOrientation="portrait"></activity>
 		<activity android:name=".RouteDetail"></activity>
 		<activity android:name=".Map"></activity>
 		<activity android:name=".MapStep"></activity>

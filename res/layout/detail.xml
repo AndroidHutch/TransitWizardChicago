@@ -102,6 +102,28 @@
 		    android:text="0 minutes"
 		    android:textColor="#000000"
 		    android:textSize="14px"
+		    />  
+
+		    <TextView  
+			android:id="@+id/detail_title_alight"
+		    android:layout_width="fill_parent" 
+		    android:layout_height="wrap_content" 
+		    android:text="ALIGHT"
+		    android:textStyle="bold"
+		    android:textColor="#000000"
+		    android:textSize="10px"
+		    android:gravity="right"
+		    android:layout_marginRight="5px" 
+		    android:visibility="invisible"
+		    />		    
+		    <TextView  
+			android:id="@+id/detail_text_alight"
+		    android:layout_width="fill_parent" 
+		    android:layout_height="wrap_content" 
+		    android:text="00:00"
+		    android:textColor="#000000"
+		    android:textSize="14px"
+		    android:visibility="invisible"
 		    />    
 	    </TableRow>
 	    
