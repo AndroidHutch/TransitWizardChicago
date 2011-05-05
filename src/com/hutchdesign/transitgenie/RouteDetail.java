@@ -96,9 +96,10 @@ public class RouteDetail extends Activity {
         //endLat = "";
         if(nodeName.equals("transit")) //public transit node
 		{
-			startLat = attr.item(12).getNodeValue();	//Stop Latitude
-			startLong = attr.item(13).getNodeValue();	//Stop Longitude
-
+			startLat = attr.item(11).getNodeValue();	//Start Latitude
+			startLong = attr.item(12).getNodeValue();	//Start Longitude
+			endLat = attr.item(16).getNodeValue(); //Stop Lat
+			endLong = attr.item(17).getNodeValue(); //Stop long
 		}
 		else //walk node
 		{	
