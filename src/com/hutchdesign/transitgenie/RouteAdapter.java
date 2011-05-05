@@ -32,7 +32,7 @@ public class RouteAdapter extends BaseAdapter implements OnClickListener {
     private Activity parent;
 
     private List<SingleRoute> routeList;
-
+    
     public RouteAdapter(Context context, Activity p, List<SingleRoute> routeList) {
         this.context = context;
         this.routeList = routeList;

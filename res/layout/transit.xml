@@ -36,7 +36,7 @@
 			android:id="@+id/transit_origin1"
 		    android:layout_width="wrap_content" 
 		    android:layout_height="fill_parent" 
-		    android:text="University of Illinois"
+		    android:text=""
 		    
 		    android:textStyle="bold"
 		    android:textColor="#000000"
@@ -64,7 +64,7 @@
 			android:id="@+id/transit_destn1"
 		    android:layout_width="fill_parent" 
 		    android:layout_height="fill_parent" 
-		    android:text="destination"
+		    android:text=""
 		    android:textStyle="bold"
 		    android:textColor="#000000"
 		    android:textSize="16px"

@@ -36,6 +36,9 @@ public class RouteDetail extends Activity {
 	Bundle b;
 	SingleRoute selectedRoute;	//the Route to be displayed in detail
 	
+	public static String ORIGIN;
+	public static String DESTINATION;
+	
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -46,7 +49,8 @@ public class RouteDetail extends Activity {
         
         //Get bundle from previous activity
         b = getIntent().getExtras();
-        
+        ORIGIN = b.getString("origin_string");
+        DESTINATION = b.getString("destin_string");
         
         //Import widgets from transit.xml
         TextView instr = (TextView) findViewById(R.id.route_instr);
@@ -57,8 +61,8 @@ public class RouteDetail extends Activity {
         map.setImageResource(R.drawable.americas_small);
         
         instr.setText("Click row for map of specific step\nor select map button.");		//Set instructions
-        orig.setText(b.getString("origin_string"));		//Set origin title
-        dest.setText(b.getString("destin_string"));		//Set destination title
+        orig.setText(ORIGIN);			//Set origin title
+        dest.setText(DESTINATION);		//Set destination title
         
         int position = b.getInt("position");			
        	selectedRoute = Routes.RouteList.get(position);	//Get SingleRoute from RouteList to be displayed in detailed form.

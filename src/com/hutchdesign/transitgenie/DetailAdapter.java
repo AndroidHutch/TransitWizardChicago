@@ -20,11 +20,13 @@ public class DetailAdapter extends BaseAdapter implements OnClickListener {
     private Context context;
     private Activity parentActivity;
     private NodeList stepList;
+    private String prevLocation;	//Last location as specified by previous Node.
     
     public DetailAdapter(Context context, Activity parentActivity, NodeList stepList) {
         this.context = context;
         this.parentActivity = parentActivity;
         this.stepList = stepList;
+        this.prevLocation = "";
     }
 
     public int getCount() {
@@ -90,7 +92,8 @@ public class DetailAdapter extends BaseAdapter implements OnClickListener {
 			String rtid = attr.item(2).getNodeValue();  //Route Id
 			
 			stepFrom.setText(attr.item(6).getNodeValue());	//"From" is attribute board_stop
-			stepTo.setText(attr.item(14).getNodeValue());	//"To" is attribute alight_stop
+			prevLocation = attr.item(14).getNodeValue();
+			stepTo.setText(prevLocation);					//"To" is attribute alight_stop
 			
 			if(temp.equals("CTA") && type.equals("1"))	//Route is a CTA train.
 			{
@@ -111,46 +114,67 @@ public class DetailAdapter extends BaseAdapter implements OnClickListener {
 		{	
 			Routes.setStepImage(stepImage, nodeName);		//Set image corresponding to step
 			NodeList s = curr.getChildNodes();
-			double num = 0;
+			double num = 0;		//Used to add lengths of steps (will be converted to miles/feet)
+			int timeDif = 0;	//Used to determine total time of route
 			String temp = "0";
-			int timeDif = 0;
+			
 			for(int y=0; y<s.getLength(); ++y)
 			{
 				NamedNodeMap attr1 = s.item(y).getAttributes();
 				Log.i("Detail", s.item(y).getNodeName());
-				if(s.item(y).getNodeName().equals("start") || s.item(y).getNodeName().equals("end"))
+				
+				if(s.item(y).getNodeName().equals("start"))
 				{
 					Log.i("startNode", "inside start node");
-					temp = attr1.item(0).getNodeValue();
+					temp = attr1.item(0).getNodeValue();		//Value added to total length
 					timeDif = (Integer.parseInt(attr1.item(3).getNodeValue()) - 
 					Integer.parseInt(attr1.item(2).getNodeValue()));
 					
+					stepFrom.setText(RouteDetail.ORIGIN);
+					
+				}
+				else if(s.item(y).getNodeName().equals("end"))
+				{
+					
+					temp = attr1.item(0).getNodeValue();	//Value added to total length
+					timeDif = (Integer.parseInt(attr1.item(3).getNodeValue()) - 
+					Integer.parseInt(attr1.item(2).getNodeValue()));
+					
+					stepTo.setText(RouteDetail.DESTINATION);
 				}
 				else
 				{
-					temp = attr1.item(1).getNodeValue();
+					temp = attr1.item(1).getNodeValue();	//Value added to total length
 					Log.i("StreetNode", attr1.item(3).getNodeValue() + " , " + attr1.item(3).getNodeName() );
 					timeDif = (Integer.parseInt(attr1.item(4).getNodeValue()) - 
 							Integer.parseInt(attr1.item(3).getNodeValue()));
-					if(y == 1)
+					
+					if(y == 0)
 					{
 						stepFrom.setText(attr1.item(0).getNodeValue());
 					}
+					
+					stepTo.setText(attr1.item(0).getNodeValue());
 				}
+				
 				if( timeDif > 60 )
 					{stepFor.setText(Integer.toString(timeDif / 60) + " min");}
 				else{ stepFor.setText(Integer.toString(timeDif) + " sec");}
-				stepTo.setText(attr1.item(0).getNodeValue());
+				
 				num += Integer.valueOf(temp);
 			} 
 			
-			//num now holds length of walk in meters.
-			//convert to miles...
-			num = (num / (1609.344));
-			String miles = String.valueOf(num).substring(0, 3) + "mi";
-			stepTag.setText(miles);
+			String from = (String) stepFrom.getText();
+			if(from.equalsIgnoreCase("Unknown") || from.length() <= 0)
+			{
+				stepFrom.setText(prevLocation);
+			}
 			
-		}
+			//num now holds length of walk in meters.
+			//convert to miles (or feet)...
+			stepTag.setText(Routes.convertFromMeters(num));
+			
+		}//End "else" (walk node)
         //END SET IMAGE AND TAG  -------------------------------------------------------------------
         
         
