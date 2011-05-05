@@ -338,7 +338,7 @@ public class TransitGenieMain extends Activity {
 	    		//b.putInt("origin", 1);	//Set in Bundle 'b' that user is requesting destination.
 	    		//i.putExtras(b);			//Pass Bundle 'b' to Places activity via Intent 'i'.
 	            //startActivity(i);
-				//return true;
+				return true;
 			case R.id.menu_time:
 		        
 		        mHour = c.get(Calendar.HOUR_OF_DAY);
