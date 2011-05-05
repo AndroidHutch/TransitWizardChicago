@@ -9,10 +9,15 @@ import java.util.Locale;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
+import android.view.ContextMenu;
+import android.view.ContextMenu.ContextMenuInfo;
 import android.view.KeyEvent;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -36,7 +41,7 @@ public class places extends Activity {
 			"\tJohn Hancock Center", "\tLicoln Park Zoo", "\tMagnificent Mile",
 			"\tMcCormick Place", "\tMidway Airport", "\tMillennium Park",
 			"\tNavy Pier", "\tNorth Avenue Beach", "\tOak Street Beach",
-			"\tUniversity of Illinois at Chicago", "\tWillis Tower" };
+			"\tUniversity of Illinois at\n\tChicago", "\tWillis Tower" };
 	
     // List of "latitude,longitude" of popular places
     static final String POPULAR_LOC[] = {
@@ -94,6 +99,7 @@ public class places extends Activity {
 		ADAP = (new ArrayAdapter<String>(places.this,
 				R.layout.list_item, LIST));
 		MAIN_LIST.setAdapter(ADAP);
+		registerForContextMenu(MAIN_LIST);
 
 		MAIN_LIST.setOnItemClickListener(new OnItemClickListener() {
 			public void onItemClick(AdapterView<?> parent, View view,
@@ -177,12 +183,12 @@ public class places extends Activity {
 					//& Set latitude/longitude in Request class
 					if (ORIGIN == 0) {
 						TransitGenieMain.ORIGIN_GPS = 0;
-						b.putString("origin_string", LIST.get(position).trim());
+						b.putString("origin_string", LIST.get(position).trim().replace('\n', ' ').replace('\t', ' '));
 						TransitGenieMain.request.originLatitude = lat;
 						TransitGenieMain.request.originLongitude = lon;
 					} else {
 						TransitGenieMain.DEST_GPS = 0;
-						b.putString("destin_string", LIST.get(position).trim());
+						b.putString("destin_string", LIST.get(position).trim().replace('\n', ' ').replace('\t', ' '));
 						TransitGenieMain.request.destLatitude = lat;
 						TransitGenieMain.request.destLongitude = lon;
 					}
@@ -262,6 +268,41 @@ public class places extends Activity {
 			return true;
 		}
 		return super.onKeyDown(keyCode, event);
+	}
+	
+	@Override
+	public void onCreateContextMenu(ContextMenu menu, View v,
+	    ContextMenuInfo menuInfo) {
+	  if (v.getId()==R.id.listView1) {
+	    AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
+	    if(LIST.size() > 17)
+	    {
+	    	if(info.position > 17)
+	    	{
+	    		menu.setHeaderTitle(LIST.get(info.position));
+	    		menu.add(Menu.NONE, 0, 0, "Delete");
+	    	}
+	    }
+	    else
+	    {
+	    	if(info.position > 2)
+	    	{
+	    		menu.setHeaderTitle(LIST.get(info.position));
+	    		menu.add(Menu.NONE, 0, 0, "Delete");
+	    	}
+	    }
+	    
+	  }
+	}
+	@Override
+	public boolean onContextItemSelected(MenuItem item) {
+		AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo)item.getMenuInfo();
+		
+		TransitGenieMain.deleteFavoriteByName(LIST.get(info.position));
+		LIST.remove(info.position);
+		ADAP.notifyDataSetChanged();
+
+		return true;
 	}
 
 }// End main class.

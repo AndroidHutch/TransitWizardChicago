@@ -51,6 +51,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -135,6 +136,57 @@ public class TransitGenieMain extends Activity {
 	    		
 	    		else
 	    		{
+	    			 /* * * * * * * * * * * * * * * * * * * * * * * * *
+	    			  * ASYNC TASK
+	    			  * 	Used to request server data.
+	    			  * 	Progress bar is diplayed while loading.
+	    			  * 
+	    			  * * * * * * * * * * * * * * * * * * * * * * * * */
+	    			 AsyncTask<String, Void, String> sendRequest = new AsyncTask<String, Void, String>() {
+	    				    Dialog progress;
+
+	    				    @Override
+	    				    protected void onPreExecute() {
+	    				        progress = ProgressDialog.show(TransitGenieMain.this, 
+	    				                "Loading Data", "Please Wait...");
+	    				        super.onPreExecute();
+	    				    }
+
+	    				    @Override
+	    				    protected String doInBackground(String... params) {
+	    				    	//RETRIEVE DOCUMENT
+	    				        allRoutes = null;	//Array of DOM trees, each representing a singular route.
+	    				        
+	    				        try {
+	    							allRoutes = TransitGenieMain.request.buildRoutes();
+	    						} catch (IOException e) {
+	    							e.printStackTrace();
+	    						} catch (ParserConfigurationException e) {
+	    							e.printStackTrace();
+	    						} catch (SAXException e) {
+	    							e.printStackTrace();
+	    						}
+	    						if(allRoutes == null)	//If no routes were added to array.
+	    						{
+	    							Toast.makeText(getApplicationContext(), "Error: No Routes Found. Check internet connectivity.", Toast.LENGTH_SHORT).show();
+	    							return "error";
+	    						}
+	    				        return "";
+	    				    }
+
+	    				    @Override
+	    				    protected void onPostExecute(String result) {
+	    				    	super.onPostExecute(result);
+	    				        progress.dismiss();
+	    				        
+	    				    	if(!result.equals("error")) //Run Routes activity if no error occured
+	    				    	{
+	    				    		Intent i = new Intent(getApplicationContext(), Routes.class);
+	    				    		i.putExtras(b);		// Bundle needed in next Activity to utilize Strings representing origin and destination.
+	    				            startActivity(i);
+	    				    	}  
+	    				    }
+	    				};
 	    			sendRequest.execute();	//Request data form server via Async. task
 	    		}
 	    	}
@@ -339,12 +391,21 @@ public class TransitGenieMain extends Activity {
 	    		//i.putExtras(b);			//Pass Bundle 'b' to Places activity via Intent 'i'.
 	            //startActivity(i);
 				return true;
+				
 			case R.id.menu_time:
 		        
 		        mHour = c.get(Calendar.HOUR_OF_DAY);
 		        mMinute = c.get(Calendar.MINUTE);
 				showDialog(TIME_DIALOG);
 				return true;
+			
+			case R.id.menu_about:
+				String url = "http://www.transitgenie.com/";
+				Intent iweb = new Intent(Intent.ACTION_VIEW);
+				iweb.setData(Uri.parse(url));
+				startActivity(iweb);
+				return true;
+				
 			default:
 				return super.onOptionsItemSelected(item);
     	
@@ -373,57 +434,6 @@ public class TransitGenieMain extends Activity {
             }
         };
    
- /* * * * * * * * * * * * * * * * * * * * * * * * *
-  * ASYNC TASK
-  * 	Used to request server data.
-  * 	Progress bar is diplayed while loading.
-  * 
-  * * * * * * * * * * * * * * * * * * * * * * * * */
- AsyncTask<String, Void, String> sendRequest = new AsyncTask<String, Void, String>() {
-	    Dialog progress;
-
-	    @Override
-	    protected void onPreExecute() {
-	        progress = ProgressDialog.show(TransitGenieMain.this, 
-	                "Loading Data", "Please Wait...");
-	        super.onPreExecute();
-	    }
-
-	    @Override
-	    protected String doInBackground(String... params) {
-	    	//RETRIEVE DOCUMENT
-	        allRoutes = null;	//Array of DOM trees, each representing a singular route.
-	        
-	        try {
-				allRoutes = TransitGenieMain.request.buildRoutes();
-			} catch (IOException e) {
-				e.printStackTrace();
-			} catch (ParserConfigurationException e) {
-				e.printStackTrace();
-			} catch (SAXException e) {
-				e.printStackTrace();
-			}
-			if(allRoutes == null)	//If no routes were added to array.
-			{
-				Toast.makeText(getApplicationContext(), "Error: No Routes Found. Check internet connectivity.", Toast.LENGTH_SHORT).show();
-				return "error";
-			}
-	        return "";
-	    }
-
-	    @Override
-	    protected void onPostExecute(String result) {
-	    	super.onPostExecute(result);
-	        progress.dismiss();
-	        
-	    	if(!result.equals("error")) //Run Routes activity if no error occured
-	    	{
-	    		Intent i = new Intent(getApplicationContext(), Routes.class);
-	    		i.putExtras(b);		// Bundle needed in next Activity to utilize Strings representing origin and destination.
-	            startActivity(i);
-	    	}  
-	    }
-	};
         
     //-----------------------------------------------------------
     //METHODS NEEDED FOR SQL DATABASE
@@ -466,7 +476,7 @@ public class TransitGenieMain extends Activity {
     }
     
     //Delete favorite based on route name
-	public void deleteFavoriteByName(String name)
+	public static void deleteFavoriteByName(String name)
     {
     	SQLiteDatabase db = SQL_HELPER.getReadableDatabase();
     	db.delete(SQLHelper.TABLE, SQLHelper.NAME + "=?", new String[]{name});
