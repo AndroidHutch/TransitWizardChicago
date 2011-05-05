@@ -12,10 +12,9 @@
     android:layout_height="wrap_content" 
     android:text="@string/title_places"
     android:textColor="#000000"
-    android:textSize="20px"
+    android:textSize="24px"
     android:textStyle="bold"
-    android:paddingBottom="10px"
-    android:paddingLeft="5px"
+    android:padding="5px"
     />
 
 	<ListView 
@@ -23,6 +22,7 @@
 	android:layout_height="wrap_content" 
 	android:layout_width="fill_parent" 
 	android:cacheColorHint="#b6b6b6"
+	android:divider="@drawable/gradient"
 	>
 	</ListView>
 

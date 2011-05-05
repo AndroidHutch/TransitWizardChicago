@@ -94,8 +94,8 @@ public class TransitGenieMain extends Activity {
         
         //Initialize Bundle and set default values
         b = new Bundle();
-        b.putString("origin_string", "Current Location");
-        b.putString("destin_string", "Current Location");
+        //b.putString("origin_string", "Current Location");
+        //b.putString("destin_string", "Current Location");
         
         //Import Buttons from main.xml
         Button button_go = (Button)findViewById(R.id.button_go);					//"Go" button on main screen (=> User is ready for routes)
@@ -113,10 +113,26 @@ public class TransitGenieMain extends Activity {
         button_go.setOnClickListener(new View.OnClickListener(){	
 	    	public void onClick(View v){
 	    		
-	    		//Run Routes activity
-	    		Intent i = new Intent(getApplicationContext(), Routes.class);
-	    		i.putExtras(b);		// Bundle needed in next Activity to utilize Strings representing origin and destination.
-	            startActivity(i);
+	    		EditText destin = (EditText) findViewById(R.id.text_destn2);
+	    		EditText origin = (EditText) findViewById(R.id.text_origin2);
+	    		
+	    		if(origin.getText().length() <= 0)
+	    		{
+	    			Toast.makeText(getApplicationContext(), "Please input a location for Origin.", Toast.LENGTH_SHORT).show();
+	    			
+	    		}
+	    		else if(destin.getText().length() <= 0)
+	    		{
+	    			Toast.makeText(getApplicationContext(), "Please input a location for Destination.", Toast.LENGTH_SHORT).show();
+	    		}
+	    		
+	    		else
+	    		{
+		    		//Run Routes activity
+		    		Intent i = new Intent(getApplicationContext(), Routes.class);
+		    		i.putExtras(b);		// Bundle needed in next Activity to utilize Strings representing origin and destination.
+		            startActivity(i);
+	    		}
 	    	}
         });
         
@@ -175,7 +191,7 @@ public class TransitGenieMain extends Activity {
 			this.dest = i;
 			this.text = origin_text.getText().toString();
 		}
-		@Override
+
 		public boolean onKey(View v, int keyCode, KeyEvent event) {
 			if ((event.getAction() == KeyEvent.ACTION_DOWN)&& (keyCode == KeyEvent.KEYCODE_ENTER) )
 			{

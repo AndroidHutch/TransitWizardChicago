@@ -18,7 +18,8 @@
 	android:layout_width="wrap_content" 
 	android:id="@+id/detail_tableLayout" 
 	android:layout_height="wrap_content" 
-	android:padding="4px">
+	android:padding="4px" 
+	android:layout_weight="1">
 	
 		<TableRow android:paddingBottom="5px">
 			<Button 
@@ -35,24 +36,15 @@
 			android:id="@+id/transit_origin1"
 		    android:layout_width="wrap_content" 
 		    android:layout_height="fill_parent" 
-		    android:text="origin"
+		    android:text="University of Illinois"
+		    
 		    android:textStyle="bold"
 		    android:textColor="#000000"
 		    android:textSize="16px"
 		    android:paddingLeft="4px"
 		    android:gravity="center_vertical"
-		    android:background="#FFFFFF"
-		    />
-		    <TextView  
-		    android:layout_width="fill_parent" 
-		    android:layout_height="fill_parent" 
-		    android:text="origin"
-		    android:textStyle="bold"
-		    android:textColor="#b6b6b6"
-		    android:background="#FFFFFF"
-		    android:textSize="12px"
-		    android:gravity="right"
-		    android:paddingRight="4px"
+		    android:maxLines="1"
+		    android:layout_marginRight="4px"
 		    />
 		    
 		</TableRow>
@@ -75,22 +67,13 @@
 		    android:text="destination"
 		    android:textStyle="bold"
 		    android:textColor="#000000"
-		    android:background="#FFFFFF"
 		    android:textSize="16px"
 		    android:paddingLeft="4px"
 		    android:paddingRight="4px"
+		    android:layout_marginRight="4px"
 		    android:gravity="center_vertical"
-		    />
-		    <TextView  
-		    android:layout_width="fill_parent" 
-		    android:layout_height="fill_parent" 
-		    android:text="dest."
-		    android:textStyle="bold"
-		    android:textColor="#b6b6b6"
-		    android:background="#FFFFFF"
-		    android:textSize="12px"
-		    android:gravity="right"
-		    android:paddingRight="4px"
+		    android:maxLines="1"
+		    
 		    />
 		</TableRow>
 
@@ -100,16 +83,26 @@
 		<RelativeLayout 
 		android:id="@+id/relativeLayout1" 
 		android:layout_width="fill_parent" 
-		android:layout_height="fill_parent">
+		android:layout_height="fill_parent"
+		android:layout_weight="25">
 		
 		<ImageButton 
 		android:layout_width="wrap_content" 
 		android:layout_height="wrap_content" 
 		android:src="@drawable/time_small" 
 		android:id="@+id/transit_button"
-		android:layout_alignParentRight="true"
+		android:layout_centerHorizontal="true"
 		>
 		</ImageButton>
+		<TextView  
+		    android:layout_width="fill_parent" 
+		    android:layout_height="fill_parent" 
+		    android:text="00:00 PM"
+		    android:textColor="#000000"
+		    android:textSize="12px"
+		    android:gravity="center"
+		    android:layout_below="@id/transit_button"
+		    />
 		
 		</RelativeLayout>
     

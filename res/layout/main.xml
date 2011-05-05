@@ -5,6 +5,13 @@
     android:layout_height="fill_parent"
     android:background="#b6b6b6"
     >
+    <ImageView 
+    android:layout_width="wrap_content" 
+    android:layout_height="wrap_content" 
+    android:paddingTop="4px"
+    android:src="@drawable/transit_genie_title"
+    android:layout_gravity="center_horizontal">
+    </ImageView>
     
 	<TextView  
 	android:id="@+id/text_origin"
@@ -13,7 +20,8 @@
     android:text="Origin"
     android:textStyle="bold"
     android:textColor="#000000"
-    android:textSize="16px"
+    android:textSize="24px"
+    android:paddingLeft="5px"
     />
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -36,7 +44,7 @@
 	android:id="@+id/text_origin2"
     android:layout_width="fill_parent" 
     android:layout_height="wrap_content" 
-    android:text="Use Current Location" 
+    android:hint="Type or Select Location" 
     android:layout_toLeftOf="@id/button_origin"
     android:selectAllOnFocus="true"
     />
@@ -51,8 +59,9 @@
     android:text="Destination"
     android:textStyle="bold"
     android:textColor="#000000"
-    android:textSize="16px"
+    android:textSize="24px"
     android:layout_marginTop="10px"
+    android:paddingLeft="5px"
     />
 
 
@@ -76,7 +85,7 @@
 	android:id="@+id/text_destn2"
     android:layout_width="fill_parent" 
     android:layout_height="wrap_content" 
-    android:text="Use Current Location" 
+    android:hint="Type or Select Location" 
     android:layout_toLeftOf="@id/button_destn"
     android:selectAllOnFocus="true"    
     />
@@ -87,23 +96,12 @@
 	<Button 
 	android:id="@+id/button_go" 
 	android:background="@drawable/custom_button"
-	android:layout_width="70px" 
-	android:layout_height="70px"
+	android:layout_width="wrap_content" 
+	android:layout_height="wrap_content"
 	android:layout_gravity="right"
 	android:layout_marginRight="10px"
-	android:layout_marginTop="10px"
+	android:layout_marginTop="16px"
 	>
 	</Button>
-	
-	<TextView  
-	android:id="@+id/text_go"
-    android:layout_width="90px"
-    android:layout_height="wrap_content" 
-    android:text="Go"
-    android:textColor="#000000"
-    android:textSize="18px"
-    android:gravity="center"
-    android:layout_gravity="right"
-    />
 
 </LinearLayout>

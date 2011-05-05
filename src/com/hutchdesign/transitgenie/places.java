@@ -36,7 +36,7 @@ public class places extends Activity {
 			"\tJohn Hancock Center", "\tLicoln Park Zoo", "\tMagnificent Mile",
 			"\tMcCormick Place", "\tMidway Airport", "\tMillennium Park",
 			"\tNavy Pier", "\tNorth Avenue Beach", "\tOak Street Beach",
-			"\tUniversity of Illinois\n\t at Chicago", "\tWillis Tower" };
+			"\tUniversity of Illinois at Chicago", "\tWillis Tower" };
 	
     // List of "latitude,longitude" of popular places
     static final String POPULAR_LOC[] = {
@@ -92,7 +92,7 @@ public class places extends Activity {
 		LIST.addAll(FAVORITES);
 		MAIN_LIST = (ListView) findViewById(R.id.listView1);
 		ADAP = (new ArrayAdapter<String>(places.this,
-				android.R.layout.simple_list_item_1, LIST));
+				R.layout.list_item, LIST));
 		MAIN_LIST.setAdapter(ADAP);
 
 		MAIN_LIST.setOnItemClickListener(new OnItemClickListener() {
@@ -195,11 +195,6 @@ public class places extends Activity {
 				}
 			}
 		});
-
-		// TODO: Determine if setting origin or destination
-		// Needed for setting appropriate values to variables in request class
-
-		// TODO: Impliment favorites
 
 	}// End onCreate
 
