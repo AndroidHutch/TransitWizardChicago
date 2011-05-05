@@ -27,44 +27,61 @@
 
 package com.hutchdesign.transitgenie;
 
+import java.io.IOException;
+
 import java.util.ArrayList;
+import java.util.Calendar;
 
 import android.app.Activity;
+import android.app.Dialog;
+import android.app.TimePickerDialog;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.location.Address;
+import android.location.Geocoder;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnKeyListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 public class TransitGenieMain extends Activity {
     protected static final int ORIGIN_REQUEST = 0;
+	private static final int TIME_DIALOG = 1;
     public static int ORIGIN_GPS = 1;
     public static int DEST_GPS = 1;
     public static Request request = new Request();
-    
+    Calendar c = Calendar.getInstance();
     public static SQLHelper SQL_HELPER;
     public static Cursor CURSOR;
     Bundle b;	//Holds data passed between main activity and places activity
-    
-    
+    Geocoder geocoder;
+    EditText origin_text;
+    EditText dest_text;
+	private int mHour;
+	private int mMinute;
 	/** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
-        
+        geocoder = new Geocoder(this.getApplicationContext());
         //Initialize SQL Database helper and cursor
         SQL_HELPER = new SQLHelper(this);
         CURSOR = getFavorites();
@@ -84,7 +101,11 @@ public class TransitGenieMain extends Activity {
         Button button_go = (Button)findViewById(R.id.button_go);					//"Go" button on main screen (=> User is ready for routes)
         ImageButton button_origin = (ImageButton)findViewById(R.id.button_origin);	//Selected when user wishes to choose origin.
         ImageButton button_destn = (ImageButton)findViewById(R.id.button_destn);	//Selected when user wishes to choose destination.
+        origin_text = (EditText)findViewById(R.id.text_origin2);
+        dest_text = (EditText)findViewById(R.id.text_destn2);
         
+        origin_text.setOnKeyListener(new CustomTextWatcher(origin_text, 0));
+        dest_text.setOnKeyListener(new CustomTextWatcher(dest_text, 1));
 
         /* * * * * * * * * * * * * 
          * "GO" Button Listener  *
@@ -145,7 +166,52 @@ public class TransitGenieMain extends Activity {
         }); 
        
     }//End onCreate
-    
+    private class CustomTextWatcher implements OnKeyListener{
+    	private int dest;
+    	Address address;
+    	String text;
+		public CustomTextWatcher(EditText origin_text, int i) {
+			// TODO Auto-generated constructor stub
+			this.dest = i;
+			this.text = origin_text.getText().toString();
+		}
+		@Override
+		public boolean onKey(View v, int keyCode, KeyEvent event) {
+			if ((event.getAction() == KeyEvent.ACTION_DOWN)&& (keyCode == KeyEvent.KEYCODE_ENTER) )
+			{
+			try {
+				//this.address = geocoder.getFromLocationName(text, 2).get(0);
+				if(dest == 0){
+					this.address = geocoder.getFromLocationName(origin_text.getText().toString(), 1).get(0);
+					request.originLatitude = address.getLatitude();
+					request.originLongitude = address.getLongitude();
+					//if(address.getFeatureName() != null)
+						//{b.putString("origin_string", address.getFeatureName());}
+					b.putString("origin_string", origin_text.getText().toString());
+				}
+				else{
+					this.address = geocoder.getFromLocationName(dest_text.getText().toString(), 1).get(0);
+					request.destLatitude = address.getLatitude();
+					request.originLongitude = address.getLongitude();
+					//if(address.getFeatureName() != null)
+					//	{b.putString("destin_string", address.getFeatureName());}
+					b.putString("destin_string", origin_text.getText().toString());
+				}
+			} catch (Exception e) {
+				Toast.makeText( getApplicationContext(),
+					    "Can not resolve address",
+					    Toast.LENGTH_SHORT).show();
+			}
+			Log.i("Geocoder", this.text);
+			Log.i("Address", this.address.toString());
+			}
+
+			return false;
+		}
+
+		
+    	
+    }
     /* Class My Location Listener */
 
     public class MyLocationListener implements LocationListener
@@ -249,23 +315,50 @@ public class TransitGenieMain extends Activity {
     }
     
     public boolean onOptionsItemSelected(MenuItem item)
-    {/*
+    {
     	switch (item.getItemId())
     	{
 	    	case R.id.menu_settings:
-				
-				return true;
+	    		//Intent i = new Intent(getApplicationContext(), MainMenu.class);
+	    		
+	    		//b.putStringArrayList("favs", getFavoritesArrayList());
+	    		//b.putInt("origin", 1);	//Set in Bundle 'b' that user is requesting destination.
+	    		//i.putExtras(b);			//Pass Bundle 'b' to Places activity via Intent 'i'.
+	            //startActivity(i);
+				//return true;
 			case R.id.menu_time:
-				
+		        
+		        mHour = c.get(Calendar.HOUR_OF_DAY);
+		        mMinute = c.get(Calendar.MINUTE);
+				showDialog(TIME_DIALOG);
 				return true;
 			default:
 				return super.onOptionsItemSelected(item);
     	
-    	}*/
-    	
-		return true;
+    	}    	
     }
-    
+    @Override
+    protected Dialog onCreateDialog(int id) {
+        switch (id) {
+        case TIME_DIALOG:
+            return new TimePickerDialog(this,
+                    mTimeSetListener, mHour, mMinute, false);
+        }
+        return null;
+    }
+ // the callback received when the user "sets" the time in the dialog
+    private TimePickerDialog.OnTimeSetListener mTimeSetListener =
+        new TimePickerDialog.OnTimeSetListener() {
+            public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                mHour = hourOfDay;
+                mMinute = minute;
+                c.set(Calendar.HOUR_OF_DAY, mHour);
+                c.set(Calendar.MINUTE, mMinute);
+                request.queryTime = c.getTimeInMillis()/1000L;
+                Log.i("Time", Long.toString(c.getTimeInMillis()/1000L));
+                Log.i("Current", Long.toString(System.currentTimeMillis()));
+            }
+        };
     //-----------------------------------------------------------
     //METHODS NEEDED FOR SQL DATABASE
 

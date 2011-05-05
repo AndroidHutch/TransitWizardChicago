@@ -19,6 +19,8 @@ import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
+import android.util.Log;
+
 
 
 /* 
@@ -36,7 +38,7 @@ public class Request {
 	public double originLatitude = 41.823309;
 	public double destLongitude = -87.635990;
 	public double destLatitude = 41.878884;
-	public long queryTime = System.currentTimeMillis();
+	public long queryTime = System.currentTimeMillis() / 1000L;
 	public int maxResults = 3;
 	public double walkingSpeed = 1.30;
 	public double sequenceNumber = 6;
@@ -47,7 +49,7 @@ public class Request {
 
 	// URL requestURL = new URL(requestString);
 	public void buildURL() throws MalformedURLException {
-		queryTime = (System.currentTimeMillis() / 1000L);
+		//queryTime = (System.currentTimeMillis() / 1000L);
 		String requestString = "http://" + server + "/path_xml?version="
 				+ version + "&origlon=" + originLongitude + "&origlat="
 				+ originLatitude + "&destlon=" + destLongitude + "&destlat="
@@ -55,7 +57,7 @@ public class Request {
 				+ maxResults + "&walking_speed=" + walkingSpeed + "&seqno="
 				+ sequenceNumber + "&street_mode=%22" + streetMode
 				+ "%22&transit_mode=%22" + transitMode + "%22"; // &udid=%22" + currentDevice + "%22";
-		
+		Log.i("URL", requestString);
 		requestURL = new URL(requestString);
 //		String date = new java.text.SimpleDateFormat("MM/dd/yyyy HH:mm:ss").format(new java.util.Date (attribute*1000));
 //	    System.out.println(date);

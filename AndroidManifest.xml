@@ -15,6 +15,7 @@
 		<activity android:name=".RouteDetail"></activity>
 		<activity android:name=".Map"></activity>
 		<activity android:name=".MapStep"></activity>
+		<activity android:name=".MainMenu"></activity>
 		<uses-library android:name="com.google.android.maps"></uses-library>
     </application>
 
