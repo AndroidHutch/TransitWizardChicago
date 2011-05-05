@@ -19,7 +19,8 @@
 	android:id="@+id/detail_tableLayout" 
 	android:layout_height="wrap_content" 
 	android:padding="4px" 
-	android:layout_weight="1">
+	android:layout_weight="0"
+	>
 	
 		<TableRow android:paddingBottom="5px">
 			<Button 
@@ -84,7 +85,7 @@
 		android:id="@+id/relativeLayout1" 
 		android:layout_width="fill_parent" 
 		android:layout_height="fill_parent"
-		android:layout_weight="25">
+		>
 		
 		<ImageButton 
 		android:layout_width="wrap_content" 
@@ -92,6 +93,7 @@
 		android:src="@drawable/time_small" 
 		android:id="@+id/transit_button"
 		android:layout_centerHorizontal="true"
+		android:visibility="invisible"
 		>
 		</ImageButton>
 		<TextView  
@@ -102,6 +104,7 @@
 		    android:textSize="12px"
 		    android:gravity="center"
 		    android:layout_below="@id/transit_button"
+		    android:visibility="invisible"
 		    />
 		
 		</RelativeLayout>

@@ -32,8 +32,14 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 
+import javax.xml.parsers.ParserConfigurationException;
+
+import org.w3c.dom.Document;
+import org.xml.sax.SAXException;
+
 import android.app.Activity;
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
 import android.content.ContentValues;
 import android.content.Context;
@@ -45,9 +51,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.os.AsyncTask;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -76,6 +81,8 @@ public class TransitGenieMain extends Activity {
     EditText dest_text;
 	private int mHour;
 	private int mMinute;
+	
+	public static Document[] allRoutes;
 	/** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -128,10 +135,7 @@ public class TransitGenieMain extends Activity {
 	    		
 	    		else
 	    		{
-		    		//Run Routes activity
-		    		Intent i = new Intent(getApplicationContext(), Routes.class);
-		    		i.putExtras(b);		// Bundle needed in next Activity to utilize Strings representing origin and destination.
-		            startActivity(i);
+	    			sendRequest.execute();	//Request data form server via Async. task
 	    		}
 	    	}
         });
@@ -171,13 +175,6 @@ public class TransitGenieMain extends Activity {
 	    		b.putInt("origin", 1);	//Set in Bundle 'b' that user is requesting destination.
 	    		i.putExtras(b);			//Pass Bundle 'b' to Places activity via Intent 'i'.
 	            startActivityForResult(i, 1);
-	            
-	            //TODO: Grab destination selection from places activity
-	            //possible reference: http://thedevelopersinfo.wordpress.com/2009/10/15/passing-data-between-activities-in-android/
-	            
-	            //EditText destn = (EditText) findViewById(R.id.text_destn2);
-	            //destn.setText( b.getString("destin_string") );
-	            
 	    	}
         }); 
        
@@ -375,6 +372,59 @@ public class TransitGenieMain extends Activity {
                 Log.i("Current", Long.toString(System.currentTimeMillis()));
             }
         };
+   
+ /* * * * * * * * * * * * * * * * * * * * * * * * *
+  * ASYNC TASK
+  * 	Used to request server data.
+  * 	Progress bar is diplayed while loading.
+  * 
+  * * * * * * * * * * * * * * * * * * * * * * * * */
+ AsyncTask<String, Void, String> sendRequest = new AsyncTask<String, Void, String>() {
+	    Dialog progress;
+
+	    @Override
+	    protected void onPreExecute() {
+	        progress = ProgressDialog.show(TransitGenieMain.this, 
+	                "Loading Data", "Please Wait...");
+	        super.onPreExecute();
+	    }
+
+	    @Override
+	    protected String doInBackground(String... params) {
+	    	//RETRIEVE DOCUMENT
+	        allRoutes = null;	//Array of DOM trees, each representing a singular route.
+	        
+	        try {
+				allRoutes = TransitGenieMain.request.buildRoutes();
+			} catch (IOException e) {
+				e.printStackTrace();
+			} catch (ParserConfigurationException e) {
+				e.printStackTrace();
+			} catch (SAXException e) {
+				e.printStackTrace();
+			}
+			if(allRoutes == null)	//If no routes were added to array.
+			{
+				Toast.makeText(getApplicationContext(), "Error: No Routes Found. Check internet connectivity.", Toast.LENGTH_SHORT).show();
+				return "error";
+			}
+	        return "";
+	    }
+
+	    @Override
+	    protected void onPostExecute(String result) {
+	    	super.onPostExecute(result);
+	        progress.dismiss();
+	        
+	    	if(!result.equals("error")) //Run Routes activity if no error occured
+	    	{
+	    		Intent i = new Intent(getApplicationContext(), Routes.class);
+	    		i.putExtras(b);		// Bundle needed in next Activity to utilize Strings representing origin and destination.
+	            startActivity(i);
+	    	}  
+	    }
+	};
+        
     //-----------------------------------------------------------
     //METHODS NEEDED FOR SQL DATABASE
 

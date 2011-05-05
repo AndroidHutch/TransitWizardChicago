@@ -5,12 +5,10 @@
  * -----------------
  * Routes Activity
  * -----------------
- * Activity started immediately after user has specified origin and destination.
- * 		(ie. Upon "Go" button pressed on TransitGenieMain Activity)
+ * Activity started after user has specified origin and destination (ie. Upon "Go" button pressed on TransitGenieMain Activity,
+ * 		and server has sucessfully returned routes to (TransitGenieMain) Document[] allRoutes.	
  * 
- * Calls upon Request class (which sends/recieves info from server)
- * Takes recieved info from Request class and creates a list of SingleRoute's. (See SingleRoute.java)
- * Displays these routes in a custom ListView ('RouteListView' from transit.xml)
+ * Displays these routes retrived from main in a custom ListView ('RouteListView' from transit.xml)
  * 			-> See RouteDetail.java which translates ArrayList of SingleRoute's,
  * 			into the text/images (from row.xml) displayed in the list.
  * Contains additional methods utilized by ListView adapters (RouteAdapter, DetailAdapter) for proper variable display.
@@ -121,35 +119,18 @@ public class Routes extends Activity {
         });
         //-------------------------------------------------------
         
-        //RETRIEVE DOCUMENT
-        Document[] allRoutes = null;	//Array of DOM trees, each representing a singular route.
         
-        try {
-			allRoutes = TransitGenieMain.request.buildRoutes();
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (ParserConfigurationException e) {
-			e.printStackTrace();
-		} catch (SAXException e) {
-			e.printStackTrace();
-		}
-		if(allRoutes == null)	//If no routes were added to array.
-		{
-			Toast.makeText(getApplicationContext(), "Error: No Routes Found. Check internet connectivity.", Toast.LENGTH_SHORT).show();
-			this.finish();
-		}
 		
 		
-		//CREATE CUSTOM LIST VIEW
-		else {	
+		//CREATE CUSTOM LIST VIEW	
         ListView routeListView = (ListView) findViewById(R.id.RouteListView);	//Load ListView from .xml       
         RouteList = new ArrayList<SingleRoute>();		//Create ArrayList of SingleRoutes.
         
         //Parse and separate Documents.
-        for(int x=0; x<allRoutes.length; ++x) 
+        for(int x=0; x<TransitGenieMain.allRoutes.length; ++x) 
         {
         	try{
-        	RouteList.add(new SingleRoute(allRoutes[x]));
+        	RouteList.add(new SingleRoute(TransitGenieMain.allRoutes[x]));
         	}
         	catch(Exception e){
     			Toast.makeText(getApplicationContext(), "Error at Route:" + x, Toast.LENGTH_SHORT).show();
@@ -175,7 +156,7 @@ public class Routes extends Activity {
 		 * //System.out.println(attribute); } } }
 		 */
 		
-		}
+		
     }//End onCreate
     
     //Start RouteDetail Activity upon user selecting a specific route.
@@ -222,7 +203,7 @@ public class Routes extends Activity {
     	if(step.equals("Pink")){
     		i.setImageResource(R.drawable.cta_pink);	
     		return; }
-    	if(step.equals("Purple")){
+    	if(step.startsWith("P")){
     		i.setImageResource(R.drawable.cta_purple);	
     		return; }
     	if(step.startsWith("O")){
@@ -231,7 +212,7 @@ public class Routes extends Activity {
     	if(step.equals("R") || step.equals("Red")){
     		i.setImageResource(R.drawable.cta_red);	
     		return; }
-    	if(step.equals("Y") || step.equals("Yellow")){
+    	if(step.startsWith("Y")){
     		i.setImageResource(R.drawable.cta_yellow);	
     		return; }
 		

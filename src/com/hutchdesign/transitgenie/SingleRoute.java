@@ -68,7 +68,14 @@ public class SingleRoute
 			
 			long now = System.currentTimeMillis();
 			long diff = ((d*1000L-now) / 1000) / 60;
-		leaveIn = diff  + " min";				//Store depart time
+		if(diff <= 0)
+		{
+			leaveIn = "now";
+		}
+		else
+		{
+			leaveIn = diff  + " min";				//Store depart time
+		}
 
 		
 		//ARRIVAL TIME

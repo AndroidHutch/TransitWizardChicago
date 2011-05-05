@@ -10,6 +10,7 @@
 		android:layout_height="wrap_content"
 		android:orientation="vertical"
 		android:layout_margin="5px"
+		android:paddingRight="5px"
 		>
 		
 			<ImageView 
@@ -48,7 +49,7 @@
 		    android:textColor="#000000"
 		    android:textSize="10px"
 		    android:gravity="right"
-		    android:layout_marginRight="5px"
+		    android:layout_marginRight="10px"
 		    />
 		    <TextView  
 			android:id="@+id/detail_text_from"
@@ -71,7 +72,7 @@
 		    android:textColor="#000000"
 		    android:textSize="10px"
 		    android:gravity="right"
-		    android:layout_marginRight="5px"
+		    android:layout_marginRight="10px"
 		    />
 		    <TextView  
 			android:id="@+id/detail_text_to"
@@ -93,7 +94,7 @@
 		    android:textColor="#000000"
 		    android:textSize="10px"
 		    android:gravity="right"
-		    android:layout_marginRight="5px" 
+		    android:layout_marginRight="10px" 
 		    />		    
 		    <TextView  
 			android:id="@+id/detail_text_for"
@@ -114,7 +115,7 @@
 		    android:textColor="#000000"
 		    android:textSize="10px"
 		    android:gravity="right"
-		    android:layout_marginRight="5px" 
+		    android:layout_marginRight="10px" 
 		    android:visibility="invisible"
 		    />		    
 		    <TextView  
