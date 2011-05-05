@@ -15,6 +15,8 @@
 
 package com.hutchdesign.transitgenie;
 
+import java.util.ArrayList;
+
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -35,7 +37,7 @@ public class RouteDetail extends Activity {
 	
 	Bundle b;
 	SingleRoute selectedRoute;	//the Route to be displayed in detail
-	
+	public static ArrayList<Node> walkPointArray = new ArrayList<Node>();
 	public static String ORIGIN;
 	public static String DESTINATION;
 	
@@ -92,6 +94,7 @@ public class RouteDetail extends Activity {
     }//End onCreate
 
 	public void showMap(int p) {
+		walkPointArray.clear();
 		Node selectedNode = selectedRoute.allSteps.item(p);
 		String nodeName = selectedNode.getNodeName();		//Get name of Node (e.g. "walk" or "transit")
         NamedNodeMap attr = selectedNode.getAttributes();	//Get current Node's attributes
@@ -107,8 +110,15 @@ public class RouteDetail extends Activity {
 		}
 		else //walk node
 		{	
-			
-			NodeList s = selectedNode.getChildNodes().item(0).getChildNodes().item(0).getChildNodes(); // Get Points
+			NodeList s = null;
+			for(int c = 0; c < selectedNode.getChildNodes().getLength(); c++)
+			{
+			s = selectedNode.getChildNodes().item(c).getChildNodes().item(0).getChildNodes(); // Get Points
+			for(int i = 0; i < s.getLength(); i++)
+			{
+				walkPointArray.add(s.item(i));
+			}
+			}
 			NamedNodeMap startPoints = s.item(0).getAttributes();
 			NamedNodeMap endPoints = s.item(s.getLength() - 1).getAttributes();
 			startLat = startPoints.item(0).getNodeValue();
