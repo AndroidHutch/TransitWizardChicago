@@ -51,12 +51,18 @@ public class MapStep extends MapActivity {
 
 					projection.toPixels(gP1, p1);
 					projection.toPixels(gP2, p2);
-
+					//canvas.drawPoint(p1.x, y, paint)
 					path.moveTo(p2.x, p2.y);
 					path.lineTo(p1.x,p1.y);
 
 					canvas.drawPath(path, mPaint);
 				}
+			}
+			else{
+				GeoPoint gP1 = new GeoPoint((int)(startLat * 1E6), (int)(startLong * 1E6));
+				Point p1 = new Point();
+				projection.toPixels(gP1, p1);
+				canvas.drawCircle(p1.x, p1.y, 5 ,mPaint);
 			}
 		}
 	}

@@ -119,12 +119,12 @@ public class RouteDetail extends Activity {
 				walkPointArray.add(s.item(i));
 			}
 			}
-			NamedNodeMap startPoints = s.item(0).getAttributes();
-			NamedNodeMap endPoints = s.item(s.getLength() - 1).getAttributes();
-			startLat = startPoints.item(0).getNodeValue();
-			startLong = startPoints.item(1).getNodeValue();
-			endLat = endPoints.item(0).getNodeValue();
-			endLong = endPoints.item(1).getNodeValue();
+			//NamedNodeMap startPoints = s.item(0).getAttributes();
+			//NamedNodeMap endPoints = s.item(s.getLength() - 1).getAttributes();
+			startLat = selectedNode.getChildNodes().item(0).getChildNodes().item(0).getChildNodes().item(0).getAttributes().item(0).getNodeValue();
+			startLong = selectedNode.getChildNodes().item(0).getChildNodes().item(0).getChildNodes().item(0).getAttributes().item(1).getNodeValue();
+			//endLat = endPoints.item(0).getNodeValue();
+			//endLong = endPoints.item(1).getNodeValue();
 		} 
         
 		Intent i = new Intent(getApplicationContext(), MapStep.class);
