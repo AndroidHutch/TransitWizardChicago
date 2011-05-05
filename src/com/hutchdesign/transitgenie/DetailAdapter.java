@@ -127,8 +127,8 @@ public class DetailAdapter extends BaseAdapter implements OnClickListener {
 				{
 					Log.i("startNode", "inside start node");
 					temp = attr1.item(0).getNodeValue();		//Value added to total length
-					timeDif = (Integer.parseInt(attr1.item(3).getNodeValue()) - 
-					Integer.parseInt(attr1.item(2).getNodeValue()));
+					timeDif = timeDif + (Integer.parseInt(attr1.item(3).getNodeValue()) - 
+					Integer.parseInt(attr1.item(2).getNodeValue())); // Value added to total time
 					
 					stepFrom.setText(RouteDetail.ORIGIN);
 					
@@ -137,8 +137,8 @@ public class DetailAdapter extends BaseAdapter implements OnClickListener {
 				{
 					
 					temp = attr1.item(0).getNodeValue();	//Value added to total length
-					timeDif = (Integer.parseInt(attr1.item(3).getNodeValue()) - 
-					Integer.parseInt(attr1.item(2).getNodeValue()));
+					timeDif = timeDif + (Integer.parseInt(attr1.item(3).getNodeValue()) - 
+					Integer.parseInt(attr1.item(2).getNodeValue())); // Value added to total time
 					
 					stepTo.setText(RouteDetail.DESTINATION);
 				}
@@ -146,7 +146,7 @@ public class DetailAdapter extends BaseAdapter implements OnClickListener {
 				{
 					temp = attr1.item(1).getNodeValue();	//Value added to total length
 					Log.i("StreetNode", attr1.item(3).getNodeValue() + " , " + attr1.item(3).getNodeName() );
-					timeDif = (Integer.parseInt(attr1.item(4).getNodeValue()) - 
+					timeDif = timeDif + (Integer.parseInt(attr1.item(4).getNodeValue()) - 
 							Integer.parseInt(attr1.item(3).getNodeValue()));
 					
 					if(y == 0)
@@ -157,13 +157,13 @@ public class DetailAdapter extends BaseAdapter implements OnClickListener {
 					stepTo.setText(attr1.item(0).getNodeValue());
 				}
 				
-				if( timeDif > 60 )
-					{stepFor.setText(Integer.toString(timeDif / 60) + " min");}
-				else{ stepFor.setText(Integer.toString(timeDif) + " sec");}
+				
 				
 				num += Integer.valueOf(temp);
 			} 
-			
+			if( timeDif > 60 )
+			{stepFor.setText(Integer.toString(timeDif / 60) + " min");}
+			else{ stepFor.setText(Integer.toString(timeDif) + " sec");}
 			String from = (String) stepFrom.getText();
 			if(from.equalsIgnoreCase("Unknown") || from.length() <= 0)
 			{
