@@ -72,8 +72,8 @@ public class places extends Activity {
 	ArrayList<String> LIST = new ArrayList<String>();
 	ArrayList<String> FAVORITES;
 	ArrayAdapter<String> ADAP;
-	/** Called when the activity is first created. */
 	
+	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);

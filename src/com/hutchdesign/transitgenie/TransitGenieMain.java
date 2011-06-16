@@ -70,8 +70,10 @@ import android.widget.Toast;
 public class TransitGenieMain extends Activity {
     protected static final int ORIGIN_REQUEST = 0;
 	private static final int TIME_DIALOG = 1;
-    public static int ORIGIN_CURRENT_LOCATION = 1;
-    public static int DEST_CURRENT_LOCATION = 1;
+    public static int ORIGIN_CURRENT_LOCATION = 1;	//if = 0: Latitude/Long. was manually set for origin.
+    												//if = 1: Grab GPS data for origin.
+    												//if = 2: Resolve the address input.
+    public static int DEST_CURRENT_LOCATION = 1;	//See above (in context of destination).
     public static LocationManager mlocManager;
     public static LocationListener mlocListener;
     public static Request request = new Request();
@@ -84,6 +86,7 @@ public class TransitGenieMain extends Activity {
     EditText dest_text;
 	private int mHour;
 	private int mMinute;
+	
 	public static Document[] allRoutes;
 	/** Called when the activity is first created. */
     @Override
@@ -91,6 +94,7 @@ public class TransitGenieMain extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
         geocoder = new Geocoder(this.getApplicationContext());
+        
         //Initialize SQL Database helper and cursor
         SQL_HELPER = new SQLHelper(this);
         CURSOR = getFavorites();
@@ -101,10 +105,8 @@ public class TransitGenieMain extends Activity {
         mlocManager.requestLocationUpdates( LocationManager.GPS_PROVIDER, 0, 0, mlocListener);
         //mlocManager.getLastKnownLocation(LOCATION_SERVICE);
         
-        //Initialize Bundle and set default values
+        //Initialize Bundle
         b = new Bundle();
-        //b.putString("origin_string", "Current Location");
-        //b.putString("destin_string", "Current Location");
         
         //Import Buttons from main.xml
         Button button_go = (Button)findViewById(R.id.button_go);					//"Go" button on main screen (=> User is ready for routes)
@@ -125,71 +127,72 @@ public class TransitGenieMain extends Activity {
 	    		EditText destin = (EditText) findViewById(R.id.text_destn2);
 	    		EditText origin = (EditText) findViewById(R.id.text_origin2);
 	    		
+	    		//Check if there is text in origin/destination boxes
 	    		if(origin.getText().length() <= 0)
 	    		{
 	    			Toast.makeText(getApplicationContext(), "Please input a location for Origin.", Toast.LENGTH_SHORT).show();
-	    			
+	    			return;
 	    		}
-	    		else if(destin.getText().length() <= 0)
+	    		if(destin.getText().length() <= 0)
 	    		{
 	    			Toast.makeText(getApplicationContext(), "Please input a location for Destination.", Toast.LENGTH_SHORT).show();
+	    			return;
 	    		}
 	    		
-	    		else
-	    		{
-	    			 /* * * * * * * * * * * * * * * * * * * * * * * * *
-	    			  * ASYNC TASK
-	    			  * 	Used to request server data.
-	    			  * 	Progress bar is diplayed while loading.
-	    			  * 
-	    			  * * * * * * * * * * * * * * * * * * * * * * * * */
-	    			 AsyncTask<String, Void, String> sendRequest = new AsyncTask<String, Void, String>() {
-	    				    Dialog progress;
+	
+	    		
+    			 /* * * * * * * * * * * * * * * * * * * * * * * * *
+    			  * ASYNC TASK
+    			  * 	Used to request server data.
+    			  * 	Progress bar is diplayed while loading.
+    			  * 
+    			  * * * * * * * * * * * * * * * * * * * * * * * * */
+    			 AsyncTask<String, Void, String> sendRequest = new AsyncTask<String, Void, String>() {
+    				    Dialog progress;
 
-	    				    @Override
-	    				    protected void onPreExecute() {
-	    				        progress = ProgressDialog.show(TransitGenieMain.this, 
-	    				                "Loading Data", "Please Wait...");
-	    				        super.onPreExecute();
-	    				    }
+    				    @Override
+    				    protected void onPreExecute() {
+    				        progress = ProgressDialog.show(TransitGenieMain.this, 
+    				                "Loading Data", "Please Wait...");
+    				        super.onPreExecute();
+    				    }
 
-	    				    @Override
-	    				    protected String doInBackground(String... params) {
-	    				    	//RETRIEVE DOCUMENT
-	    				        allRoutes = null;	//Array of DOM trees, each representing a singular route.
-	    				        
-	    				        try {
-	    							allRoutes = TransitGenieMain.request.buildRoutes();
-	    						} catch (IOException e) {
-	    							e.printStackTrace();
-	    						} catch (ParserConfigurationException e) {
-	    							e.printStackTrace();
-	    						} catch (SAXException e) {
-	    							e.printStackTrace();
-	    						}
-	    						if(allRoutes == null)	//If no routes were added to array.
-	    						{
-	    							Toast.makeText(getApplicationContext(), "Error: No Routes Found. Check internet connectivity.", Toast.LENGTH_SHORT).show();
-	    							return "error";
-	    						}
-	    				        return "";
-	    				    }
+    				    @Override
+    				    protected String doInBackground(String... params) {
+    				    	//RETRIEVE DOCUMENT
+    				        allRoutes = null;	//Array of DOM trees, each representing a singular route.
+    				        
+    				        try {
+    							allRoutes = TransitGenieMain.request.buildRoutes();
+    						} catch (IOException e) {
+    							e.printStackTrace();
+    						} catch (ParserConfigurationException e) {
+    							e.printStackTrace();
+    						} catch (SAXException e) {
+    							e.printStackTrace();
+    						}
+    						if(allRoutes == null)	//If no routes were added to array.
+    						{
+    							Toast.makeText(getApplicationContext(), "Error: No Routes Found. Check internet connectivity.", Toast.LENGTH_SHORT).show();
+    							return "error";
+    						}
+    				        return "";
+    				    }
 
-	    				    @Override
-	    				    protected void onPostExecute(String result) {
-	    				    	super.onPostExecute(result);
-	    				        progress.dismiss();
-	    				        
-	    				    	if(!result.equals("error")) //Run Routes activity if no error occured
-	    				    	{
-	    				    		Intent i = new Intent(getApplicationContext(), Routes.class);
-	    				    		i.putExtras(b);		// Bundle needed in next Activity to utilize Strings representing origin and destination.
-	    				            startActivity(i);
-	    				    	}  
-	    				    }
-	    				};
-	    			sendRequest.execute();	//Request data form server via Async. task
-	    		}
+    				    @Override
+    				    protected void onPostExecute(String result) {
+    				    	super.onPostExecute(result);
+    				        progress.dismiss();
+    				        
+    				    	if(!result.equals("error")) //Run Routes activity if no error occured
+    				    	{
+    				    		Intent i = new Intent(getApplicationContext(), Routes.class);
+    				    		i.putExtras(b);		// Bundle needed in next Activity to utilize Strings representing origin and destination.
+    				            startActivity(i);
+    				    	}  
+    				    }
+    				};
+    			sendRequest.execute();	//Request data form server via Async. task
 	    	}
         });
         
@@ -201,8 +204,6 @@ public class TransitGenieMain extends Activity {
          */
         button_origin.setOnClickListener(new View.OnClickListener(){	
 	    	public void onClick(View v){
-	    		// reset GPS Flag
-	    		ORIGIN_CURRENT_LOCATION = 0;
 	    		//Run places activity
 	    		Intent i = new Intent(getApplicationContext(), places.class);
 	    		
@@ -233,35 +234,38 @@ public class TransitGenieMain extends Activity {
        
     }//End onCreate
     private class CustomTextWatcher implements OnKeyListener{
-    	private int dest;
+    	private int dest;	//if = 0 -> origin text box || if = 1 -> destination text box.
     	Address address;
     	String text;
 		public CustomTextWatcher(EditText origin_text, int i) {
-			// TODO Auto-generated constructor stub
 			this.dest = i;
 			this.text = origin_text.getText().toString();
 		}
 
 		public boolean onKey(View v, int keyCode, KeyEvent event) {
-			if ((event.getAction() == KeyEvent.ACTION_DOWN)&& (keyCode == KeyEvent.KEYCODE_ENTER) )
+			if ((event.getAction() == KeyEvent.ACTION_DOWN))
 			{
 			try {
 				//this.address = geocoder.getFromLocationName(text, 2).get(0);
-				if(dest == 0){
-					this.address = geocoder.getFromLocationName(origin_text.getText().toString(), 1).get(0);
+				if(dest == 0){	//Origin text box was edited
+					ORIGIN_CURRENT_LOCATION = 2;	//Change flag so that typed address is resolved upon pressing "Go"
+					
+					/*this.address = geocoder.getFromLocationName(origin_text.getText().toString(), 1).get(0);
 					request.originLatitude = address.getLatitude();
 					request.originLongitude = address.getLongitude();
 					//if(address.getFeatureName() != null)
 						//{b.putString("origin_string", address.getFeatureName());}
-					b.putString("origin_string", origin_text.getText().toString());
+					b.putString("origin_string", origin_text.getText().toString());*/
 				}
-				else{
-					this.address = geocoder.getFromLocationName(dest_text.getText().toString(), 1).get(0);
+				else{	//Destination text box was edited
+					DEST_CURRENT_LOCATION = 2;	//Change flag so that typed address is resolved upon pressing "Go"
+					
+					/*this.address = geocoder.getFromLocationName(dest_text.getText().toString(), 1).get(0);
 					request.destLatitude = address.getLatitude();
 					request.originLongitude = address.getLongitude();
 					//if(address.getFeatureName() != null)
 					//	{b.putString("destin_string", address.getFeatureName());}
-					b.putString("destin_string", origin_text.getText().toString());
+					b.putString("destin_string", origin_text.getText().toString());*/
 				}
 			} catch (Exception e) {
 				Toast.makeText( getApplicationContext(),
