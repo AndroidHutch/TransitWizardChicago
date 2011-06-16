@@ -113,9 +113,9 @@ public class places extends Activity {
 				case 0:
 					if (ORIGIN == 0) {
 						b.putString("origin_string", "Use Current Location");
-						TransitGenieMain.ORIGIN_GPS = 1;
+						TransitGenieMain.ORIGIN_CURRENT_LOCATION = 1;
 					} else {
-						TransitGenieMain.DEST_GPS = 1;
+						TransitGenieMain.DEST_CURRENT_LOCATION = 1;
 						b.putString("destin_string", "Use Current Location");
 					}
 
@@ -182,12 +182,13 @@ public class places extends Activity {
 					//Send location name (String) to Bundle
 					//& Set latitude/longitude in Request class
 					if (ORIGIN == 0) {
-						TransitGenieMain.ORIGIN_GPS = 0;
+						TransitGenieMain.ORIGIN_CURRENT_LOCATION = 0;
 						b.putString("origin_string", LIST.get(position).trim().replace('\n', ' ').replace('\t', ' '));
 						TransitGenieMain.request.originLatitude = lat;
 						TransitGenieMain.request.originLongitude = lon;
+
 					} else {
-						TransitGenieMain.DEST_GPS = 0;
+						TransitGenieMain.DEST_CURRENT_LOCATION = 0;
 						b.putString("destin_string", LIST.get(position).trim().replace('\n', ' ').replace('\t', ' '));
 						TransitGenieMain.request.destLatitude = lat;
 						TransitGenieMain.request.destLongitude = lon;

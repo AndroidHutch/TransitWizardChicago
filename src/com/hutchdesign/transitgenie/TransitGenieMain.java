@@ -70,8 +70,10 @@ import android.widget.Toast;
 public class TransitGenieMain extends Activity {
     protected static final int ORIGIN_REQUEST = 0;
 	private static final int TIME_DIALOG = 1;
-    public static int ORIGIN_GPS = 1;
-    public static int DEST_GPS = 1;
+    public static int ORIGIN_CURRENT_LOCATION = 1;
+    public static int DEST_CURRENT_LOCATION = 1;
+    public static LocationManager mlocManager;
+    public static LocationListener mlocListener;
     public static Request request = new Request();
     Calendar c = Calendar.getInstance();
     public static SQLHelper SQL_HELPER;
@@ -82,7 +84,6 @@ public class TransitGenieMain extends Activity {
     EditText dest_text;
 	private int mHour;
 	private int mMinute;
-	
 	public static Document[] allRoutes;
 	/** Called when the activity is first created. */
     @Override
@@ -95,8 +96,8 @@ public class TransitGenieMain extends Activity {
         CURSOR = getFavorites();
         
         //Set up GPS location manager
-        LocationManager mlocManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
-        LocationListener mlocListener = new MyLocationListener();
+        mlocManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
+        mlocListener = new MyLocationListener();
         mlocManager.requestLocationUpdates( LocationManager.GPS_PROVIDER, 0, 0, mlocListener);
         //mlocManager.getLastKnownLocation(LOCATION_SERVICE);
         
@@ -201,7 +202,7 @@ public class TransitGenieMain extends Activity {
         button_origin.setOnClickListener(new View.OnClickListener(){	
 	    	public void onClick(View v){
 	    		// reset GPS Flag
-	    		ORIGIN_GPS = 0;
+	    		ORIGIN_CURRENT_LOCATION = 0;
 	    		//Run places activity
 	    		Intent i = new Intent(getApplicationContext(), places.class);
 	    		
@@ -287,25 +288,25 @@ public class TransitGenieMain extends Activity {
 		
 		    loc.getLongitude();
 		
-		    String Text = "My current location is: " +
-		
-		    "Latitud = " + loc.getLatitude() +
-		
-		    "Longitud = " + loc.getLongitude();
-		
-		
-		    Toast.makeText( getApplicationContext(),
-		    Text,
-		    Toast.LENGTH_SHORT).show();
+//		    String Text = "My current location is: " +
+//		
+//		    "Latitud = " + loc.getLatitude() +
+//		
+//		    "Longitud = " + loc.getLongitude();
+//		
+//		
+//		    Toast.makeText( getApplicationContext(),
+//		    Text,
+//		    Toast.LENGTH_SHORT).show();
 	
 	    }
 	
 	
 	    public void onProviderDisabled(String provider)
 	    {
-	    	Toast.makeText( getApplicationContext(),
-		    "Gps Disabled",
-		    Toast.LENGTH_SHORT ).show();
+//	    	Toast.makeText( getApplicationContext(),
+//		    "Gps Disabled",
+//		    Toast.LENGTH_SHORT ).show();
 	
 	    }
 	
@@ -313,9 +314,9 @@ public class TransitGenieMain extends Activity {
 	    public void onProviderEnabled(String provider)
 	    {
 	
-	    	Toast.makeText( getApplicationContext(),
-		    "Gps Enabled",
-		    Toast.LENGTH_SHORT).show();
+//	    	Toast.makeText( getApplicationContext(),
+//		    "Gps Enabled",
+//		    Toast.LENGTH_SHORT).show();
 	
 	    }
 	

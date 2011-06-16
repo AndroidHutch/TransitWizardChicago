@@ -25,8 +25,8 @@ public class Map extends MapActivity {
 			}
 			// TODO Make pop up of "Select this location?", return when verified
 			//Reset GPS Flag
-    		TransitGenieMain.DEST_GPS = 0;
-    		TransitGenieMain.ORIGIN_GPS = 0;
+    		TransitGenieMain.DEST_CURRENT_LOCATION = 0;
+    		TransitGenieMain.ORIGIN_CURRENT_LOCATION = 0;
 			setResult(RESULT_OK);
 			finish();
 
