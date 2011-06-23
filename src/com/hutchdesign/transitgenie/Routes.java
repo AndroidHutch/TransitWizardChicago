@@ -56,16 +56,9 @@
 
 package com.hutchdesign.transitgenie;
 
-import java.io.IOException;
-import java.net.MalformedURLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-
-import javax.xml.parsers.ParserConfigurationException;
-
-import org.w3c.dom.Document;
-import org.xml.sax.SAXException;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -133,7 +126,7 @@ public class Routes extends Activity {
         	RouteList.add(new SingleRoute(TransitGenieMain.allRoutes[x]));
         	}
         	catch(Exception e){
-    			Toast.makeText(getApplicationContext(), "Error at Route:" + x, Toast.LENGTH_SHORT).show();
+    			Toast.makeText(getApplicationContext(), "Error at Route: " + x, Toast.LENGTH_SHORT).show();
         		continue;}
         }
      
@@ -294,8 +287,8 @@ public class Routes extends Activity {
 			       .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
 			           public void onClick(DialogInterface dialog, int id) {
 			        	   //ADD TO DATABASE
-			        	   Double lat = TransitGenieMain.request.destLatitude;
-			        	   Double lon = TransitGenieMain.request.destLongitude;
+			        	   Double lat = TransitGenieMain.request.destinLatitude;
+			        	   Double lon = TransitGenieMain.request.destinLongitude;
 			        	   TransitGenieMain.addFavorite(name1, lat, lon); 
 			           }
 			       })

@@ -31,12 +31,11 @@ import java.io.IOException;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
-
+import android.net.NetworkInfo;
 import android.app.Activity;
 import android.app.Dialog;
 import android.app.ProgressDialog;
@@ -51,16 +50,17 @@ import android.database.sqlite.SQLiteDatabase;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.View.OnKeyListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -73,7 +73,7 @@ public class TransitGenieMain extends Activity {
     public static int ORIGIN_CURRENT_LOCATION = 1;	//if = 0: Latitude/Long. was manually set for origin.
     												//if = 1: Grab GPS data for origin.
     												//if = 2: Resolve the address input.
-    public static int DEST_CURRENT_LOCATION = 1;	//See above (in context of destination).
+    public static int DESTIN_CURRENT_LOCATION = 1;	//See above (in context of destination).
     public static LocationManager mlocManager;
     public static LocationListener mlocListener;
     public static Request request = new Request();
@@ -83,9 +83,14 @@ public class TransitGenieMain extends Activity {
     Bundle b;	//Holds data passed between main activity and places activity
     Geocoder geocoder;
     EditText origin_text;
-    EditText dest_text;
+    EditText destin_text;
+    private double currentLat;
+    private double currentLon;
 	private int mHour;
 	private int mMinute;
+	private boolean from_places_origin = false;	//Has the user just returned with an origin selection from the places Activity?
+												//Used to determine if user has typed their input or if it was selected from places.java.
+	private boolean from_places_destin = false;
 	
 	public static Document[] allRoutes;
 	/** Called when the activity is first created. */
@@ -101,10 +106,10 @@ public class TransitGenieMain extends Activity {
         
         //Set up GPS location manager
         mlocManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
-        mlocListener = new MyLocationListener();
-        mlocManager.requestLocationUpdates( LocationManager.GPS_PROVIDER, 0, 0, mlocListener);
-        //mlocManager.getLastKnownLocation(LOCATION_SERVICE);
-        
+        mlocListener = new MyLocationListener();      
+        mlocManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, mlocListener);
+        mlocManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, mlocListener);
+  
         //Initialize Bundle
         b = new Bundle();
         
@@ -113,10 +118,37 @@ public class TransitGenieMain extends Activity {
         ImageButton button_origin = (ImageButton)findViewById(R.id.button_origin);	//Selected when user wishes to choose origin.
         ImageButton button_destn = (ImageButton)findViewById(R.id.button_destn);	//Selected when user wishes to choose destination.
         origin_text = (EditText)findViewById(R.id.text_origin2);
-        dest_text = (EditText)findViewById(R.id.text_destn2);
+        destin_text = (EditText)findViewById(R.id.text_destn2);
         
-        origin_text.setOnKeyListener(new CustomTextWatcher(origin_text, 0));
-        dest_text.setOnKeyListener(new CustomTextWatcher(dest_text, 1));
+        /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
+         * Edit Text Listeners For Origin and Destination Input  *
+         * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+        origin_text.addTextChangedListener(new TextWatcher()
+        {
+        	public void  afterTextChanged (Editable s) { 
+        		if(!from_places_origin){	//Do not set custom location flag (ORIGIN_CURRENT_LOCATION) if user just returned from 'places' Activity.
+        		ORIGIN_CURRENT_LOCATION = 2;		/* => On "GO," program will parse origin box for the custom location. 
+               									 	* (Uses geocoder to determine what the user meant) 
+               									 	*/
+        		}
+        		from_places_origin = false;
+			} 
+			public void  beforeTextChanged  (CharSequence s, int start, int count, int after) { } 	//Do Nothing (Required method)
+			public void  onTextChanged  	(CharSequence s, int start, int before, int count){  }	//Do Nothing (Required methid)
+        });
+        destin_text.addTextChangedListener(new TextWatcher()
+        {
+        	public void  afterTextChanged (Editable s) { 
+        		if(!from_places_destin){	//Do not set custom location flag (DESTIN_CURRENT_LOCATION) if user just returned from 'places' Activity.
+        		DESTIN_CURRENT_LOCATION = 2;		/* => On "GO," program will parse destination box for the custom location. 
+               									 	* (Uses geocoder to determine what the user meant) 
+               									 	*/
+        		}
+        		from_places_destin = false;
+			} 
+			public void  beforeTextChanged  (CharSequence s, int start, int count, int after) { } 	//Do Nothing (Required method)
+			public void  onTextChanged  	(CharSequence s, int start, int before, int count){  }	//Do Nothing (Required methid)
+        });
 
         /* * * * * * * * * * * * * 
          * "GO" Button Listener  *
@@ -128,70 +160,181 @@ public class TransitGenieMain extends Activity {
 	    		EditText origin = (EditText) findViewById(R.id.text_origin2);
 	    		
 	    		//Check if there is text in origin/destination boxes
-	    		if(origin.getText().length() <= 0)
-	    		{
+	    		if(origin.getText().length() <= 0) {
 	    			Toast.makeText(getApplicationContext(), "Please input a location for Origin.", Toast.LENGTH_SHORT).show();
 	    			return;
 	    		}
-	    		if(destin.getText().length() <= 0)
-	    		{
+	    		if(destin.getText().length() <= 0) {
 	    			Toast.makeText(getApplicationContext(), "Please input a location for Destination.", Toast.LENGTH_SHORT).show();
-	    			return;
+	    			return; 
 	    		}
 	    		
-	
+	    		Address address;
+	    		//Location current;
+
+	    		switch(ORIGIN_CURRENT_LOCATION) {	//Resolve origin latitude and longitude
+	    			//case 0: => Latitude & Longitude are already set in request.java.
+	    			case 1:	//Grab GPS data for origin (user has selected 'Use Current Location').
+	    				if(!mlocManager.isProviderEnabled(LocationManager.GPS_PROVIDER) && !mlocManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
+	    					Toast.makeText( getApplicationContext(),
+								    "Please enable GPS to utilize current location for Origin.",
+								    Toast.LENGTH_SHORT).show();
+	    					return;
+	    				}
+	    				else if(DESTIN_CURRENT_LOCATION == 1) {
+	    					Toast.makeText( getApplicationContext(),
+								    "Origin and Destination are both your current location. Please alter one.",
+								    Toast.LENGTH_SHORT).show();
+	    					return;
+	    				}
+	    				else {
+	    					//current = mlocManager.getLastKnownLocation(PROVIDER);
+	    					if(currentLat > 0) {
+	    						request.originLatitude = currentLat;	
+		    					request.originLongitude = currentLon;
+		    					b.putString("origin_string", "My Location");
+	    					}
+	    					else {
+	    						Toast.makeText( getApplicationContext(),
+	    							    "No current loction found for Origin. Is your GPS on?",
+	    							    Toast.LENGTH_SHORT).show();
+	    						return;
+	    					}
+	    				}
+	    				
+	    				break;
+	    			
+	    			case 2:	//Resolve address of input.
+	    				try {
+							address = geocoder.getFromLocationName(origin_text.getText().toString(), 2).get(0);		//Resolve address
+							if(address == null)
+							{
+								Toast.makeText( getApplicationContext(),
+									    "Can not resolve Origin Address. Try searching on map or re-type.",
+									    Toast.LENGTH_SHORT).show();
+								return;
+							}
+							request.originLatitude = address.getLatitude();		//set Latitude based on resolved address
+	    					request.originLongitude = address.getLongitude();	//set Logitude based on resolved address
+	    					b.putString("origin_string", origin_text.getText().toString());
+						} catch (IOException e1) {
+							Toast.makeText( getApplicationContext(),
+								    "Can not resolve Origin Address. Try searching on map or re-type.",
+								    Toast.LENGTH_SHORT).show();	//TODO: change from Toast to dialog.
+							return;
+						}		
+	    				break;
+	    			default: break;
+	    		} //End switch ORIGIN_CURRENT_LOCATION
+	    		switch(DESTIN_CURRENT_LOCATION) {	//Resolve destination latitude and longitude
+    			//case 0: => Latitude & Longitude are already set in request.java.
+    			case 1:	//Grab GPS data for destination (user has selected 'Use Current Location').
+    				if(!mlocManager.isProviderEnabled(LocationManager.GPS_PROVIDER) && !mlocManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER))
+    				{
+    					Toast.makeText( getApplicationContext(),
+    							"Please enable GPS to utilize current location for Destination.",
+							    Toast.LENGTH_SHORT).show();
+    					return;
+    				}
+    				else
+    				{
+    					//current = mlocManager.getLastKnownLocation(PROVIDER);
+    					if(currentLat > 0)
+    					{
+    						request.destinLatitude = currentLat;	
+        					request.destinLongitude = currentLon;
+        					b.putString("destin_string", "My Location");
+    					}
+    					else
+    					{
+    						Toast.makeText( getApplicationContext(),
+    							    "No current loction found for Destination. Is your GPS on?",
+    							    Toast.LENGTH_SHORT).show();
+    						return;
+    					}
+    				}
+    				
+    				break;
+    			
+    			case 2:	//Resolve address of input.
+    				try {
+						address = geocoder.getFromLocationName(origin_text.getText().toString(), 2).get(0);		//Resolve address
+						
+						if(address == null)
+						{
+							Toast.makeText( getApplicationContext(),
+								    "Can not resolve Destination Address. Try searching on map or re-type.",
+								    Toast.LENGTH_SHORT).show();
+						}
+						
+						request.destinLatitude = address.getLatitude();		//set Latitude based on resolved address
+    					request.destinLongitude = address.getLongitude();	//set Logitude based on resolved address
+    					b.putString("destin_string", destin_text.getText().toString());
+					} catch (IOException e1) {
+						Toast.makeText( getApplicationContext(),
+							    "Can not resolve Destination Address. Try searching on map or re-type.",
+							    Toast.LENGTH_SHORT).show();	//TODO: change from Toast to dialog.
+						return;
+					}		
+    				break;
+    			default: break;
+    		} //End switch DESTIN_CURRENT_LOCATION
 	    		
     			 /* * * * * * * * * * * * * * * * * * * * * * * * *
     			  * ASYNC TASK
     			  * 	Used to request server data.
     			  * 	Progress bar is diplayed while loading.
-    			  * 
     			  * * * * * * * * * * * * * * * * * * * * * * * * */
     			 AsyncTask<String, Void, String> sendRequest = new AsyncTask<String, Void, String>() {
-    				    Dialog progress;
+				    Dialog progress;
 
-    				    @Override
-    				    protected void onPreExecute() {
-    				        progress = ProgressDialog.show(TransitGenieMain.this, 
-    				                "Loading Data", "Please Wait...");
-    				        super.onPreExecute();
-    				    }
+				    @Override
+				    protected void onPreExecute() {
+				        progress = ProgressDialog.show(TransitGenieMain.this, 
+				                "Loading Data", "Please Wait...");
+				        super.onPreExecute();
+				    }
 
-    				    @Override
-    				    protected String doInBackground(String... params) {
-    				    	//RETRIEVE DOCUMENT
-    				        allRoutes = null;	//Array of DOM trees, each representing a singular route.
-    				        
-    				        try {
-    							allRoutes = TransitGenieMain.request.buildRoutes();
-    						} catch (IOException e) {
-    							e.printStackTrace();
-    						} catch (ParserConfigurationException e) {
-    							e.printStackTrace();
-    						} catch (SAXException e) {
-    							e.printStackTrace();
-    						}
-    						if(allRoutes == null)	//If no routes were added to array.
-    						{
-    							Toast.makeText(getApplicationContext(), "Error: No Routes Found. Check internet connectivity.", Toast.LENGTH_SHORT).show();
-    							return "error";
-    						}
-    				        return "";
-    				    }
+				    @Override
+				    protected String doInBackground(String... params) {
+				    	//RETRIEVE DOCUMENT
+				        allRoutes = null;	//Array of DOM trees, each representing a singular route.
+				        
+				        try {
+							allRoutes = TransitGenieMain.request.buildRoutes();
+						} catch (IOException e) {
+							e.printStackTrace();
+						} catch (ParserConfigurationException e) {
+							e.printStackTrace();
+						} catch (SAXException e) {
+							e.printStackTrace(); 
+						}
+						if(allRoutes == null)	//If no routes were added to array.
+						{
+							return "error";
+						}
+				        return "";
+				    }
 
-    				    @Override
-    				    protected void onPostExecute(String result) {
-    				    	super.onPostExecute(result);
-    				        progress.dismiss();
-    				        
-    				    	if(!result.equals("error")) //Run Routes activity if no error occured
-    				    	{
-    				    		Intent i = new Intent(getApplicationContext(), Routes.class);
-    				    		i.putExtras(b);		// Bundle needed in next Activity to utilize Strings representing origin and destination.
-    				            startActivity(i);
-    				    	}  
-    				    }
-    				};
+				    @Override
+				    protected void onPostExecute(String result) {
+				    	super.onPostExecute(result);
+				        progress.dismiss();
+				        
+				    	if(!result.equals("error")) //Run Routes activity if no error occured
+				    	{
+				    		Intent i = new Intent(getApplicationContext(), Routes.class);
+				    		i.putExtras(b);		// Bundle needed in next Activity to utilize Strings representing origin and destination.
+				            startActivity(i);
+				    	}  
+				    	else
+				    	{
+				    		Toast.makeText(getApplicationContext(), 
+				    				"Error: No Routes Found.\n" + request.originLatitude + "\n" + request.originLongitude, 
+				    				Toast.LENGTH_SHORT).show();
+				    	}
+				    }
+				};
     			sendRequest.execute();	//Request data form server via Async. task
 	    	}
         });
@@ -233,94 +376,38 @@ public class TransitGenieMain extends Activity {
         }); 
        
     }//End onCreate
-    private class CustomTextWatcher implements OnKeyListener{
-    	private int dest;	//if = 0 -> origin text box || if = 1 -> destination text box.
-    	Address address;
-    	String text;
-		public CustomTextWatcher(EditText origin_text, int i) {
-			this.dest = i;
-			this.text = origin_text.getText().toString();
-		}
-
-		public boolean onKey(View v, int keyCode, KeyEvent event) {
-			if ((event.getAction() == KeyEvent.ACTION_DOWN))
-			{
-			try {
-				//this.address = geocoder.getFromLocationName(text, 2).get(0);
-				if(dest == 0){	//Origin text box was edited
-					ORIGIN_CURRENT_LOCATION = 2;	//Change flag so that typed address is resolved upon pressing "Go"
-					
-					/*this.address = geocoder.getFromLocationName(origin_text.getText().toString(), 1).get(0);
-					request.originLatitude = address.getLatitude();
-					request.originLongitude = address.getLongitude();
-					//if(address.getFeatureName() != null)
-						//{b.putString("origin_string", address.getFeatureName());}
-					b.putString("origin_string", origin_text.getText().toString());*/
-				}
-				else{	//Destination text box was edited
-					DEST_CURRENT_LOCATION = 2;	//Change flag so that typed address is resolved upon pressing "Go"
-					
-					/*this.address = geocoder.getFromLocationName(dest_text.getText().toString(), 1).get(0);
-					request.destLatitude = address.getLatitude();
-					request.originLongitude = address.getLongitude();
-					//if(address.getFeatureName() != null)
-					//	{b.putString("destin_string", address.getFeatureName());}
-					b.putString("destin_string", origin_text.getText().toString());*/
-				}
-			} catch (Exception e) {
-				Toast.makeText( getApplicationContext(),
-					    "Can not resolve address",
-					    Toast.LENGTH_SHORT).show();
-			}
-			Log.i("Geocoder", this.text);
-			Log.i("Address", this.address.toString());
-			}
-
-			return false;
-		}
-
-		
-    	
-    }
+  
     /* Class My Location Listener */
-
     public class MyLocationListener implements LocationListener
     {
     	public void onLocationChanged(Location loc)
-	    {
-		    loc.getLatitude();
-		
-		    loc.getLongitude();
-		
-//		    String Text = "My current location is: " +
-//		
-//		    "Latitud = " + loc.getLatitude() +
-//		
-//		    "Longitud = " + loc.getLongitude();
-//		
-//		
-//		    Toast.makeText( getApplicationContext(),
-//		    Text,
-//		    Toast.LENGTH_SHORT).show();
-	
+	    {	
+			/*Toast.makeText( getApplicationContext(),
+			"hello",
+		    Toast.LENGTH_SHORT ).show();*/
+    		
+			currentLat = loc.getLatitude();
+			currentLon = loc.getLongitude();
+
+    		/*Toast.makeText( getApplicationContext(),
+    				"" + currentLat + "\n" + currentLon,
+    			    Toast.LENGTH_SHORT ).show();*/
 	    }
-	
-	
+
 	    public void onProviderDisabled(String provider)
 	    {
-//	    	Toast.makeText( getApplicationContext(),
-//		    "Gps Disabled",
-//		    Toast.LENGTH_SHORT ).show();
+	/*    	Toast.makeText( getApplicationContext(),
+		    "Gps Disabled",
+		    Toast.LENGTH_SHORT ).show();*/
 	
 	    }
-	
-	
+
 	    public void onProviderEnabled(String provider)
 	    {
 	
-//	    	Toast.makeText( getApplicationContext(),
-//		    "Gps Enabled",
-//		    Toast.LENGTH_SHORT).show();
+ /*   	Toast.makeText( getApplicationContext(),
+		    "Gps Enabled",
+		    Toast.LENGTH_SHORT).show();*/
 	
 	    }
 	
@@ -347,6 +434,7 @@ public class TransitGenieMain extends Activity {
         	EditText origin = (EditText) findViewById(R.id.text_origin2);
         	origin.setText(bundl.getString("origin_string"));
         	b.putString("origin_string", bundl.getString("origin_string"));
+        	from_places_origin = true;
         	
 					            // Perform a query to the contact's content provider for the contact's name
 								//  Cursor cursor = getContentResolver().query(data.getData(),
@@ -365,6 +453,7 @@ public class TransitGenieMain extends Activity {
         	EditText destn = (EditText) findViewById(R.id.text_destn2);
         	destn.setText(bundl.getString("destin_string"));
         	b.putString("destin_string", bundl.getString("destin_string"));
+        	from_places_destin = true;
         }
         
         else if(resultCode == Activity.RESULT_CANCELED)
@@ -494,7 +583,20 @@ public class TransitGenieMain extends Activity {
     	db.delete(SQLHelper.TABLE, "_id=?", new String[]{String.valueOf(id)});
     }
     
-    
+    /* Request updates at startup */
+	/*@Override
+	protected void onResume() {
+		super.onResume();
+		mlocManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 2, mlocListener);
+	}
+
+	/* Remove the locationlistener updates when Activity is paused */
+	/*@Override
+	protected void onPause() {
+		super.onPause();
+		mlocManager.removeUpdates(mlocListener);
+	}*/
+	
     @Override
     public void onDestroy() 
     {
@@ -505,4 +607,5 @@ public class TransitGenieMain extends Activity {
     	if(SQL_HELPER != null)
     		SQL_HELPER.close();
     }  
+    				
 }//End main class.

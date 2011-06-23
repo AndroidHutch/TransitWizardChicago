@@ -33,13 +33,13 @@ import android.util.Log;
 public class Request {
 	public String server = "www.transitgenie.com:8080";
 	public Double version = 2.3;
-	// User Defined
+	// User Defined:
 	public double originLongitude = -87.839341;
 	public double originLatitude = 41.823309;
-	public double destLongitude = -87.635990;
-	public double destLatitude = 41.878884;
+	public double destinLongitude = -87.635990;
+	public double destinLatitude = 41.878884;
 	public long queryTime = System.currentTimeMillis() / 1000L;
-	public int maxResults = 3;
+	public int maxResults = 4;
 	public double walkingSpeed = 1.30;
 	public double sequenceNumber = 6;
 	public String streetMode = "walk";
@@ -52,8 +52,8 @@ public class Request {
 		//queryTime = (System.currentTimeMillis() / 1000L);
 		String requestString = "http://" + server + "/path_xml?version="
 				+ version + "&origlon=" + originLongitude + "&origlat="
-				+ originLatitude + "&destlon=" + destLongitude + "&destlat="
-				+ destLatitude + "&dep_time=" + queryTime + "&max_results="
+				+ originLatitude + "&destlon=" + destinLongitude + "&destlat="
+				+ destinLatitude + "&dep_time=" + queryTime + "&max_results="
 				+ maxResults + "&walking_speed=" + walkingSpeed + "&seqno="
 				+ sequenceNumber + "&street_mode=%22" + streetMode
 				+ "%22&transit_mode=%22" + transitMode + "%22"; // &udid=%22" + currentDevice + "%22";

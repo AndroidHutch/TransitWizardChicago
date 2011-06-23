@@ -20,12 +20,12 @@ public class Map extends MapActivity {
 				TransitGenieMain.request.originLatitude = (p.getLatitudeE6() / 1E6);
 				TransitGenieMain.request.originLongitude = (p.getLongitudeE6() / 1E6);
 			} else {
-				TransitGenieMain.request.destLatitude = (p.getLatitudeE6() / 1E6);
-				TransitGenieMain.request.destLongitude = (p.getLongitudeE6() / 1E6);
+				TransitGenieMain.request.destinLatitude = (p.getLatitudeE6() / 1E6);
+				TransitGenieMain.request.destinLongitude = (p.getLongitudeE6() / 1E6);
 			}
 			// TODO Make pop up of "Select this location?", return when verified
 			//Reset GPS Flag
-    		TransitGenieMain.DEST_CURRENT_LOCATION = 0;
+    		TransitGenieMain.DESTIN_CURRENT_LOCATION = 0;
     		TransitGenieMain.ORIGIN_CURRENT_LOCATION = 0;
 			setResult(RESULT_OK);
 			finish();

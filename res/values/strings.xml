@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">TransitGenie</string>
+    <string name="app_name">Transit Wizard Chicago</string>
     <string name="origin">Use Current Location...</string>
     <string name="destin">Use Current Location...</string>
     <string name="title_places">Choose Origin</string>

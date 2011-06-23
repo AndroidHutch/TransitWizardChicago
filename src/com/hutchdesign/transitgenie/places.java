@@ -9,7 +9,6 @@ import java.util.Locale;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.database.sqlite.SQLiteDatabase;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
@@ -24,7 +23,6 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 //New lines bc svn is picky
 
@@ -115,7 +113,7 @@ public class places extends Activity {
 						b.putString("origin_string", "Use Current Location");
 						TransitGenieMain.ORIGIN_CURRENT_LOCATION = 1;
 					} else {
-						TransitGenieMain.DEST_CURRENT_LOCATION = 1;
+						TransitGenieMain.DESTIN_CURRENT_LOCATION = 1;
 						b.putString("destin_string", "Use Current Location");
 					}
 
@@ -188,10 +186,10 @@ public class places extends Activity {
 						TransitGenieMain.request.originLongitude = lon;
 
 					} else {
-						TransitGenieMain.DEST_CURRENT_LOCATION = 0;
+						TransitGenieMain.DESTIN_CURRENT_LOCATION = 0;
 						b.putString("destin_string", LIST.get(position).trim().replace('\n', ' ').replace('\t', ' '));
-						TransitGenieMain.request.destLatitude = lat;
-						TransitGenieMain.request.destLongitude = lon;
+						TransitGenieMain.request.destinLatitude = lat;
+						TransitGenieMain.request.destinLongitude = lon;
 					}
 
 					intent = getIntent();
@@ -215,9 +213,11 @@ public class places extends Activity {
 			if (ORIGIN == 0) {
 				mapLat = TransitGenieMain.request.originLatitude;
 				mapLong = TransitGenieMain.request.originLongitude;
+				TransitGenieMain.ORIGIN_CURRENT_LOCATION = 0;
 			} else {
-				mapLat = TransitGenieMain.request.destLatitude;
-				mapLong = TransitGenieMain.request.destLongitude;
+				mapLat = TransitGenieMain.request.destinLatitude;
+				mapLong = TransitGenieMain.request.destinLongitude;
+				TransitGenieMain.DESTIN_CURRENT_LOCATION = 0;
 			}
 			// List<Address> addresses = geoCoder.getFromLocation(
 			// p.getLatitudeE6() / 1E6,

@@ -173,8 +173,8 @@ public class RouteDetail extends Activity {
 			       .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
 			           public void onClick(DialogInterface dialog, int id) {
 			        	   //ADD TO DATABASE
-			        	   Double lat = TransitGenieMain.request.destLatitude;
-			        	   Double lon = TransitGenieMain.request.destLongitude;
+			        	   Double lat = TransitGenieMain.request.destinLatitude;
+			        	   Double lon = TransitGenieMain.request.destinLongitude;
 			        	   TransitGenieMain.addFavorite(name1, lat, lon); 
 			           }
 			       })
