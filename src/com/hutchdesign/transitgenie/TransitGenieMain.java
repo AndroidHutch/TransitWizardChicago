@@ -35,7 +35,6 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
-import android.net.NetworkInfo;
 import android.app.Activity;
 import android.app.Dialog;
 import android.app.ProgressDialog;
@@ -50,7 +49,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
-import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -76,7 +74,7 @@ public class TransitGenieMain extends Activity {
     public static int DESTIN_CURRENT_LOCATION = 1;	//See above (in context of destination).
     public static LocationManager mlocManager;
     public static LocationListener mlocListener;
-    public static Request request = new Request();
+    public static Request request;
     Calendar c = Calendar.getInstance();
     public static SQLHelper SQL_HELPER;
     public static Cursor CURSOR;
@@ -84,13 +82,17 @@ public class TransitGenieMain extends Activity {
     Geocoder geocoder;
     EditText origin_text;
     EditText destin_text;
-    private double currentLat;
-    private double currentLon;
+    
 	private int mHour;
 	private int mMinute;
 	private boolean from_places_origin = false;	//Has the user just returned with an origin selection from the places Activity?
 												//Used to determine if user has typed their input or if it was selected from places.java.
-	private boolean from_places_destin = false;
+	private boolean from_places_destin = false;	//See above, in context of destination selection.
+	
+	//GPS & Location Variables
+	private double currentLat;		//Last known latitude.
+    private double currentLon;		//Last known longitude.
+    private boolean gotFix = false; //True when location has been updated once.
 	
 	public static Document[] allRoutes;
 	/** Called when the activity is first created. */
@@ -99,6 +101,7 @@ public class TransitGenieMain extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
         geocoder = new Geocoder(this.getApplicationContext());
+        request = new Request();
         
         //Initialize SQL Database helper and cursor
         SQL_HELPER = new SQLHelper(this);
@@ -196,7 +199,7 @@ public class TransitGenieMain extends Activity {
 	    					}
 	    					else {
 	    						Toast.makeText( getApplicationContext(),
-	    							    "No current loction found for Origin. Is your GPS on?",
+	    							    "No current loction found for Origin...yet",
 	    							    Toast.LENGTH_SHORT).show();
 	    						return;
 	    					}
@@ -382,16 +385,19 @@ public class TransitGenieMain extends Activity {
     {
     	public void onLocationChanged(Location loc)
 	    {	
-			/*Toast.makeText( getApplicationContext(),
-			"hello",
-		    Toast.LENGTH_SHORT ).show();*/
-    		
-			currentLat = loc.getLatitude();
+		    currentLat = loc.getLatitude();
 			currentLon = loc.getLongitude();
-
-    		/*Toast.makeText( getApplicationContext(),
-    				"" + currentLat + "\n" + currentLon,
-    			    Toast.LENGTH_SHORT ).show();*/
+			
+			Toast.makeText( getApplicationContext(),
+    				"UPDATE\n" + currentLat + "\n" + currentLon,
+    			    Toast.LENGTH_SHORT ).show();
+			
+			if((int) currentLat == 37)
+			{
+				Toast.makeText( getApplicationContext(),
+	    				":(",
+	    			    Toast.LENGTH_SHORT ).show();
+			}
 	    }
 
 	    public void onProviderDisabled(String provider)
@@ -609,3 +615,5 @@ public class TransitGenieMain extends Activity {
     }  
     				
 }//End main class.
+
+

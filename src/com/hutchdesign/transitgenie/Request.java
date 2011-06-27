@@ -34,10 +34,10 @@ public class Request {
 	public String server = "www.transitgenie.com:8080";
 	public Double version = 2.3;
 	// User Defined:
-	public double originLongitude = -87.839341;
-	public double originLatitude = 41.823309;
-	public double destinLongitude = -87.635990;
-	public double destinLatitude = 41.878884;
+	public double originLongitude = 0;//-87.839341;
+	public double originLatitude = 0;//41.823309;
+	public double destinLongitude = 0;//-87.635990;
+	public double destinLatitude = 0;//41.878884;
 	public long queryTime = System.currentTimeMillis() / 1000L;
 	public int maxResults = 4;
 	public double walkingSpeed = 1.30;

@@ -184,9 +184,6 @@ public class Routes extends Activity {
     		return; }
 		
     	//Train Images
-    	if(step.equals("G")){
-    		i.setImageResource(R.drawable.cta_green);	
-    		return; }
     	if(step.equals("Blue")){
     		i.setImageResource(R.drawable.cta_blue);	
     		return; }
@@ -204,6 +201,9 @@ public class Routes extends Activity {
     		return; }
     	if(step.equals("R") || step.equals("Red")){
     		i.setImageResource(R.drawable.cta_red);	
+    		return; }
+    	if(step.startsWith("G")){
+    		i.setImageResource(R.drawable.cta_green);	
     		return; }
     	if(step.startsWith("Y")){
     		i.setImageResource(R.drawable.cta_yellow);	
