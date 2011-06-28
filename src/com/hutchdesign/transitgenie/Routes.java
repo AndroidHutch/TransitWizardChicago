@@ -100,12 +100,12 @@ public class Routes extends Activity {
         Button fav_dest = (Button) findViewById(R.id.button_fav_dest);
         
         //Add onClickListeners to add to favorites buttons.
-        fav_origin.setOnClickListener(new View.OnClickListener(){	
+        fav_origin.setOnClickListener(new View.OnClickListener() {	
 	    	public void onClick(View v){
 	    		showDialog(0);
 	    	}
         });
-        fav_dest.setOnClickListener(new View.OnClickListener(){	
+        fav_dest.setOnClickListener(new View.OnClickListener() {	
 	    	public void onClick(View v){
 	    		showDialog(1);
 	    	}
@@ -120,17 +120,23 @@ public class Routes extends Activity {
         RouteList = new ArrayList<SingleRoute>();		//Create ArrayList of SingleRoutes.
         
         //Parse and separate Documents.
-        for(int x=0; x<TransitGenieMain.allRoutes.length; ++x) 
-        {
-        	try{
+        for(int x=0; x<TransitGenieMain.allRoutes.length; ++x)  {
+        	try {
         	RouteList.add(new SingleRoute(TransitGenieMain.allRoutes[x]));
-        	}
-        	catch(Exception e){
+        	} catch(Exception e){
     			Toast.makeText(getApplicationContext(), "Error at Route: " + x, Toast.LENGTH_SHORT).show();
         		continue;}
         }
      
         RouteAdapter adapter = new RouteAdapter(this, this, RouteList);		//Add ArrayList to adapter.
+        
+        if(!adapter.moreThanOneSteps()) {
+        	Toast.makeText(getApplicationContext(), 
+    				"Error: No Routes.", 
+    				Toast.LENGTH_SHORT).show();
+        	finish();
+        }
+        
         routeListView.setAdapter(adapter);									//Set ListView adapter.
 		
         /*
@@ -153,8 +159,7 @@ public class Routes extends Activity {
     }//End onCreate
     
     //Start RouteDetail Activity upon user selecting a specific route.
-    public void getDetail(int p)
-    {
+    public void getDetail(int p) {
     	Intent i = new Intent(getApplicationContext(), RouteDetail.class);
     	b.putInt("position", p);
     	i.putExtras(b);
@@ -165,8 +170,7 @@ public class Routes extends Activity {
     //ADDITIONAL METHODS...
     
     //setStepImage displays appropriate route image (in ImageView 'i') based on attribute String 'step'
-    public static void setStepImage(ImageView i, String step)
-    {
+    public static void setStepImage(ImageView i, String step) {
     	if(step == null){
     		i.setImageResource(R.drawable.filler);		//Blank Image
     		return; }
@@ -213,27 +217,23 @@ public class Routes extends Activity {
     }
     
     //setStepText used to prevent NullPointerExceptions.
-    public static void setStepText(TextView t, String s)
-    {
-    	if(s == null){
+    public static void setStepText(TextView t, String s) {
+    	if(s == null) {
     		t.setText(""); 
-    		return; }
+    		return; 
+    	}
     	t.setText(s);
     }
     
     //convertFromMeters returns value of x in either miles or feet in the form of a String.
-    public static String convertFromMeters(double x)
-    {
+    public static String convertFromMeters(double x) {
     	String ans = "";		//String to be returned
 		double x_miles = (x / (1609.344));		//Convert x to miles.
 		
-		if(x_miles < 0.1)
-		{
+		if(x_miles < 0.1) {
 			int feet = (int) (x/3.2808399);		//Convert x to feet.
 			ans = String.valueOf(feet) + "ft";
-		}
-		else
-		{
+		} else {
 			ans = String.valueOf(x_miles).substring(0, 3) + "mi";
 		}
     	
@@ -241,8 +241,7 @@ public class Routes extends Activity {
     }
     
     //Format milliseconds to time format mm:hh a (e.g. 12:00 pm)
-    public static String formatMillis(long m)
-    {
+    public static String formatMillis(long m) {
     	SimpleDateFormat date = new SimpleDateFormat("h:mm a");
 		Calendar cal = Calendar.getInstance();
 		
@@ -252,8 +251,7 @@ public class Routes extends Activity {
     }
     
     //DIALOG CREATION
-    protected Dialog onCreateDialog(int i) 
-	{
+    protected Dialog onCreateDialog(int i) {
 		switch(i) {
 		case 0:	//Origin		 
 			AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -264,8 +262,8 @@ public class Routes extends Activity {
 			       .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
 			           public void onClick(DialogInterface dialog, int id) {
 			        	   //ADD TO DATABASE
-			        	   Double lat = TransitGenieMain.request.originLatitude;
-			        	   Double lon = TransitGenieMain.request.originLongitude;
+			        	   Double lat = b.getDouble("origin_lat"); //TransitGenieMain.request.originLatitude;
+			        	   Double lon = b.getDouble("origin_lon"); //TransitGenieMain.request.originLongitude;
 			        	   TransitGenieMain.addFavorite(name, lat, lon); 
 			           }
 			       })
@@ -287,8 +285,8 @@ public class Routes extends Activity {
 			       .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
 			           public void onClick(DialogInterface dialog, int id) {
 			        	   //ADD TO DATABASE
-			        	   Double lat1 = TransitGenieMain.request.destinLatitude;
-			        	   Double lon1 = TransitGenieMain.request.destinLongitude;
+			        	   Double lat1 = b.getDouble("destin_lat"); //TransitGenieMain.request.destinLatitude;
+			        	   Double lon1 = b.getDouble("destin_lon"); //TransitGenieMain.request.destinLongitude;
 			        	   TransitGenieMain.addFavorite(name1, lat1, lon1); 
 			           }
 			       })

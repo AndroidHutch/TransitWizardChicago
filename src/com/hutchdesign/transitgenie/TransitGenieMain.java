@@ -1,4 +1,4 @@
-/* Transit Genie Android 
+/* Transit Wizard Android 
  * v. 1.0
  * Code by Mike Hutcheson and Allie Curry
  * 
@@ -154,9 +154,6 @@ public class TransitGenieMain extends Activity {
         			DESTIN_CURRENT_LOCATION = 2;	/* => On "GO," program will parse destination box for the custom location. 
                									 	* (Uses geocoder to determine what the user meant) 
                									 	*/
-        			Toast.makeText( getApplicationContext(),
-						    "I was edited",
-						    Toast.LENGTH_SHORT).show();
         		} else if(destin_text.getText().toString().equalsIgnoreCase("Use Current Location")){
         			DESTIN_CURRENT_LOCATION = 1;
         		} else {
@@ -227,7 +224,7 @@ public class TransitGenieMain extends Activity {
 							address = geocoder.getFromLocationName(origin_text.getText().toString(), 2).get(0);		//Resolve address
 							if(address == null) {
 								Toast.makeText( getApplicationContext(),
-									    "Can not resolve Origin Address. Try searching on map or re-type.",
+									    "Cannot resolve Origin Address. Try searching on map or re-type.",
 									    Toast.LENGTH_SHORT).show();
 								return;
 							}
@@ -236,60 +233,70 @@ public class TransitGenieMain extends Activity {
 	    					b.putString("origin_string", origin_text.getText().toString());
 						} catch (IOException e1) {
 							Toast.makeText( getApplicationContext(),
-								    "Can not resolve Origin Address. Try searching on map or re-type.",
+								    "Cannot resolve Origin Address. Try searching on map or re-type.",
 								    Toast.LENGTH_SHORT).show();	//TODO: change from Toast to dialog.
 							return;
 						}		
 	    				break;
 	    			default: break;
 	    		} //End switch ORIGIN_CURRENT_LOCATION
+	    		
 	    		switch(DESTIN_CURRENT_LOCATION) {	//Resolve destination latitude and longitude
-    			//case 0: => Latitude & Longitude are already set in request.java.
-	    		case 0:  break;
-    			case 1:	//Grab GPS data for destination (user has selected 'Use Current Location').
-    				if(!mlocManager.isProviderEnabled(LocationManager.GPS_PROVIDER) && !mlocManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
-    					Toast.makeText( getApplicationContext(),
-    							"Please enable GPS to utilize current location for Destination.",
-							    Toast.LENGTH_SHORT).show();
-    					return;
-    				} else {
-    					//current = mlocManager.getLastKnownLocation(PROVIDER);
-    					if(currentLat > 0.0) {
-    						request.destinLatitude = currentLat;	
-        					request.destinLongitude = currentLon;
-        					b.putString("destin_string", "My Location");
-    					} else {
-    						Toast.makeText( getApplicationContext(),
-    							    "No current loction found for Destination.\nPlease check GPS status.",
-    							    Toast.LENGTH_SHORT).show();
-    						return;
-    					}
-    				}
-    				
-    				break;
-    			
-    			case 2:	//Resolve address of input.
-    				try {
-						address = geocoder.getFromLocationName(origin_text.getText().toString(), 2).get(0);		//Resolve address
-						
-						if(address == null) {
-							Toast.makeText( getApplicationContext(),
-								    "Can not resolve Destination Address. Try searching on map or re-type.",
+	    			//case 0: => Latitude & Longitude are already set in request.java.
+		    		case 0:  break;
+	    			case 1:	//Grab GPS data for destination (user has selected 'Use Current Location').
+	    				if(!mlocManager.isProviderEnabled(LocationManager.GPS_PROVIDER) && !mlocManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
+	    					Toast.makeText( getApplicationContext(),
+	    							"Please enable GPS to utilize current location for Destination.",
 								    Toast.LENGTH_SHORT).show();
-						}
-						
-						request.destinLatitude = address.getLatitude();		//set Latitude based on resolved address
-    					request.destinLongitude = address.getLongitude();	//set Logitude based on resolved address
-    					b.putString("destin_string", destin_text.getText().toString());
-					} catch (IOException e1) {
-						Toast.makeText( getApplicationContext(),
-							    "Can not resolve Destination Address. Try searching on map or re-type.",
-							    Toast.LENGTH_SHORT).show();	//TODO: change from Toast to dialog.
-						return;
-					}		
-    				break;
-    			default: break;
-    		} //End switch DESTIN_CURRENT_LOCATION*/\
+	    					return;
+	    				} else {
+	    					//current = mlocManager.getLastKnownLocation(PROVIDER);
+	    					if(currentLat > 0.0) {
+	    						request.destinLatitude = currentLat;	
+	        					request.destinLongitude = currentLon;
+	        					b.putString("destin_string", "My Location");
+	    					} else {
+	    						Toast.makeText( getApplicationContext(),
+	    							    "No current loction found for Destination.\nPlease check GPS status.",
+	    							    Toast.LENGTH_SHORT).show();
+	    						return;
+	    					}
+	    				}
+	    				
+	    				break;
+	    			
+	    			case 2:	//Resolve address of input.
+	    				try {
+							address = geocoder.getFromLocationName(origin_text.getText().toString(), 2).get(0);		//Resolve address
+							
+							if(address == null) {
+								Toast.makeText( getApplicationContext(),
+									    "Cannot resolve Destination Address. Try searching on map or re-type.",
+									    Toast.LENGTH_SHORT).show();
+							}
+							
+							request.destinLatitude = address.getLatitude();		//set Latitude based on resolved address
+	    					request.destinLongitude = address.getLongitude();	//set Logitude based on resolved address
+	    					b.putString("destin_string", destin_text.getText().toString());
+						} catch (IOException e1) {
+							Toast.makeText( getApplicationContext(),
+								    "Cannot resolve Destination Address. Try searching on map or re-type.",
+								    Toast.LENGTH_SHORT).show();	//TODO: change from Toast to dialog.
+							return;
+						}		
+	    				break;
+	    			default: break;
+	    		} //End switch DESTIN_CURRENT_LOCATION
+	    		
+	    		//Test to make sure destination & origin are not the same.
+	    		if(request.originLatitude == request.destinLatitude && request.originLongitude == request.destinLongitude)
+	    		{
+	    			Toast.makeText( getApplicationContext(),
+						    "Error: Origin and Destination are the same.",
+						    Toast.LENGTH_SHORT).show();	//TODO: change from Toast to dialog.
+					return;
+	    		}
 	    		
     			 /* * * * * * * * * * * * * * * * * * * * * * * * *
     			  * ASYNC TASK
@@ -334,6 +341,11 @@ public class TransitGenieMain extends Activity {
 				        
 				    	if(!result.equals("error")) //Run Routes activity if no error occured
 				    	{
+				    		b.putDouble("origin_lat", request.originLatitude);
+				    		b.putDouble("origin_lon", request.originLongitude);
+				    		b.putDouble("destin_lat", request.destinLatitude);
+				    		b.putDouble("destin_lon", request.destinLongitude);
+				    		
 				    		Intent i = new Intent(getApplicationContext(), Routes.class);
 				    		i.putExtras(b);		// Bundle needed in next Activity to utilize Strings representing origin and destination.
 				            startActivity(i);
@@ -457,9 +469,6 @@ public class TransitGenieMain extends Activity {
     	{
 	    	case R.id.menu_settings:
 	    		//Intent i = new Intent(getApplicationContext(), MainMenu.class);
-	    		
-	    		//b.putStringArrayList("favs", getFavoritesArrayList());
-	    		//b.putInt("origin", 1);	//Set in Bundle 'b' that user is requesting destination.
 	    		//i.putExtras(b);			//Pass Bundle 'b' to Places activity via Intent 'i'.
 	            //startActivity(i);
 				return true;

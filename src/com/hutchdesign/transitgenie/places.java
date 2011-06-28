@@ -163,7 +163,9 @@ public class places extends Activity {
 					{									//OR position is below popular places. => User selected a favorite 
 						int p = position-3;
 						if(position > 17) { p -= 15; }
-						TransitGenieMain.CURSOR.moveToPosition(p);	//Point to Table row corresponding to selected favorite
+
+						
+						TransitGenieMain.CURSOR.moveToPosition(p+1);	//Point to Table row corresponding to selected favorite
 						lat = TransitGenieMain.CURSOR.getDouble(2);
 						lon = TransitGenieMain.CURSOR.getDouble(3);
 					}
@@ -273,18 +275,13 @@ public class places extends Activity {
 	    ContextMenuInfo menuInfo) {
 	  if (v.getId()==R.id.listView1) {
 	    AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
-	    if(LIST.size() > 17)
-	    {
-	    	if(info.position > 17)
-	    	{
+	    if(LIST.size() > 17) {
+	    	if(info.position > 17) {
 	    		menu.setHeaderTitle(LIST.get(info.position));
 	    		menu.add(Menu.NONE, 0, 0, "Delete");
 	    	}
-	    }
-	    else
-	    {
-	    	if(info.position > 2)
-	    	{
+	    } else {
+	    	if(info.position > 2) {
 	    		menu.setHeaderTitle(LIST.get(info.position));
 	    		menu.add(Menu.NONE, 0, 0, "Delete");
 	    	}

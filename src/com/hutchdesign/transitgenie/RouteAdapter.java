@@ -46,6 +46,18 @@ public class RouteAdapter extends BaseAdapter implements OnClickListener {
     public Object getItem(int position) {
         return routeList.get(position);
     }
+    
+    public boolean moreThanOneSteps()
+    {
+    	for(int x=0; x<getCount(); ++x)
+    	{
+    		if(routeList.get(x).allSteps.getLength() > 0)
+    		{
+    			return true;
+    		}
+    	}
+		return false;
+    }
 
     public long getItemId(int position) {
         return position;
