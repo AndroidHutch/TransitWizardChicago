@@ -337,9 +337,7 @@ public class TransitGenieMain extends Activity {
 				    		Intent i = new Intent(getApplicationContext(), Routes.class);
 				    		i.putExtras(b);		// Bundle needed in next Activity to utilize Strings representing origin and destination.
 				            startActivity(i);
-				    	}  
-				    	else
-				    	{
+				    	} else {
 				    		Toast.makeText(getApplicationContext(), 
 				    				"Error: No Routes Found.\n" + request.originLatitude + "\n" + request.originLongitude, 
 				    				Toast.LENGTH_SHORT).show();
