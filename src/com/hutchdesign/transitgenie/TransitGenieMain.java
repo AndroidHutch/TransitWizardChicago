@@ -385,7 +385,7 @@ public class TransitGenieMain extends Activity {
         }); 
        
     }//End onCreate
-    
+     
     /* Class My Location Listener */
     public class MyLocationListener implements LocationListener {
     	public void onLocationChanged(Location loc)
