@@ -287,9 +287,9 @@ public class Routes extends Activity {
 			       .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
 			           public void onClick(DialogInterface dialog, int id) {
 			        	   //ADD TO DATABASE
-			        	   Double lat = TransitGenieMain.request.destinLatitude;
-			        	   Double lon = TransitGenieMain.request.destinLongitude;
-			        	   TransitGenieMain.addFavorite(name1, lat, lon); 
+			        	   Double lat1 = TransitGenieMain.request.destinLatitude;
+			        	   Double lon1 = TransitGenieMain.request.destinLongitude;
+			        	   TransitGenieMain.addFavorite(name1, lat1, lon1); 
 			           }
 			       })
 			       .setNegativeButton("No", new DialogInterface.OnClickListener() {

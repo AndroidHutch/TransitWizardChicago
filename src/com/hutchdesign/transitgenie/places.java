@@ -110,12 +110,8 @@ public class places extends Activity {
 				// USE CURRENT LOCATION
 				case 0:
 					if (ORIGIN == 0) {
-						//TransitGenieMain.ORIGIN_CURRENT_LOCATION = 1;
-						b.putInt("ORIGIN_CURR", 1);
 						b.putString("origin_string", "Use Current Location");
 					} else {
-						//TransitGenieMain.DESTIN_CURRENT_LOCATION = 1;
-						b.putInt("DESTIN_CURR", 1);
 						b.putString("destin_string", "Use Current Location");
 					}
 
@@ -182,8 +178,6 @@ public class places extends Activity {
 					//Send location name (String) to Bundle
 					//& Set latitude/longitude in Request class
 					if (ORIGIN == 0) {
-						//TransitGenieMain.ORIGIN_CURRENT_LOCATION = 0;
-						b.putInt("ORIGIN_CURR", 0);
 						b.putString("origin_string", LIST.get(position).trim().replace('\n', ' ').replace('\t', ' '));
 						b.putDouble("origin_lat", lat);
 						b.putDouble("origin_lon", lon);
@@ -191,8 +185,6 @@ public class places extends Activity {
 						TransitGenieMain.request.originLongitude = lon;
 
 					} else {
-						//TransitGenieMain.DESTIN_CURRENT_LOCATION = 0;
-						b.putInt("DESTIN_CURR", 0);
 						b.putString("destin_string", LIST.get(position).trim().replace('\n', ' ').replace('\t', ' '));
 						b.putDouble("destin_lat", lat);
 						b.putDouble("destin_lon", lon);
@@ -259,8 +251,7 @@ public class places extends Activity {
 			finish();
 		}
 
-		else if (resultCode == Activity.RESULT_CANCELED) {
-		}
+		else if (resultCode == Activity.RESULT_CANCELED) { }
 
 	}
 

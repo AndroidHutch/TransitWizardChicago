@@ -212,8 +212,7 @@ public class TransitGenieMain extends Activity {
 	    						request.originLatitude = currentLat;	
 		    					request.originLongitude = currentLon;
 		    					b.putString("origin_string", "My Location");
-	    					}
-	    					else {
+	    					} else {
 	    						Toast.makeText( getApplicationContext(),
 	    							    "No current loction found for Origin.\nPlease check GPS status.",
 	    							    Toast.LENGTH_SHORT).show();
@@ -226,8 +225,7 @@ public class TransitGenieMain extends Activity {
 	    			case 2:	//Resolve address of input.
 	    				try {
 							address = geocoder.getFromLocationName(origin_text.getText().toString(), 2).get(0);		//Resolve address
-							if(address == null)
-							{
+							if(address == null) {
 								Toast.makeText( getApplicationContext(),
 									    "Can not resolve Origin Address. Try searching on map or re-type.",
 									    Toast.LENGTH_SHORT).show();
@@ -249,24 +247,18 @@ public class TransitGenieMain extends Activity {
     			//case 0: => Latitude & Longitude are already set in request.java.
 	    		case 0:  break;
     			case 1:	//Grab GPS data for destination (user has selected 'Use Current Location').
-    				if(!mlocManager.isProviderEnabled(LocationManager.GPS_PROVIDER) && !mlocManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER))
-    				{
+    				if(!mlocManager.isProviderEnabled(LocationManager.GPS_PROVIDER) && !mlocManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
     					Toast.makeText( getApplicationContext(),
     							"Please enable GPS to utilize current location for Destination.",
 							    Toast.LENGTH_SHORT).show();
     					return;
-    				}
-    				else
-    				{
+    				} else {
     					//current = mlocManager.getLastKnownLocation(PROVIDER);
-    					if(currentLat > 0.0)
-    					{
+    					if(currentLat > 0.0) {
     						request.destinLatitude = currentLat;	
         					request.destinLongitude = currentLon;
         					b.putString("destin_string", "My Location");
-    					}
-    					else
-    					{
+    					} else {
     						Toast.makeText( getApplicationContext(),
     							    "No current loction found for Destination.\nPlease check GPS status.",
     							    Toast.LENGTH_SHORT).show();
@@ -280,8 +272,7 @@ public class TransitGenieMain extends Activity {
     				try {
 						address = geocoder.getFromLocationName(origin_text.getText().toString(), 2).get(0);		//Resolve address
 						
-						if(address == null)
-						{
+						if(address == null) {
 							Toast.makeText( getApplicationContext(),
 								    "Can not resolve Destination Address. Try searching on map or re-type.",
 								    Toast.LENGTH_SHORT).show();
@@ -397,80 +388,8 @@ public class TransitGenieMain extends Activity {
        
     }//End onCreate
     
-    /* 
-     * Supplementary Async. Task
-     * Current known bug: First request sent to server doesn't work under any condition.
-     * 		- If using current location, sets latitude/longitude to about 87 by -37
-     * 		- If using popular places, sets latitude/longitude for destination to the same as origin. (but origin is correct)
-     * 		- If using map, crashes.
-     * 
-     * This method makes a call to the server upon starting application so the user can 'skip' the first request
-     */
-    
-    private void fakeRequest()
-    {
-    	request.destinLongitude = -87.839341;
-		request.originLatitude = 41.823309;
-		request.destinLongitude = -87.635990;
-		request.destinLatitude = 41.878884;
-    	
-		 AsyncTask<String, Void, String> sendRequest = new AsyncTask<String, Void, String>() {
-		    Dialog progress;
-
-		    @Override
-		    protected void onPreExecute() {
-		        progress = ProgressDialog.show(TransitGenieMain.this, 
-		                "Loading Application", "Please Wait...");
-		        super.onPreExecute();
-		    }
-
-		    @Override
-		    protected String doInBackground(String... params) {
-		    	//RETRIEVE DOCUMENT
-		        allRoutes = null;	//Array of DOM trees, each representing a singular route.
-		        
-		        try {
-					allRoutes = TransitGenieMain.request.buildRoutes();
-				} catch (IOException e) {
-					e.printStackTrace();
-				} catch (ParserConfigurationException e) {
-					e.printStackTrace();
-				} catch (SAXException e) {
-					e.printStackTrace(); 
-				}
-				if(allRoutes == null)	//If no routes were added to array.
-				{
-					return "error";
-				}
-		        return "";
-		    }
-
-		    @Override
-		    protected void onPostExecute(String result) {
-		    	super.onPostExecute(result);
-		        progress.dismiss();
-		        
-		    	if(!result.equals("error")) //Run Routes activity if no error occured
-		    	{
-		    		/*Intent i = new Intent(getApplicationContext(), Routes.class);
-		    		i.putExtras(b);		// Bundle needed in next Activity to utilize Strings representing origin and destination.
-		            startActivity(i);*/
-		    	}  
-		    	else
-		    	{
-		    		/*Toast.makeText(getApplicationContext(), 
-		    				"Error: in fakeAsync()", 
-		    				Toast.LENGTH_SHORT).show();*/
-		    	}
-		    }
-		};
-		sendRequest.execute();	//Request data form server via Async. task
-	}
-    
-  
     /* Class My Location Listener */
-    public class MyLocationListener implements LocationListener
-    {
+    public class MyLocationListener implements LocationListener {
     	public void onLocationChanged(Location loc)
 	    {	
 		    currentLat = loc.getLatitude();
@@ -481,29 +400,9 @@ public class TransitGenieMain extends Activity {
     			    Toast.LENGTH_SHORT ).show();*/
 	    }
 
-	    public void onProviderDisabled(String provider)
-	    {
-	/*    	Toast.makeText( getApplicationContext(),
-		    "Gps Disabled",
-		    Toast.LENGTH_SHORT ).show();*/
-	
-	    }
-
-	    public void onProviderEnabled(String provider)
-	    {
-	
- /*   	Toast.makeText( getApplicationContext(),
-		    "Gps Enabled",
-		    Toast.LENGTH_SHORT).show();*/
-	
-	    }
-	
-	    public void onStatusChanged(String provider, int status, Bundle extras)
-	    {
-	
-	
-	    }
-	    
+	    public void onProviderDisabled(String provider) { }
+	    public void onProviderEnabled(String provider) { }
+	    public void onStatusChanged(String provider, int status, Bundle extras) { }
     }//End MyLocationListener
     
     /*
@@ -530,8 +429,8 @@ public class TransitGenieMain extends Activity {
         
         //If the request went well (OK) and the request was for destination
         //Note: requestCode = 1 => Destination Request
-        else if(resultCode == Activity.RESULT_OK && requestCode == 1) 
-        {
+        else if(resultCode == Activity.RESULT_OK && requestCode == 1)  {
+        	
         	from_places_destin = true;
         	EditText destn = (EditText) findViewById(R.id.text_destn2);
         	destn.setText(bundl.getString("destin_string"));
@@ -541,9 +440,7 @@ public class TransitGenieMain extends Activity {
         	request.destinLongitude = bundl.getDouble("destin_lon");
         }
         
-        else if(resultCode == Activity.RESULT_CANCELED)
-        {
-        }
+        else if(resultCode == Activity.RESULT_CANCELED) { }
 
     }
     
@@ -551,15 +448,13 @@ public class TransitGenieMain extends Activity {
     //	Utilizes manu_main.xml
     //	Contains selections: 'Settings', 'Depart Time', 'About'
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) 
-    {
+    public boolean onCreateOptionsMenu(Menu menu) {
     	MenuInflater inflater = getMenuInflater();
     	inflater.inflate(R.menu.menu_main, menu);
     	return true;
     }
     
-    public boolean onOptionsItemSelected(MenuItem item)
-    {
+    public boolean onOptionsItemSelected(MenuItem item) {
     	switch (item.getItemId())
     	{
 	    	case R.id.menu_settings:
@@ -618,8 +513,7 @@ public class TransitGenieMain extends Activity {
     //METHODS NEEDED FOR SQL DATABASE
 
     //Retrieve all favorite locations from the database
-    private Cursor getFavorites() 
-    {
+    private Cursor getFavorites() {
     	SQLiteDatabase db = SQL_HELPER.getReadableDatabase();
     	Cursor cursor = db.query(SQLHelper.TABLE, null, null, null, null, null, null);
   
@@ -628,8 +522,7 @@ public class TransitGenieMain extends Activity {
     }
     
     //Retrieve all favorite locations from the database in the form of an array list
-    private ArrayList<String> getFavoritesArrayList() 
-    {
+    private ArrayList<String> getFavoritesArrayList() {
     	ArrayList<String> allNames = new ArrayList<String>();
     	CURSOR.moveToFirst();
     	
@@ -640,8 +533,7 @@ public class TransitGenieMain extends Activity {
     }
     
   //Add a favorite location to the database
-    public static void addFavorite(String name, double latitude, double longitude) 
-    {
+    public static void addFavorite(String name, double latitude, double longitude) {
       SQLiteDatabase db = SQL_HELPER.getWritableDatabase();
       ContentValues values = new ContentValues();
       
@@ -655,15 +547,13 @@ public class TransitGenieMain extends Activity {
     }
     
     //Delete favorite based on route name
-	public static void deleteFavoriteByName(String name)
-    {
+	public static void deleteFavoriteByName(String name) {
     	SQLiteDatabase db = SQL_HELPER.getReadableDatabase();
     	db.delete(SQLHelper.TABLE, SQLHelper.NAME + "=?", new String[]{name});
     }
     
     //Delete favoirte based on database row id
-    public void deleteFavoriteById(long id)
-    {
+    public void deleteFavoriteById(long id) {
     	SQLiteDatabase db = SQL_HELPER.getReadableDatabase();
     	db.delete(SQLHelper.TABLE, "_id=?", new String[]{String.valueOf(id)});
     }
@@ -672,19 +562,19 @@ public class TransitGenieMain extends Activity {
 	/*@Override
 	protected void onResume() {
 		super.onResume();
-		mlocManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 2, mlocListener);
-	}
+		mlocManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 3000, 2, mlocListener);
+		mlocManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 3000, 2, mlocListener);
+	}*/
 
 	/* Remove the locationlistener updates when Activity is paused */
 	/*@Override
 	protected void onPause() {
 		super.onPause();
-		mlocManager.removeUpdates(mlocListener);
+		mlocManager.removeUpdates(mlocListener);	
 	}*/
 	
     @Override
-    public void onDestroy() 
-    {
+    public void onDestroy() {
     	super.onDestroy();
     	
     	if(CURSOR != null)
