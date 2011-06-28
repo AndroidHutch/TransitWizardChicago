@@ -110,10 +110,12 @@ public class places extends Activity {
 				// USE CURRENT LOCATION
 				case 0:
 					if (ORIGIN == 0) {
+						//TransitGenieMain.ORIGIN_CURRENT_LOCATION = 1;
+						b.putInt("ORIGIN_CURR", 1);
 						b.putString("origin_string", "Use Current Location");
-						TransitGenieMain.ORIGIN_CURRENT_LOCATION = 1;
 					} else {
-						TransitGenieMain.DESTIN_CURRENT_LOCATION = 1;
+						//TransitGenieMain.DESTIN_CURRENT_LOCATION = 1;
+						b.putInt("DESTIN_CURR", 1);
 						b.putString("destin_string", "Use Current Location");
 					}
 
@@ -180,14 +182,20 @@ public class places extends Activity {
 					//Send location name (String) to Bundle
 					//& Set latitude/longitude in Request class
 					if (ORIGIN == 0) {
-						TransitGenieMain.ORIGIN_CURRENT_LOCATION = 0;
+						//TransitGenieMain.ORIGIN_CURRENT_LOCATION = 0;
+						b.putInt("ORIGIN_CURR", 0);
 						b.putString("origin_string", LIST.get(position).trim().replace('\n', ' ').replace('\t', ' '));
+						b.putDouble("origin_lat", lat);
+						b.putDouble("origin_lon", lon);
 						TransitGenieMain.request.originLatitude = lat;
 						TransitGenieMain.request.originLongitude = lon;
 
 					} else {
-						TransitGenieMain.DESTIN_CURRENT_LOCATION = 0;
+						//TransitGenieMain.DESTIN_CURRENT_LOCATION = 0;
+						b.putInt("DESTIN_CURR", 0);
 						b.putString("destin_string", LIST.get(position).trim().replace('\n', ' ').replace('\t', ' '));
+						b.putDouble("destin_lat", lat);
+						b.putDouble("destin_lon", lon);
 						TransitGenieMain.request.destinLatitude = lat;
 						TransitGenieMain.request.destinLongitude = lon;
 					}
@@ -213,11 +221,14 @@ public class places extends Activity {
 			if (ORIGIN == 0) {
 				mapLat = TransitGenieMain.request.originLatitude;
 				mapLong = TransitGenieMain.request.originLongitude;
-				TransitGenieMain.ORIGIN_CURRENT_LOCATION = 0;
+				b.putDouble("origin_lat", mapLat);
+				b.putDouble("origin_lon", mapLong);
+				
 			} else {
 				mapLat = TransitGenieMain.request.destinLatitude;
 				mapLong = TransitGenieMain.request.destinLongitude;
-				TransitGenieMain.DESTIN_CURRENT_LOCATION = 0;
+				b.putDouble("destin_lat", mapLat);
+				b.putDouble("destin_lon", mapLong);
 			}
 			// List<Address> addresses = geoCoder.getFromLocation(
 			// p.getLatitudeE6() / 1E6,
@@ -231,22 +242,17 @@ public class places extends Activity {
 
 				if (addresses.size() > 0)
 					add = addresses.get(0).getAddressLine(0);
-				// {
-				// for (int count=0;
-				// count<addresses.get(0).getMaxAddressLineIndex();
-				// count++)
-				// add += addresses.get(0).getAddressLine(count) + "\n";
-				// }
+
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+			
 			if (ORIGIN == 0) {
 				b.putString("origin_string", add);
 			} else {
 				b.putString("destin_string", add);
 			}
-			// Toast.makeText(getBaseContext(), add, Toast.LENGTH_SHORT).show();
+			
 			Intent i = getIntent();
 			i.putExtras(b);
 			setResult(RESULT_OK, i);

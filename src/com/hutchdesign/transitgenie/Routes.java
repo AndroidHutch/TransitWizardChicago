@@ -187,9 +187,6 @@ public class Routes extends Activity {
     	if(step.equals("Blue")){
     		i.setImageResource(R.drawable.cta_blue);	
     		return; }
-    	if(step.equals("Brn")){
-    		i.setImageResource(R.drawable.cta_brown);	
-    		return; }
     	if(step.equals("Pink")){
     		i.setImageResource(R.drawable.cta_pink);	
     		return; }
@@ -204,6 +201,9 @@ public class Routes extends Activity {
     		return; }
     	if(step.startsWith("G")){
     		i.setImageResource(R.drawable.cta_green);	
+    		return; }
+    	if(step.startsWith("B")){
+    		i.setImageResource(R.drawable.cta_brown);	
     		return; }
     	if(step.startsWith("Y")){
     		i.setImageResource(R.drawable.cta_yellow);	
