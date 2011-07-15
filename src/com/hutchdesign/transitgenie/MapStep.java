@@ -61,6 +61,17 @@ public class MapStep extends MapActivity {
 				Point p1 = new Point();
 				projection.toPixels(gP1, p1);
 				canvas.drawCircle(p1.x, p1.y, 5 ,mPaint);
+				
+				mPaint.setColor(Color.BLUE);
+				GeoPoint gP2 = new GeoPoint((int)(endLat * 1E6), (int)(endLong * 1E6));
+				Point p2 = new Point();
+				projection.toPixels(gP2, p2);
+					
+				canvas.drawCircle(p2.x, p2.y, 5 ,mPaint);
+				
+				mPaint.setColor(Color.BLACK);
+				mPaint.setStrokeWidth(0.5f);
+				canvas.drawText("Alight", p2.x+5, p2.y+5, mPaint);
 			}
 		}
 	}

@@ -22,7 +22,6 @@
 	android:layout_height="wrap_content" 
 	android:layout_width="fill_parent" 
 	android:cacheColorHint="#b6b6b6"
-	android:divider="@drawable/gradient"
 	>
 	</ListView>
 

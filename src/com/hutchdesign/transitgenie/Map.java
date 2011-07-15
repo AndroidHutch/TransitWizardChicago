@@ -3,7 +3,6 @@ package com.hutchdesign.transitgenie;
 import java.util.List;
 
 import android.os.Bundle;
-
 import com.google.android.maps.GeoPoint;
 import com.google.android.maps.MapActivity;
 import com.google.android.maps.MapController;
@@ -71,17 +70,6 @@ public class Map extends MapActivity {
 	protected boolean isRouteDisplayed() {
 		return false;
 	}
-	/*
-	@Override
-	 public boolean dispatchTouchEvent(MotionEvent ev) { 
-		boolean rtn = mGesture.onTouchEvent(ev); 
-		if (ev.getAction() == MotionEvent.ACTION_UP) { 
-			Log.v("dispatch", "Gesture=" + mGesture.getGestureString()); 
-			if(mGesture.getGestureString().equals("")) { 
-				return super.dispatchTouchEvent(ev); 
-			} 
-	                } 
-		                return rtn; 
-        }*/
+	
 
 }

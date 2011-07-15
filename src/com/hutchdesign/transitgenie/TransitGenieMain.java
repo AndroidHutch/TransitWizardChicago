@@ -42,7 +42,6 @@ import android.app.TimePickerDialog;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
-import android.location.Address;
 import android.location.Geocoder;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -52,16 +51,12 @@ import android.location.LocationManager;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
@@ -80,14 +75,11 @@ public class TransitGenieMain extends Activity {
     public static Cursor CURSOR;
     Bundle b;	//Holds data passed between main activity and places activity
     Geocoder geocoder;
-    EditText origin_text;
-    EditText destin_text;
+    //EditText origin_text;
+    //EditText destin_text;
     
 	private int mHour;
 	private int mMinute;
-	private boolean from_places_origin;	//Has the user just returned with an origin selection from the places Activity?
-										//Used to determine if user has typed their input or if it was selected from places.java.
-	private boolean from_places_destin;	//See above, in context of destination selection.
 	
 	//GPS & Location Variables
 	private double currentLat;		//Last known latitude.
@@ -114,78 +106,34 @@ public class TransitGenieMain extends Activity {
   
         //Initialize Bundle
         b = new Bundle();
-        from_places_origin = false;
-        from_places_destin = false;
         currentLat = 0;
         currentLon = 0;
 
         
         //Import Buttons from main.xml
         Button button_go = (Button)findViewById(R.id.button_go);					//"Go" button on main screen (=> User is ready for routes)
-        ImageButton button_origin = (ImageButton)findViewById(R.id.button_origin);	//Selected when user wishes to choose origin.
-        ImageButton button_destn = (ImageButton)findViewById(R.id.button_destn);	//Selected when user wishes to choose destination.
-        origin_text = (EditText)findViewById(R.id.text_origin2);
-        destin_text = (EditText)findViewById(R.id.text_destn2);
         
-        /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
-         * Edit Text Listeners For Origin and Destination Input  *
-         * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-        origin_text.addTextChangedListener(new TextWatcher()
-        {
-        	public void  afterTextChanged (Editable s) { 
-        		if(!from_places_origin){	//Do not set custom location flag (ORIGIN_CURRENT_LOCATION) if user just returned from 'places' Activity.
-        			ORIGIN_CURRENT_LOCATION = 2;	/* => On "GO," program will parse origin box for the custom location. 
-               									 	* (Uses geocoder to determine what the user meant) 
-               									 	*/
-        		} else if(origin_text.getText().toString().equalsIgnoreCase("Use Current Location")){
-        			ORIGIN_CURRENT_LOCATION = 1;
-        		} else {
-        			ORIGIN_CURRENT_LOCATION = 0;
-        		}
-        		from_places_origin = false;
-			} 
-			public void  beforeTextChanged  (CharSequence s, int start, int count, int after) { } 	//Do Nothing (Required method)
-			public void  onTextChanged  	(CharSequence s, int start, int before, int count){ }	//Do Nothing (Required methid)
-        });
-        destin_text.addTextChangedListener(new TextWatcher()
-        {
-        	public void  afterTextChanged (Editable s) { 
-        		if(!from_places_destin){	//Do not set custom location flag (DESTIN_CURRENT_LOCATION) if user just returned from 'places' Activity.
-        			DESTIN_CURRENT_LOCATION = 2;	/* => On "GO," program will parse destination box for the custom location. 
-               									 	* (Uses geocoder to determine what the user meant) 
-               									 	*/
-        		} else if(destin_text.getText().toString().equalsIgnoreCase("Use Current Location")){
-        			DESTIN_CURRENT_LOCATION = 1;
-        		} else {
-        			DESTIN_CURRENT_LOCATION = 0;
-        		}
-        		
-        		from_places_destin = false;
-			} 
-			public void  beforeTextChanged  (CharSequence s, int start, int count, int after) { } 	//Do Nothing (Required method)
-			public void  onTextChanged  	(CharSequence s, int start, int before, int count){ }	//Do Nothing (Required methid)
-        });
-
+        Button button_origin = (Button)findViewById(R.id.button_origin);
+        Button button_destin = (Button)findViewById(R.id.button_destin);
+    
         /* * * * * * * * * * * * * 
          * "GO" Button Listener  *
          * * * * * * * * * * * * */
         button_go.setOnClickListener(new View.OnClickListener(){	
 	    	public void onClick(View v){
 	    		
-	    		EditText destin = (EditText) findViewById(R.id.text_destn2);
-	    		EditText origin = (EditText) findViewById(R.id.text_origin2);
+	    		Button origin = (Button) findViewById(R.id.button_origin);
+	    		Button destin = (Button) findViewById(R.id.button_destin);
 	    		
 	    		//Check if there is text in origin/destination boxes
-	    		if(origin.getText().length() <= 0) {
+	    		if(origin.getText().length() <= 0 || origin.getText().toString().equals("Click to Select Origin")) {
 	    			Toast.makeText(getApplicationContext(), "Please input a location for Origin.", Toast.LENGTH_SHORT).show();
 	    			return;
 	    		}
-	    		if(destin.getText().length() <= 0) {
+	    		if(destin.getText().length() <= 0 || destin.getText().toString().equals("Click to Select Destination")) {
 	    			Toast.makeText(getApplicationContext(), "Please input a location for Destination.", Toast.LENGTH_SHORT).show();
 	    			return; 
 	    		}
-	    		
-	    		Address address;
 	    		
 	    		switch(ORIGIN_CURRENT_LOCATION) {	//Resolve origin latitude and longitude
 	    			//case 0: => Latitude & Longitude are already set in request.java.
@@ -219,25 +167,6 @@ public class TransitGenieMain extends Activity {
 	    				
 	    				break;
 	    			
-	    			case 2:	//Resolve address of input.
-	    				try {
-							address = geocoder.getFromLocationName(origin_text.getText().toString(), 2).get(0);		//Resolve address
-							if(address == null) {
-								Toast.makeText( getApplicationContext(),
-									    "Cannot resolve Origin Address. Try searching on map or re-type.",
-									    Toast.LENGTH_SHORT).show();
-								return;
-							}
-							request.originLatitude = address.getLatitude();		//set Latitude based on resolved address
-	    					request.originLongitude = address.getLongitude();	//set Logitude based on resolved address
-	    					b.putString("origin_string", origin_text.getText().toString());
-						} catch (IOException e1) {
-							Toast.makeText( getApplicationContext(),
-								    "Cannot resolve Origin Address. Try searching on map or re-type.",
-								    Toast.LENGTH_SHORT).show();	//TODO: change from Toast to dialog.
-							return;
-						}		
-	    				break;
 	    			default: break;
 	    		} //End switch ORIGIN_CURRENT_LOCATION
 	    		
@@ -266,26 +195,6 @@ public class TransitGenieMain extends Activity {
 	    				
 	    				break;
 	    			
-	    			case 2:	//Resolve address of input.
-	    				try {
-							address = geocoder.getFromLocationName(origin_text.getText().toString(), 2).get(0);		//Resolve address
-							
-							if(address == null) {
-								Toast.makeText( getApplicationContext(),
-									    "Cannot resolve Destination Address. Try searching on map or re-type.",
-									    Toast.LENGTH_SHORT).show();
-							}
-							
-							request.destinLatitude = address.getLatitude();		//set Latitude based on resolved address
-	    					request.destinLongitude = address.getLongitude();	//set Logitude based on resolved address
-	    					b.putString("destin_string", destin_text.getText().toString());
-						} catch (IOException e1) {
-							Toast.makeText( getApplicationContext(),
-								    "Cannot resolve Destination Address. Try searching on map or re-type.",
-								    Toast.LENGTH_SHORT).show();	//TODO: change from Toast to dialog.
-							return;
-						}		
-	    				break;
 	    			default: break;
 	    		} //End switch DESTIN_CURRENT_LOCATION
 	    		
@@ -384,7 +293,7 @@ public class TransitGenieMain extends Activity {
          * Switch to new activity -> "places" (uses places.xml)
          * Retrieve user choice from places activity and set to their destination.
          */
-        button_destn.setOnClickListener(new View.OnClickListener(){	
+        button_destin.setOnClickListener(new View.OnClickListener(){	
 	    	public void onClick(View v){
 	    		//Run places activity
 	    		Intent i = new Intent(getApplicationContext(), places.class);
@@ -427,10 +336,14 @@ public class TransitGenieMain extends Activity {
         // If the request went well (OK) and the request was ORIGIN_REQUEST
         if(resultCode == Activity.RESULT_OK && requestCode == ORIGIN_REQUEST) {
         	
-        	from_places_origin = true;
-        	EditText origin = (EditText) findViewById(R.id.text_origin2);
-        	origin.setText(bundl.getString("origin_string"));
-        	b.putString("origin_string", bundl.getString("origin_string"));
+        	Button origin = (Button) findViewById(R.id.button_origin);
+        	
+        	String new_origin = bundl.getString("origin_string");
+        	origin.setText(new_origin);
+        	b.putString("origin_string", new_origin);
+        	
+        	if(new_origin.equals("Use Current Location")) { ORIGIN_CURRENT_LOCATION = 1; }
+        	else { ORIGIN_CURRENT_LOCATION = 0; }
         	
         	request.originLatitude = bundl.getDouble("origin_lat");
         	request.originLongitude = bundl.getDouble("origin_lon");
@@ -441,10 +354,14 @@ public class TransitGenieMain extends Activity {
         //Note: requestCode = 1 => Destination Request
         else if(resultCode == Activity.RESULT_OK && requestCode == 1)  {
         	
-        	from_places_destin = true;
-        	EditText destn = (EditText) findViewById(R.id.text_destn2);
-        	destn.setText(bundl.getString("destin_string"));
-        	b.putString("destin_string", bundl.getString("destin_string"));
+        	Button destn = (Button) findViewById(R.id.button_destin);
+        	
+        	String new_destin = bundl.getString("destin_string");
+        	destn.setText(new_destin);
+        	b.putString("destin_string", new_destin);
+        	
+        	if(new_destin.equals("Use Current Location")) { DESTIN_CURRENT_LOCATION = 1; }
+        	else { DESTIN_CURRENT_LOCATION = 0; }
         	
         	request.destinLatitude = bundl.getDouble("destin_lat");
         	request.destinLongitude = bundl.getDouble("destin_lon");

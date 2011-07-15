@@ -94,8 +94,8 @@ public class places extends Activity {
 		LIST.addAll(Arrays.asList(MENU));
 		LIST.addAll(FAVORITES);
 		MAIN_LIST = (ListView) findViewById(R.id.listView1);
-		ADAP = (new ArrayAdapter<String>(places.this,
-				R.layout.list_item, LIST));
+		
+		ADAP = (new ArrayAdapter<String>(places.this, R.layout.list_item, LIST));
 		MAIN_LIST.setAdapter(ADAP);
 		registerForContextMenu(MAIN_LIST);
 

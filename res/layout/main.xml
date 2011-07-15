@@ -9,88 +9,55 @@
     android:layout_width="wrap_content" 
     android:layout_height="wrap_content" 
     android:paddingTop="4px"
+    android:paddingBottom="8px"
     android:src="@drawable/transit_wizard_title"
     android:layout_gravity="center_horizontal">
     </ImageView>
     
 	<TextView  
-	android:id="@+id/text_origin"
     android:layout_width="fill_parent" 
     android:layout_height="wrap_content" 
     android:text="Origin"
     android:textStyle="bold"
     android:textColor="#000000"
     android:textSize="24px"
-    android:paddingLeft="5px"
+    android:paddingLeft="6px"
     />
 
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="horizontal"
-    android:layout_width="fill_parent"
-    android:layout_height="wrap_content"
-    >
-	
-	
-    <ImageButton 
+	<Button 
 	android:id="@+id/button_origin" 
-	android:src="@drawable/ic_button_04"
-	android:layout_width="45px" 
-	android:layout_height="45px"
-	android:layout_alignParentRight="true"
+	android:background="@drawable/custom_button2"
+	android:layout_width="fill_parent" 
+	android:layout_height="wrap_content"
+	android:layout_gravity="right"
+	android:text="Click to Select Origin"
+	android:layout_marginLeft="6px"
+	android:layout_marginRight="6px"
 	>
-	</ImageButton>
+	</Button>
 	
-	<EditText  
-	android:id="@+id/text_origin2"
-    android:layout_width="fill_parent" 
-    android:layout_height="wrap_content" 
-    android:hint="Type or Select Location" 
-    android:layout_toLeftOf="@id/button_origin"
-    android:selectAllOnFocus="true"
-    />
-	
-</RelativeLayout>
-
-
 	<TextView  
-	android:id="@+id/text_destn"
     android:layout_width="fill_parent" 
     android:layout_height="wrap_content" 
     android:text="Destination"
     android:textStyle="bold"
     android:textColor="#000000"
     android:textSize="24px"
-    android:layout_marginTop="10px"
-    android:paddingLeft="5px"
+    android:paddingLeft="6px"
+    android:paddingTop="16px"
     />
-
-
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="horizontal"
-    android:layout_width="fill_parent"
-    android:layout_height="wrap_content"
-    >
 	
-	
-    <ImageButton 
-	android:id="@+id/button_destn" 
-	android:src="@drawable/ic_button_04"
-	android:layout_width="45px" 
-	android:layout_height="45px"
-	android:layout_alignParentRight="true"
+	<Button 
+	android:id="@+id/button_destin" 
+	android:background="@drawable/custom_button2"
+	android:layout_width="fill_parent" 
+	android:layout_height="wrap_content"
+	android:layout_gravity="right"
+	android:text="Click to Select Destination"
+	android:layout_marginLeft="6px"
+	android:layout_marginRight="6px"
 	>
-	</ImageButton>
-	
-	<EditText  
-	android:id="@+id/text_destn2"
-    android:layout_width="fill_parent" 
-    android:layout_height="wrap_content" 
-    android:hint="Type or Select Location" 
-    android:layout_toLeftOf="@id/button_destn"
-    android:selectAllOnFocus="true"    
-    />
-	
-</RelativeLayout>
+	</Button>
 	
 
 	<Button 
@@ -100,7 +67,7 @@
 	android:layout_height="wrap_content"
 	android:layout_gravity="right"
 	android:layout_marginRight="10px"
-	android:layout_marginTop="16px"
+	android:layout_marginTop="24px"
 	>
 	</Button>
 
