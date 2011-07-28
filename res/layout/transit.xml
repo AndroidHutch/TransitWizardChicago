@@ -126,7 +126,7 @@
 		android:id="@+id/route_instr"
 	    android:layout_width="fill_parent" 
 	    android:layout_height="wrap_content" 
-	    android:text="Click row for route details.\nControls on top adjust origin/destination\nand arrival/departure time preferences."
+	    android:text="Click row for route details."
 	    android:textColor="#000000"
 	    android:textSize="12px"
 	    android:gravity="center"

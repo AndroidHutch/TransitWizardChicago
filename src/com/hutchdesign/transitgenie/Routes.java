@@ -91,7 +91,7 @@ public class Routes extends Activity {
         TextView orig = (TextView) findViewById(R.id.transit_origin1);
         TextView dest = (TextView) findViewById(R.id.transit_destn1);
         
-        instr.setText("Click row for route details.\nUse clock button on top to adjust arrival/departure time.\nUse \"+\" button to add location to favorites.");	//Instructions for user
+        instr.setText("Click row for route details.\nUse \"+\" button to add location to favorites.");	//Instructions for user
         orig.setText(b.getString("origin_string"));		//Origin in form of String (imported from TransitGenieMain)
         dest.setText(b.getString("destin_string"));		//Destination in form of String (imported from TransitGenieMain)
         

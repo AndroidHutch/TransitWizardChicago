@@ -62,7 +62,7 @@ public class RouteDetail extends Activity {
         
         map.setImageResource(R.drawable.americas_small);
         
-        instr.setText("Click row for map of specific step\nor select map button.");		//Set instructions
+        instr.setText("Click row for map of specific step.");		//Set instructions
         orig.setText(ORIGIN);			//Set origin title
         dest.setText(DESTINATION);		//Set destination title
         
